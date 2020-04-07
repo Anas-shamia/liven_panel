@@ -1,0 +1,135 @@
+<template>
+    <div class="container-content pb-24">
+        <div class="flex items-center mb-8 3sm:mb-4">
+            <img src="@/assets/img/user.svg" alt="icon">
+            <h2 class="text-2xl 4xl:text-lg text-blue-900 px-4">Users</h2>
+            <img src="@/assets/img/right-chevron.svg" alt="icon">
+            <span class="text-2xl 4xl:text-lg text-gray-900 pl-6">User Details</span>
+        </div>
+
+        <div class="flex flex-wrap -mx-4">
+            <div class="w-1/4 3sm:w-full px-4 profile-info">
+                <Profile/>
+                <div class="mb-8 3sm:mb-4">
+                    <h3 class="text-blue-900 font-medium text-2xl 4xl:text-lg mb-6">Reports</h3>
+                    <div class="bg-white-900 px-4 py-8 3sm:py-4 rounded-lg">
+                        <ul class="mb-8 3sm:mb-4">
+                            <li class="border-b border-gray-800 mb-4 3sm:mb-2 flex items-center">
+                                <p class="mb-2 text-black-900 font-medium text-base 3sm:text-sm flex-grow">Weight
+                                    Statistics</p>
+                                <p class="mb-2 text-base 3sm:text-xs text-gray-700">Today , 02:30PM</p>
+                            </li>
+                            <li class="border-b border-gray-800 mb-4 3sm:mb-2 flex items-center">
+                                <p class="mb-2 text-black-900 font-medium text-base 3sm:text-sm flex-grow">Blood
+                                    Sugar</p>
+                                <p class="mb-2 text-base 3sm:text-xs text-gray-700">Today , 02:30PM</p>
+                            </li>
+                            <li class="border-b border-gray-800 mb-4 3sm:mb-2 flex items-center">
+                                <p class="mb-2 text-black-900 font-medium text-base 3sm:text-sm flex-grow">Meals
+                                    History</p>
+                                <p class="mb-2 text-base 3sm:text-xs text-gray-700">Today , 02:30PM</p>
+                            </li>
+                        </ul>
+                        <button type="button"
+                                class="font-medium rounded bg-primary-900 text-white-900 text-lg 3sm:text-base 3sm:font-normal py-2 w-10/12 mx-auto block text-center"
+                                @click="openReportModal">
+                            Write a Report
+                        </button>
+                    </div>
+                </div>
+                <button type="button"
+                        class="font-medium rounded-full bg-primary-900 text-white-900 text-lg 3sm:text-base 3sm:font-normal 3sm:mb-4 py-2 w-10/12 mx-auto block text-center"
+                        @click="openNotification">
+                    Send Notification
+                </button>
+            </div>
+            <div class="w-3/4 3sm:w-full px-4 flex flex-wrap">
+                <div class="w-3/5" v-if="OpenCallComponent ">
+                    <callPatient/>
+                </div>
+                <div class="w-full" v-if="ShowMealsComponent ">
+                    <mealInfo/>
+                </div>
+                <div class="w-full" v-if="ShowMealsComponent === false && OpenCallComponent === false">
+                    <SubscriptionDuration/>
+                    <WeightStatistics :user_id="profile.id" :weight="profile.weight" :height="profile.length"
+                                      :waist="'50'" :hip="'120'"/>
+                    <div class="flex flex-wrap -mx-6 4xl:-mx-4 3sm:-mx-4">
+                        <div class="w-1/2 3sm:w-full px-6 4xl:px-4 3sm:px-4">
+                            <BloodSugar/>
+                        </div>
+                        <div class="w-1/2 3sm:w-full px-6 4xl:px-4 3sm:px-4">
+                            <MealsHistory/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <SendNotification v-if="open" @close="open = false"/>
+        <SendReport v-if="openReport" @close="openReport = false" :profile_id="profile.id"/>
+
+    </div>
+</template>
+<script>
+    import Profile from "../../components/userDetails/Profile";
+    import SubscriptionDuration from "../../components/userDetails/SubscriptionDuration";
+    import WeightStatistics from "../../components/userDetails/WeightStatistics";
+    import BloodSugar from "../../components/userDetails/BloodSugar";
+    import MealsHistory from "../../components/userDetails/MealsHistory";
+    import SendNotification from "../../components/userDetails/SendNotification";
+    import SendReport from "../../components/userDetails/SendReport";
+    import callPatient from "../../components/userDetails/CallPatient";
+    import mealInfo from "../../components/userDetails/MealInfo";
+
+    export default {
+        data() {
+            return {
+                open: false,
+                openReport: false,
+                openCall: false,
+                profile: []
+
+            }
+        },
+
+        components: {
+            Profile,
+            SubscriptionDuration,
+            WeightStatistics,
+            BloodSugar,
+            MealsHistory,
+            SendNotification,
+            SendReport,
+            callPatient,
+            mealInfo
+        },
+        methods: {
+            openNotification() {
+                this.open = !this.open;
+            },
+            openReportModal() {
+                this.openReport = !this.openReport;
+            },
+            openCalls() {
+                this.$store.dispatch("getMealShow", false);
+                this.$store.dispatch("getCallOpen", true);
+            }
+        },
+        computed: {
+            ShowMealsComponent() {
+                return this.$store.state.showMeal;
+            },
+            OpenCallComponent() {
+                return this.$store.state.openCall;
+            }
+        },
+
+        mounted() {
+            const $id = this.$route.params.user;
+            this.axios.get(`c_panel/user/profile?user_id=${$id}`)
+                .then(response => (this.profile = response.data.data[0]))
+        }
+
+    }
+</script>
+

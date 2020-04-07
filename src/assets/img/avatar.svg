@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="144" height="144" viewBox="0 0 144 144">
+  <defs>
+    <clipPath id="clip-path">
+      <rect width="144" height="144" fill="none"/>
+    </clipPath>
+    <clipPath id="clip-path-2">
+      <path id="Path_2185" data-name="Path 2185" d="M-143,806.048H408.911V-178H-143Z" transform="translate(143 178)" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="Component_2" data-name="Component 2" clip-path="url(#clip-path)">
+    <g id="Group_9666" data-name="Group 9666" transform="translate(-134.377 -95)">
+      <circle id="Ellipse_1" data-name="Ellipse 1" cx="72" cy="72" r="72" transform="translate(134.377 95)" fill="#f3f3f3"/>
+      <g id="Group_10009" data-name="Group 10009" transform="translate(174 131)">
+        <path id="Path_2400" data-name="Path 2400" d="M55.082,44.713A68.14,68.14,0,0,0,32,41,68.14,68.14,0,0,0,8.918,44.713,9.012,9.012,0,0,0,3,53.174V62a1,1,0,0,0,1,1H60a1,1,0,0,0,1-1V53.174A9.012,9.012,0,0,0,55.082,44.713Z" fill="rgba(0,0,0,0.18)"/>
+        <path id="Path_2401" data-name="Path 2401" d="M32,35A15.017,15.017,0,0,0,47,20V16a15,15,0,0,0-30,0v4A15.017,15.017,0,0,0,32,35Z" fill="rgba(0,0,0,0.18)"/>
+      </g>
+    </g>
+  </g>
+</svg>

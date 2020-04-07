@@ -1,0 +1,44 @@
+{
+  "name": "liven_front",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "@websanova/vue-auth": "^2.22.0-beta",
+    "axios": "^0.19.2",
+    "core-js": "^3.6.4",
+    "highcharts": "^8.0.4",
+    "highcharts-vue": "^1.3.5",
+    "lodash": "^4.17.15",
+    "luxon": "^1.22.0",
+    "register-service-worker": "^1.6.2",
+    "tailwindcss": "^1.2.0",
+    "tailwindcss-dir": "^4.0.0",
+    "v-calendar": "^1.0.1",
+    "vee-validate": "^3.2.5",
+    "vue": "^2.6.11",
+    "vue-axios": "^2.1.5",
+    "vue-data-tables": "^3.4.5",
+    "vue-datetime": "^1.0.0-beta.11",
+    "vue-i18n": "^8.15.5",
+    "vue-lodash": "^2.1.2",
+    "vue-router": "^3.1.5",
+    "vue-select": "^3.8.1",
+    "vue-slider-component": "^3.1.1",
+    "vue2-perfect-scrollbar": "^1.3.0",
+    "vuex": "^3.1.2",
+    "webpack": "^4.42.0",
+    "weekstart": "^1.0.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^4.2.0",
+    "@vue/cli-plugin-pwa": "^4.2.0",
+    "@vue/cli-service": "^4.2.0",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^8.0.2",
+    "vue-template-compiler": "^2.6.11"
+  }
+}

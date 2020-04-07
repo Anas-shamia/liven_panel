@@ -1,0 +1,17 @@
+<svg id="restaurant" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+  <g id="Group_10859" data-name="Group 10859" transform="translate(1.67)">
+    <g id="Group_10858" data-name="Group 10858">
+      <path id="Path_3081" data-name="Path 3081" d="M56.194,25.507,44.424,13.744,30.672,0H29.6l-.219.557a9.848,9.848,0,0,0-.716,4.351,6.143,6.143,0,0,0,1.723,3.925L41.121,19.562l1.416-1.415,9.925,11.091a2.666,2.666,0,0,0,3.733,0A2.64,2.64,0,0,0,56.194,25.507Z" transform="translate(-28.636)" fill="#9393af"/>
+    </g>
+  </g>
+  <g id="Group_10861" data-name="Group 10861" transform="translate(0 17.069)">
+    <g id="Group_10860" data-name="Group 10860">
+      <path id="Path_3082" data-name="Path 3082" d="M9.333,291.442.925,299.85a2.639,2.639,0,0,0,3.733,3.733l8.408-8.408Z" transform="translate(-0.153 -291.442)" fill="#9393af"/>
+    </g>
+  </g>
+  <g id="Group_10863" data-name="Group 10863" transform="translate(16.076 0.021)">
+    <g id="Group_10862" data-name="Group 10862">
+      <path id="Path_3083" data-name="Path 3083" d="M287.012,5.338l-4.77,4.77L281,8.863l4.77-4.77-1.244-1.244-4.77,4.77L278.51,6.375l4.77-4.77L282.035.361l-6.221,6.221a4.392,4.392,0,0,0-1.28,2.846,2.535,2.535,0,0,1-.18.794l4.041,4.041a2.532,2.532,0,0,1,.794-.18,4.391,4.391,0,0,0,2.846-1.28l6.221-6.221Z" transform="translate(-274.354 -0.361)" fill="#9393af"/>
+    </g>
+  </g>
+</svg>
