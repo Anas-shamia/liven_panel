@@ -4,6 +4,9 @@ import axios from 'axios';
 import VueAxios from 'vue-axios';
 import VueAuth from '@websanova/vue-auth'
 
+//https://developer.edamam.com/edamam-recipe-api-demo
+//https://api.edamam.com/api/food-database/parser?ingr=rice&app_id=691cdfff&app_key=85704859d9ba587b4181bb4d6af9215e
+
 Vue.use(VueAxios, axios);
 
 
