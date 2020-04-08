@@ -14,10 +14,10 @@
             <data-tables :data="tableData" :filters="filters" :page-size="1"
                          :pagination-props="{ background: true, pageSizes: [5, 10, 20] }">
                 <el-table-column v-for="(title,index) in titles" :prop="title.prop" :label="title.label" :key="index"
-                                 :width="title.prop ==='ticket_id' ?120 : ''"
-                                 :sortable="(title.prop === 'ticket_id' || title.prop === 'date' || title.prop === 'user')"
-                                 :filters="title.prop === 'status'?[{ text: 'Closed', value: 'Closed' }, { text: 'Open', value: 'Open' }]:null"
-                                 :filter-method="title.prop === 'status'?filterTag:null"
+                                 :width="title.prop ==='id' ?120 : ''"
+                                 :sortable="(title.prop === 'id' || title.prop === 'date' || title.prop === 'user')"
+                                 :filters="title.prop === 'status_text'?[{ text: 'Closed', value: 'Closed' }, { text: 'Opened', value: 'Opened' }]:null"
+                                 :filter-method="title.prop === 'status_text'?filterTag:null"
                 >
                     <template slot-scope="scope">
                         <el-button
@@ -26,9 +26,9 @@
                                 @click="user(scope.$index, scope.row)">
                             {{scope.row.user}}
                         </el-button>
-                        <el-tag v-else-if="title.prop === 'status'"
-                                :type="scope.row.status === 'Closed' ? 'closed-class' : 'open-class'"
-                                disable-transitions>{{scope.row.status}}
+                        <el-tag v-else-if="title.prop === 'status_text'"
+                                :type="scope.row.status_text === 'Closed' ? 'closed-class' : 'open-class'"
+                                disable-transitions>{{scope.row.status_text}}
                         </el-tag>
                         <span v-else>{{scope.row[title.prop]}}</span>
                     </template>
@@ -53,70 +53,91 @@
             return {
                 filters: [
                     {
-                        prop: ['ticket_id', 'ticket_title', 'user', 'date'],
+                        prop: ['id', 'description'],
+                        // prop: ['id', 'description', 'user', 'date'],
                         value: ''
                     },
                 ],
                 titles: [
                     {
-                        prop: 'ticket_id',
+                        prop: 'id',
                         label: 'Ticket No.'
                     },
                     {
-                        prop: 'ticket_title',
+                        prop: 'description',
                         label: 'Ticket Title'
                     },
                     {
-                        prop: 'category',
+                        prop: 'id',
                         label: 'Category'
                     },
                     {
-                        prop: 'user',
+                        prop: 'id',
                         label: 'User'
                     },
                     {
-                        prop: 'date',
+                        prop: 'id',
                         label: 'Date/Time'
                     },
                     {
-                        prop: 'status',
+                        prop: 'status_text',
                         label: 'Status'
                     },
 
 
                 ],
-                tableData: [
-                    {
-                        ticket_id: '130',
-                        ticket_title: 'مشكلة في قياسات السكرمشكلة في قياسات السكرمشكلة في قياسات السكرمشكلة في قياسات السكر',
-                        category: 'Customer Services',
-                        user: 'John Smith',
-                        date: '26/11/19 - 05:00 PM',
-                        status: 'Closed',
-                    },
-                    {
-                        ticket_id: '130',
-                        ticket_title: ' قياسات السكر',
-                        category: 'Customer Services',
-                        user: 'Anas Smith',
-                        date: '26/11/19 - 044:00 PM',
-                        status: 'Opened',
-                    },
-                ],
+                tableData: [],
+                // tableData: [
+                //     {
+                //         ticket_id: '130',
+                //         ticket_title: 'مشكلة في قياسات السكرمشكلة في قياسات السكرمشكلة في قياسات السكرمشكلة في قياسات السكر',
+                //         category: 'Customer Services',
+                //         user: 'John Smith',
+                //         date: '26/11/19 - 05:00 PM',
+                //         status: 'Closed',
+                //     },
+                //     {
+                //         ticket_id: '130',
+                //         ticket_title: ' قياسات السكر',
+                //         category: 'Customer Services',
+                //         user: 'Anas Smith',
+                //         date: '26/11/19 - 044:00 PM',
+                //         status: 'Opened',
+                //     },
+                // ],
                 search: '',
             }
         },
+
         methods: {
             filterTag(value, row) {
-                return row.status === value;
+                return row.status_text === value;
             },
             handleEdit(index, row) {
-                this.$router.push(`/tickets/${row.user}/comments`);
+                this.$router.push(`/tickets/${row.user_id}/comments`);
             },
             user(index, row) {
                 this.$router.push(`/${row.user}/details`);
             },
 
+        },
+        computed:{
+            // category() {
+            //     let test = [];
+            //     if (this.tableData.length) {
+            //         _.forEach(this.tableData, function (value) {
+            //             console.log(value.category.name);
+            //             test.push(value.category.name);
+            //         });
+            //         return test;
+            //     }
+            // },
+        },
+        mounted() {
+            this.axios.get('c_panel/ticket/all',)
+                .then(response => (this.tableData = response.data.data))
+        },
+        created() {
         }
     }
 </script>
