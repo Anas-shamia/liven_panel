@@ -47,7 +47,7 @@
             return {
                 filters: [
                     {
-                        prop: ['name', 'email'],
+                        prop: ['name', 'phone'],
                         value: ''
                     },
                 ],
@@ -61,8 +61,8 @@
                         label: 'User'
                     },
                     {
-                        prop: 'email',
-                        label: 'Email'
+                        prop: 'phone',
+                        label: 'Phone'
                     },
                     {
                         prop: 'gender',
@@ -73,62 +73,11 @@
                         label: 'Age'
                     },
                     {
-                        prop: 'type',
+                        prop: 'subscription_state',
                         label: 'Type'
                     },
 
                 ],
-                // tableData: [
-                //
-                //     {
-                //         id: '03',
-                //         user: 'Anas Shamia asjd asjdh askjdh aosdh iqwndkasndj asljd laskjd Anas Shamia asjd asjdh askjdh aosdh iqwndkasndj asljd laskjd Anas Shamia asjd asjdh askjdh aosdh iqwndkasndj asljd laskjd Anas Shamia asjd asjdh askjdh aosdh iqwndkasndj asljd laskjd ',
-                //         email: 'eng.anasshamia@gmail.com',
-                //         age: '10',
-                //         type: 'Free',
-                //         gender: 'Male',
-                //     },
-                //     {
-                //         id: '04',
-                //         user: 'Anas Shamia',
-                //         email: 'test@gmail.com',
-                //         age: '35',
-                //         type: 'Free',
-                //         gender: 'Female',
-                //     },
-                //     {
-                //         id: '01',
-                //         user: 'zz Shamia',
-                //         email: 'eng.anasshamia@gmail.com',
-                //         age: '18',
-                //         type: 'Free',
-                //         gender: 'Male',
-                //     },
-                //     {
-                //         id: '02',
-                //         user: 'Anas Shamia',
-                //         email: 'eng.anasshamia@gmail.com',
-                //         age: '20',
-                //         type: 'Free',
-                //         gender: 'Female',
-                //     },
-                //     {
-                //         id: '03',
-                //         user: 'bbb Shamia',
-                //         email: 'eng.anasshamia@gmail.com',
-                //         age: '10',
-                //         type: 'Free',
-                //         gender: 'Male',
-                //     },
-                //     {
-                //         id: '04',
-                //         user: 'ahmed Shamia',
-                //         email: 'eng.anasshamia@gmail.com',
-                //         age: '35',
-                //         type: 'Free',
-                //         gender: 'Female',
-                //     },
-                // ],
                 search: '',
                 tableData: []
             }

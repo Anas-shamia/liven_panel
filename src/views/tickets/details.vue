@@ -2,7 +2,7 @@
     <div class="container-content pb-24">
         <div class="flex items-center mb-8 3sm:mb-4">
             <img src="@/assets/img/user.svg" alt="icon">
-            <h2 class="text-2xl 4xl:text-lg text-blue-900 px-4">Users</h2>
+            <router-link tag="h2" to="/users" class="text-2xl 4xl:text-lg text-blue-900 px-4 cursor-pointer">Users</router-link>
             <img src="@/assets/img/right-chevron.svg" alt="icon">
             <span class="text-2xl 4xl:text-lg text-gray-900 pl-6">User Details</span>
         </div>
