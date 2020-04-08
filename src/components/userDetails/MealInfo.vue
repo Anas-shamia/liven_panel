@@ -56,44 +56,49 @@
                                   placeholder="Notes From patient"></textarea>
                     </form>
 
-                    <div class="flex items-center 3sm:flex-wrap -mx-4 3sm:-mx-2 mt-6" v-for="(meal, index) in meals" :key="index">
+                    <div class="w-1/2 mt-4 mx-auto">
+                        <label class="block">Search</label>
+                        <input type="text" class="form-control" @input="changeText" v-model="search">
+                    </div>
+
+                    <div class="flex items-center 3sm:flex-wrap -mx-4 3sm:-mx-2 mt-6" v-for="(meal, index) in results"
+                         :key="index">
                         <div class="px-4 3sm:px-2 w-2/12 3sm:w-1/2 3sm:mb-4">
                             <label for="" class="block">Quantity</label>
-                            <input type="text" class="form-control" placeholder="0" v-model="meal.quantity"
-                                   name="meals[][quantity]">
+                            <input type="text" class="form-control" placeholder="0" value="100"/>
                         </div>
                         <div class="px-4 3sm:px-2  w-3/12 3sm:w-1/2 3sm:mb-4">
                             <label for="" class="block">Unit</label>
-                            <v-select class="form-control" :options="options" v-model="meal.unit"
-                                      placeholder="Unit"></v-select>
+                            <input type="text" class="form-control" placeholder="0" value="g"/>
                         </div>
                         <div class="px-4 3sm:px-2  w-3/12 3sm:w-1/2 3sm:mb-4">
                             <label for="" class="block">Category</label>
-                            <v-select class="form-control" :options="options" v-model="meal.category"
-                                      placeholder="Category"></v-select>
+                            <input type="text" class="form-control" placeholder="0" v-model="meal.food.category"/>
                         </div>
                         <div class="px-4 3sm:px-2  w-2/12 3sm:w-1/2 3sm:mb-4">
                             <label for="" class="block">calories</label>
-                            <input type="text" class="form-control" placeholder="0" v-model="meal.calories">
+                            <input type="text" class="form-control" placeholder="0"
+                                   v-model="parseFloat(meal.food.nutrients.ENERC_KCAL).toFixed(2)">
                         </div>
                         <div class="px-4 flex items-center  w-2/12 3sm:w-full 3sm:mt-4 3sm:justify-end">
-                            <span class="mx-2">
-                                <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="plus-circle"
-                                     role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-                                     class="svg-inline--fa fa-plus-circle w-6 cursor-pointer" @click="addNewMeal">
-                                    <path fill="#21b363"
-                                          d="M384 240v32c0 6.6-5.4 12-12 12h-88v88c0 6.6-5.4 12-12 12h-32c-6.6 0-12-5.4-12-12v-88h-88c-6.6 0-12-5.4-12-12v-32c0-6.6 5.4-12 12-12h88v-88c0-6.6 5.4-12 12-12h32c6.6 0 12 5.4 12 12v88h88c6.6 0 12 5.4 12 12zm120 16c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-48 0c0-110.5-89.5-200-200-200S56 145.5 56 256s89.5 200 200 200 200-89.5 200-200z"
-                                          class=""></path></svg>
-                            </span>
-                            <span class="mx-2">
-                                <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="minus-circle"
-                                     role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-                                     class="svg-inline--fa fa-minus-circle w-6 cursor-pointer"
-                                     @click="removeMeal(index)">
-                                <path fill="#d9534f"
-                                      d="M140 284c-6.6 0-12-5.4-12-12v-32c0-6.6 5.4-12 12-12h232c6.6 0 12 5.4 12 12v32c0 6.6-5.4 12-12 12H140zm364-28c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-48 0c0-110.5-89.5-200-200-200S56 145.5 56 256s89.5 200 200 200 200-89.5 200-200z"
-                                      class=""></path></svg>
-                            </span>
+                            <input type="checkbox" @input="onChange($event,meal)"/>
+                            <!--                            <span class="mx-2">-->
+                            <!--                                <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="plus-circle"-->
+                            <!--                                     role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"-->
+                            <!--                                     class="svg-inline&#45;&#45;fa fa-plus-circle w-6 cursor-pointer" @click="addNewMeal">-->
+                            <!--                                    <path fill="#21b363"-->
+                            <!--                                          d="M384 240v32c0 6.6-5.4 12-12 12h-88v88c0 6.6-5.4 12-12 12h-32c-6.6 0-12-5.4-12-12v-88h-88c-6.6 0-12-5.4-12-12v-32c0-6.6 5.4-12 12-12h88v-88c0-6.6 5.4-12 12-12h32c6.6 0 12 5.4 12 12v88h88c6.6 0 12 5.4 12 12zm120 16c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-48 0c0-110.5-89.5-200-200-200S56 145.5 56 256s89.5 200 200 200 200-89.5 200-200z"-->
+                            <!--                                          class=""></path></svg>-->
+                            <!--                            </span>-->
+                            <!--                            <span class="mx-2">-->
+                            <!--                                <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="minus-circle"-->
+                            <!--                                     role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"-->
+                            <!--                                     class="svg-inline&#45;&#45;fa fa-minus-circle w-6 cursor-pointer"-->
+                            <!--                                     @click="removeMeal(index)">-->
+                            <!--                                <path fill="#d9534f"-->
+                            <!--                                      d="M140 284c-6.6 0-12-5.4-12-12v-32c0-6.6 5.4-12 12-12h232c6.6 0 12 5.4 12 12v32c0 6.6-5.4 12-12 12H140zm364-28c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-48 0c0-110.5-89.5-200-200-200S56 145.5 56 256s89.5 200 200 200 200-89.5 200-200z"-->
+                            <!--                                      class=""></path></svg>-->
+                            <!--                            </span>-->
                         </div>
                     </div>
 
@@ -102,10 +107,10 @@
                             <p class="block">Total</p>
                         </div>
                         <div class="px-4 3sm:px-2 w-4/12 3sm:w-2/5">
-                            <input type="text" class="form-control" placeholder="Quantity">
+                            <input type="text" class="form-control" v-model="sumQty" placeholder="Quantity">
                         </div>
                         <div class="px-4 3sm:px-2 w-4/12 3sm:w-2/5 ml-auto">
-                            <input type="text" class="form-control" placeholder="Calories">
+                            <input type="text" class="form-control" v-model="sumCalory" placeholder="Calories">
                         </div>
                     </div>
 
@@ -118,6 +123,7 @@
     export default {
         data() {
             return {
+                search: null,
                 meal: {
                     quantity: '',
                     calories: '',
@@ -134,7 +140,11 @@
                 options: [
                     'anas',
                     'Akmal'
-                ]
+                ],
+                results: [],
+                selectedResults: [],
+                sumQty: 0,
+                sumCalory: 0,
             }
         },
         methods: {
@@ -146,7 +156,33 @@
             removeMeal: function (index) {
                 this.meals.splice(this.meals.indexOf(index), 1);
             },
-
+            getCalory($val) {
+                return parseFloat($val).toFixed(2);
+            },
+            changeText() {
+                if (this.search) {
+                    this.axios.get(`https://api.edamam.com/api/food-database/parser?ingr=${this.search}&app_id=691cdfff&app_key=85704859d9ba587b4181bb4d6af9215e`)
+                        .then(res => {
+                            this.results = res.data.hints;
+                        });
+                }
+            },
+            onChange($e, item) {
+                if ($e.target.checked) {
+                    this.selectedResults.push(item);
+                } else {
+                    const $idx = this.selectedResults.findIndex((x) => {
+                        return x.food.foodId === item.food.foodId;
+                    });
+                    this.selectedResults.splice($idx, 1);
+                }
+                this.sumQty = this.selectedResults.length * 100;
+                let $calories = 0;
+                this.selectedResults.forEach((x) => {
+                    $calories += x.food.nutrients.ENERC_KCAL;
+                });
+                this.sumCalory = parseFloat($calories).toFixed(2);
+            },
         }
     }
 </script>
