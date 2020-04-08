@@ -6,49 +6,65 @@
             </div>
             <div class="w-3/4 3sm:w-full px-4 flex flex-wrap">
                 <div class="w-full" v-if="!OpenCallComponent">
-                    <div class="w-full bg-white-900 rounded-sm comments-shadow">
+                    <div class="w-full bg-white-900 rounded-sm comments-shadow" v-for="(item,index) in tickets"
+                         :key="index">
                         <div class="px-12 3sm:px-4 py-4 3sm:py-2 flex items-center ticket-title">
-                            <h2 class="flex-grow text-blue-900 text-2xl 4xl:text-lg 3sm:text-base">Ticket No. 130</h2>
-                            <span class="bg-purple-300 py-1 px-4 text-white-900 text-sm rounded-lg 3sm:px-3 3sm:text-xs 3sm:py-2px">Open</span>
+                            <h2 class="flex-grow text-blue-900 text-2xl 4xl:text-lg 3sm:text-base">Ticket No.
+                                {{item.id}}</h2>
+                            <span class="bg-purple-300 py-1 px-4 text-white-900 text-sm rounded-lg 3sm:px-3 3sm:text-xs 3sm:py-2px"
+                                  v-if="item.status === 0">Open</span>
+                            <span class="bg-purple-300 py-1 px-4 text-white-900 text-sm rounded-lg 3sm:px-3 3sm:text-xs 3sm:py-2px"
+                                  v-if="item.status === 1">Closed</span>
                         </div>
 
                         <div class="px-12 3sm:px-4 py-8 3sm:py-4 comment-box">
-                            <p class="text-blue-90 font-medium text-lg 3sm:text-sm 3sm:mb-2 mb-3">مشكلة في قياسات السكر</p>
-                            <p class="comment-date mb-4 font-semibold 3sm:text-sm 3sm:mb-2">Today , 02:30PM</p>
+                            <p class="text-blue-90 font-medium text-lg 3sm:text-sm 3sm:mb-2 mb-3">
+                                {{item.title}}
+                            </p>
+                            <p class="comment-date mb-4 font-semibold 3sm:text-sm 3sm:mb-2">{{item.created_at}}</p>
 
                             <p class="text-gray-900 text-lg mb-2 font-semibold 3sm:text-sm">Description</p>
-                            <p class="text-blue-90 font-medium text-base 3sm:text-sm">المشكلة يا دكتور أني كلما أقيس عبر الجهاز
-                                الالكتروني بالصيدلية، عبر أجهزة متعددة وحديثة، وذات
-                                جودة؛ أجد السكر 150 أو 160، وعندما أذهب للمختبر أجده طبيعيا جدا.
+                            <p class="text-blue-90 font-medium text-base 3sm:text-sm">
+                                {{item.description}}
                             </p>
                         </div>
 
-                        <div class="px-12 3sm:px-4 py-8 3sm:py-4 ">
+                        <div class="px-12 3sm:px-4 py-8 3sm:py-4 " v-for="(reply,index) in item.replays" :key="index">
                             <p class="text-gray-900 text-lg mb-2 font-semibold 3sm:text-sm">You</p>
                             <p class="text-blue-90 font-medium text-base 3sm:text-sm">
-                                تحليل السكر العشوائي 160 تحليل طبيعي لإجرائه بعد الساعة الأولى من الأكل، وتشخيص السكر
-                                يعتمد
-                                في الأساس على تحليل السكر الصائم لمدة 10 إلى 12 ساعة، ثم تناول الإفطار، وإعادة التحليل
-                                بعد
-                                ساعتين من الإفطار
+                                {{reply.replay_text}}
                             </p>
                         </div>
 
                     </div>
                     <div class="w-full">
-                        <form action="">
-                            <div class="flex items-center 3sm:flex-wrap w-full bg-white-900 rounded-sm comments-shadow mt-4 px-12 3sm:px-4 py-4">
-                                <input type="text" class="flex-grow py-2 focus:outline-none 3sm:w-full 3sm:mb-4" placeholder="Reply...">
-                                <button type="button"
-                                        class="comment-button text-white-900 py-2 px-6 3sm:text-sm 3sm:py-1 bg-blue-900 border border-blue-900 rounded-lg 3sm:rounded 3sm:w-full">
-                                    Send
-                                </button>
+                        <ValidationObserver ref="AddComment">
+                            <form @submit.prevent="handleSubmit">
+                                <div class="flex items-center 3sm:flex-wrap w-full bg-white-900 rounded-sm comments-shadow mt-4 px-12 3sm:px-4 py-4">
+                                    <ValidationProvider class="w-full" tag="div"
+                                                        vid="replay_text" name="Comment" rules="required"
+                                                        v-slot="{ errors }">
+                                        <input type="text"
+                                               class="flex-grow py-2 focus:outline-none 3sm:w-full 3sm:mb-4 w-full"
+                                               placeholder="Reply..." v-model="form.replay_text"
+                                               :class="{ 'has-danger': errors.length }">
+                                        <p class="message-danger">{{ errors[0] }}</p>
+                                    </ValidationProvider>
+                                    <button type="submit"
+                                            class="comment-button text-white-900 py-2 px-6 3sm:text-sm 3sm:py-1 bg-blue-900 border border-blue-900 rounded-lg 3sm:rounded 3sm:w-full"
+                                            :disabled="loading">
+                                        Send
+                                    </button>
+                                </div>
+                            </form>
+                            <div class="bg-green-100 mt-4 rounded-10px text-center" v-if="success">
+                                <p class="p-3 text-base text-blue-800 font-medium">Sent Successfully</p>
                             </div>
-                        </form>
-                        <button type="button"
-                                class="comment-button text-white-900 py-2 px-8 bg-blue-900 border border-blue-900 rounded-lg 3sm:rounded mt-4 3sm:text-sm 3sm:py-1 3sm:w-full">
-                            Close Ticket
-                        </button>
+                            <button type="submit"
+                                    class="comment-button text-white-900 py-2 px-8 bg-blue-900 border border-blue-900 rounded-lg 3sm:rounded mt-4 3sm:text-sm 3sm:py-1 3sm:w-full">
+                                Close Ticket
+                            </button>
+                        </ValidationObserver>
                     </div>
                 </div>
                 <div class="w-3/5" v-if="OpenCallComponent">
@@ -63,14 +79,58 @@
     import callPatient from "../../components/userDetails/CallPatient";
 
     export default {
+        data() {
+            return {
+                tickets: null,
+                success: false,
+                loading: false,
+                form: {
+                    ticket_id: this.$route.params.id,
+                    replay_text: null
+                }
+            }
+        },
         components: {
             Profile,
-            callPatient
+            callPatient,
+        },
+        methods: {
+            handleSubmit() {
+                const $this = this;
+                this.$refs['AddComment'].validate().then((result) => {
+                    if (result) {
+                        this.loading = true;
+                        this.axios.post('/c_panel/ticket/replay', this.form).then((res) => {
+                            this.success = true;
+                            this.loading = false;
+                            this.form = {
+                                replay_text: null,
+                            };
+                            setTimeout(function () {
+                                $this.success = false;
+                            }, 2000);
+                            this.$refs['AddComment'].reset();
+                        }).catch((error) => {
+                            this.loading = false;
+                            if (error.response) {
+                                if (error.response.status === 422) {
+                                    this.$refs['AddComment'].setErrors(error.response.data.errors);
+                                }
+                            }
+                        });
+                    }
+                });
+            },
         },
         computed: {
             OpenCallComponent() {
                 return this.$store.state.openCall;
             }
+        },
+        mounted() {
+            const $id = this.$route.params.id;
+            this.axios.get(`c_panel/ticket/replays?ticket_id=${$id}`,)
+                .then(response => (this.tickets = response.data.data))
         },
     }
 </script>

@@ -20,11 +20,14 @@
                                  :filter-method="title.prop === 'status_text'?filterTag:null"
                 >
                     <template slot-scope="scope">
+                        <div v-if="title.prop === 'category'">
+                            {{scope.row.category.name}}
+                        </div>
                         <el-button
-                                v-if="title.prop === 'user'"
+                                v-else-if="title.prop === 'user'"
                                 type="link"
                                 @click="user(scope.$index, scope.row)">
-                            {{scope.row.user}}
+                            {{scope.row.user.name}}
                         </el-button>
                         <el-tag v-else-if="title.prop === 'status_text'"
                                 :type="scope.row.status_text === 'Closed' ? 'closed-class' : 'open-class'"
@@ -33,7 +36,6 @@
                         <span v-else>{{scope.row[title.prop]}}</span>
                     </template>
                 </el-table-column>
-
 
                 <el-table-column label="Details">
                     <template slot-scope="scope">
@@ -68,15 +70,15 @@
                         label: 'Ticket Title'
                     },
                     {
-                        prop: 'id',
+                        prop: 'category',
                         label: 'Category'
                     },
                     {
-                        prop: 'id',
+                        prop: 'user',
                         label: 'User'
                     },
                     {
-                        prop: 'id',
+                        prop: 'created_at',
                         label: 'Date/Time'
                     },
                     {
@@ -114,14 +116,15 @@
                 return row.status_text === value;
             },
             handleEdit(index, row) {
-                this.$router.push(`/tickets/${row.user_id}/comments`);
+                this.$router.push(`/tickets/${row.user_id}/${row.id}/comments`);
             },
             user(index, row) {
-                this.$router.push(`/${row.user}/details`);
+                this.$router.push(`/${row.user.id}/details`);
             },
 
         },
-        computed:{
+
+        computed: {
             // category() {
             //     let test = [];
             //     if (this.tableData.length) {
