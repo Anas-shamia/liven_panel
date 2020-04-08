@@ -63,9 +63,8 @@
 
                     <div class="flex items-center 3sm:flex-wrap -mx-4 3sm:-mx-2 mt-6" v-for="(meal, index) in results"
                          :key="index">
-                        <div class="px-4 3sm:px-2 w-2/12 3sm:w-1/2 3sm:mb-4">
-                            <label for="" class="block">Food</label>
-                            <p>{{meal.food.label}}</p>
+                        <div class="px-4 3sm:px-2 w-4/12 3sm:w-1/2 3sm:mb-4">
+                            <p class="form-control">{{meal.food.label}}</p>
                         </div>
                         <div class="px-4 3sm:px-2 w-2/12 3sm:w-1/2 3sm:mb-4">
                             <label for="" class="block">Quantity</label>
