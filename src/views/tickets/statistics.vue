@@ -1,5 +1,5 @@
 <template>
-    <div class="container-content pb-24">
+    <div class="container-content pb-24" v-if="profile">
         <div class="flex flex-wrap -mx-4">
             <div class="w-1/4 3sm:w-full px-4 profile-info">
                 <Profile/>
@@ -45,7 +45,7 @@
                             <img class="w-10 3sm:w-8" src="@/assets/img/pink-weight.svg" alt="weight">
                             <div class="pl-5 3sm:w-full 3sm:text-center 3sm:pl-0">
                                 <p class="text-black-900 text-base 4xl:text-sm mb-1 3sm:mb-0 3sm:pt-2">Weight</p>
-                                <p class="text-3xl 3sm:text-lg text-black-900 font-bold">65.4 <span
+                                <p class="text-3xl 3sm:text-lg text-black-900 font-bold">{{profile.weight}} <span
                                         class="text-gray-700 text-base 4xl:text-sm pl-1">kg</span></p>
                             </div>
                             <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="edit" role="img"
@@ -62,9 +62,9 @@
                         <div class="relative weight-box bg-white-900 flex items-start 3sm:flex-wrap 3sm:justify-center py-8 px-6 3sm:px-4 3sm:py-4 rounded-lg custom-shadow">
                             <img class="w-10 3sm:w-8" src="@/assets/img/fat.svg" alt="weight">
                             <div class="pl-5 3sm:w-full 3sm:text-center 3sm:pl-0">
-                                <p class="text-black-900 text-base 4xl:text-sm mb-1 3sm:mb-0 3sm:pt-2">Body Fats</p>
-                                <p class="text-3xl 3sm:text-lg text-black-900 font-bold">10 <span
-                                        class="text-gray-700 text-base 4xl:text-sm pl-1">%</span></p>
+                                <p class="text-black-900 text-base 4xl:text-sm mb-1 3sm:mb-0 3sm:pt-2">Waist</p>
+                                <p class="text-3xl 3sm:text-lg text-black-900 font-bold" v-if="profile.body.length">{{profile.body[0].waist}} <span
+                                        class="text-gray-700 text-base 4xl:text-sm pl-1">CM</span></p>
                             </div>
                             <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="edit" role="img"
                                  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
@@ -77,11 +77,12 @@
                     </div>
                     <div class="w-1/4 3sm:w-1/2 3sm:mb-4 px-6 4xl:px-4 3sm:px-2">
                         <div class="relative weight-box bg-white-900 flex items-start 3sm:flex-wrap 3sm:justify-center py-8 px-6 3sm:px-4 3sm:py-4 rounded-lg custom-shadow">
-                            <img class="w-10 3sm:w-8" src="@/assets/img/water.svg" alt="weight">
+                            <img class="w-10 3sm:w-8" src="@/assets/img/fat.svg" alt="weight">
                             <div class="pl-5 3sm:w-full 3sm:text-center 3sm:pl-0">
-                                <p class="text-black-900 text-base 4xl:text-sm mb-1 3sm:mb-0 3sm:pt-2">% Water</p>
-                                <p class="text-3xl 3sm:text-lg text-black-900 font-bold">50 <span
-                                        class="text-gray-700 text-base 4xl:text-sm pl-1">%</span></p>
+                                <p class="text-black-900 text-base 4xl:text-sm mb-1 3sm:mb-0 3sm:pt-2">Hip</p>
+                                <p class="text-3xl 3sm:text-lg text-black-900 font-bold" v-if="profile.body.length">{{profile.body[0].highest}}
+                                    <span
+                                            class="text-gray-700 text-base 4xl:text-sm pl-1">CM</span></p>
                             </div>
                             <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="edit" role="img"
                                  xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"
@@ -97,7 +98,8 @@
                             <img class="w-10 3sm:w-8" src="@/assets/img/scale.svg" alt="weight">
                             <div class="pl-5 3sm:w-full 3sm:text-center 3sm:pl-0">
                                 <p class="text-black-900 text-base 4xl:text-sm mb-1 3sm:mb-0 3sm:pt-2">BMI</p>
-                                <p class="text-3xl 3sm:text-lg text-black-900 font-bold">22.2 <span
+                                <p class="text-3xl 3sm:text-lg text-black-900 font-bold">
+                                    {{bmi(profile.length,profile.weight)}} <span
                                         class="text-gray-700 text-base 4xl:text-sm pl-1">%</span></p>
                             </div>
                             <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="edit" role="img"
@@ -248,6 +250,7 @@
                         hip: '20',
                     },
                 ],
+                profile: null
             }
         },
         components: {
@@ -262,6 +265,15 @@
             openReportModal() {
                 this.openReport = !this.openReport;
             },
+            bmi(height, weight) {
+                let finalBmi = weight / (height / 100 * height / 100);
+                return finalBmi.toFixed(2);
+            }
+        },
+        mounted() {
+            const $id = this.$route.params.user;
+            this.axios.get(`c_panel/user/profile?user_id=${$id}`)
+                .then(response => (this.profile = response.data.data[0]))
         }
     }
 </script>

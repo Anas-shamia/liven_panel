@@ -28,11 +28,11 @@
                                      to="/tickets" exact>
                             <span class="block py-2 px-10 md:px-6 md:py-1">Tickets</span>
                         </router-link>
-<!--                        <router-link tag="li"-->
-<!--                                     class="cursor-pointer text-white-900 text-xl 4xl:text-lg 3lg:text-base mr-12 3lg:mr-6 md:mr-2 "-->
-<!--                                     to="/admin/users" exact>-->
-<!--                            <span class="block py-2 px-10 md:px-6 md:py-1">Dietician</span>-->
-<!--                        </router-link>-->
+                        <!--                        <router-link tag="li"-->
+                        <!--                                     class="cursor-pointer text-white-900 text-xl 4xl:text-lg 3lg:text-base mr-12 3lg:mr-6 md:mr-2 "-->
+                        <!--                                     to="/admin/users" exact>-->
+                        <!--                            <span class="block py-2 px-10 md:px-6 md:py-1">Dietician</span>-->
+                        <!--                        </router-link>-->
                     </ul>
                 </div>
             </header>
@@ -74,6 +74,7 @@
             closeMenu() {
                 this.$store.dispatch('getOpenMenu', false);
                 this.$store.dispatch('getCallOpen', false);
+                this.$store.dispatch("getMealShow", false);
                 document.getElementsByTagName('body')[0].classList.remove('active-menu');
             },
         },

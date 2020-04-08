@@ -29,7 +29,7 @@
             <router-link tag="div" :to="`/tickets/${this.user_id}/statistics`"
                          class="w-1/4 3sm:w-1/2 3sm:mb-4 px-6 4xl:px-4 3sm:px-2 cursor-pointer">
                 <div class="weight-box bg-white-900 flex items-start 3sm:flex-wrap 3sm:justify-center py-8 px-6 3sm:px-4 3sm:py-4 rounded-lg custom-shadow">
-                    <img class="w-10 3sm:w-8" src="@/assets/img/water.svg" alt="weight">
+                    <img class="w-10 3sm:w-8" src="@/assets/img/fat.svg" alt="weight">
                     <div class="pl-5 3sm:w-full 3sm:text-center 3sm:pl-0">
                         <p class="text-black-900 text-base 4xl:text-sm mb-1 3sm:mb-0 3sm:pt-2">Hip</p>
                         <p class="text-3xl 3sm:text-lg text-black-900 font-bold">{{this.hip}} <span

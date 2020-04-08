@@ -20,13 +20,6 @@
                             <ValidationProvider class="form-group mb-8 3sm:mb-4" tag="div"
                                                 vid="title" name="title" rules="required"
                                                 v-slot="{ errors }">
-                                <v-select class="form-control" :options="options"
-                                          placeholder="Report Category" v-model="form.category_id"></v-select>
-                                <p class="message-danger">{{ errors[0] }}</p>
-                            </ValidationProvider>
-                            <ValidationProvider class="form-group mb-8 3sm:mb-4" tag="div"
-                                                vid="title" name="title" rules="required"
-                                                v-slot="{ errors }">
                                 <label class="mb-2 block 3sm:text-sm">Report</label>
                                 <textarea class="form-control border rounded-lg border-gray-200 resize-none"
                                           :class="{ 'has-danger': errors.length }" v-model="form.content"></textarea>
@@ -42,7 +35,7 @@
                             </div>
                         </form>
                     </ValidationObserver>
-s                </div>
+                </div>
             </div>
         </div>
     </div>
@@ -52,17 +45,13 @@ s                </div>
         props: ['profile_id'],
         data() {
             return {
-                options: [
-                    'anas',
-                    'Akmal'
-                ],
                 success: false,
                 loading: false,
                 form: {
                     user_id: this.profile_id,
                     title: null,
                     content: null,
-                    category_id: '1',
+                    category_id: '0'
                 }
             }
         },
@@ -78,7 +67,6 @@ s                </div>
                             this.form = {
                                 title: null,
                                 content: null,
-                                category_id: '1',
                             };
                             setTimeout(function () {
                                 $this.success = false;

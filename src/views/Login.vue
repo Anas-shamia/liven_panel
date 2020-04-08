@@ -1,9 +1,9 @@
 <template>
-    <div class="relative">
-        <img class="absolute left-0  bottom-0 mb-8 max-w-full 3sm:hidden" src="@/assets/img/white-logo.png"
+    <div class="relative flex items-center justify-center">
+        <img class="absolute max-auto mb-8 max-w-full 3sm:hidden block" src="@/assets/img/white-logo.png"
              alt="logo">
         <div class="container-auth flex items-center justify-center h-screen  3sm:pt-8 relative">
-            <div class="login-form w-full bg-white-900 px-16 pt-10 pb-19 3xl:pt-6 3xl:pb-8 3sm:pt-4 3sm:pb-4 3sm:px-4">
+            <div class="login-form w-full bg-white-900 opacity-75 px-16 pt-10 pb-19 3xl:pt-6 3xl:pb-8 3sm:pt-4 3sm:pb-4 3sm:px-4">
                 <img class="mx-auto mb-16 3sm:mb-4 3sm:w-1/3" src="@/assets/img/logo.png" alt="logo">
                 <ValidationObserver ref="obsLogin">
                     <form @submit.prevent="handleSubmit">
@@ -44,7 +44,7 @@
                             <p class="message-danger">{{ errors[0] }}</p>
                         </ValidationProvider>
                         <button type="submit"
-                                class="w-full block text-center bg-primary-900 text-white-900 text-xl 3sm:text-base rounded py-4 3sm:py-2">
+                                class="login-btn border border-transparent w-full block text-center bg-primary-900 text-white-900 text-xl 3sm:text-base rounded py-4 3sm:py-2">
                             Login
                         </button>
 
@@ -118,6 +118,13 @@
     }
 </script>
 <style lang="scss" scoped>
-
+    .login-btn{
+        transition: all 0.25s ease;
+        &:hover{
+            background: #fff;
+            border-color: #693574;
+            color: #693574;
+        }
+    }
 </style>
 

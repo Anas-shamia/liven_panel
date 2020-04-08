@@ -36,7 +36,7 @@ const routes = [
         component: TicketsList,
     },
     {
-        path: '/tickets/:user/comments',
+        path: '/tickets/:user/:id/comments',
         name: 'comments',
         meta: {layout: 'default'},
         component: Comments,
