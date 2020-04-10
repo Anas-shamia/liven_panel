@@ -9,7 +9,6 @@ import VueAuth from '@websanova/vue-auth'
 
 Vue.use(VueAxios, axios);
 
-
 Vue.axios.defaults.baseURL = 'http://it-team-dev.com/api';
 
 Vue.axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
@@ -27,6 +26,7 @@ export default new Vuex.Store({
         showMeal: false,
         menuOpen: false,
         openCall: false,
+        token: null,
     },
     mutations: {
         setMealShow(state, status) {
@@ -38,6 +38,9 @@ export default new Vuex.Store({
         setCallOpen: (state, item) => {
             state.openCall = item;
         },
+        setToken: (state, item) => {
+            state.token = item;
+        },
     },
     actions: {
         getMealShow({commit}, status) {
@@ -48,6 +51,9 @@ export default new Vuex.Store({
         },
         getCallOpen({commit}, item) {
             commit('setCallOpen', item);
+        },
+        getToken({commit}, item) {
+            commit('setToken', item);
         },
     }
 })

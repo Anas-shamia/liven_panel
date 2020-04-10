@@ -83,9 +83,13 @@
                         this.axios.post('c_panel/login', this.form).then((res) => {
                             // this.loading = false;
                             // this.auth.setUserToken(res.data.data.access_token);
-                            localStorage.setItem('token',res.data.token);
+                            const $token = res.data.token;
+                            localStorage.setItem('token',$token);
                             localStorage.setItem('user',res.data.user);
-                            this.$router.push('/users');
+                            setTimeout(function () {
+                                window.location.replace('/users');
+                                // $this.$router.push('/users');
+                            }, 500);
                             // this.$auth.ready();
                         }).catch((error) => {
                             this.loading = false;
