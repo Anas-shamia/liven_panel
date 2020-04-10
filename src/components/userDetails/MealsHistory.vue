@@ -3,26 +3,18 @@
         <h3 class="text-blue-900 font-medium text-2xl 4xl:text-lg mb-6">Meals History</h3>
         <perfect-scrollbar class="meals-history">
             <div class="bg-white-900 custom-shadow rounded-lg px-10 py-6 3sm:px-4 3sm:py-4">
-                <ValidationObserver ref="AddAdvice">
-                    <form>
-                        <ValidationProvider class="relative custom-input mb-2" tag="div"
-                                            vid="date" name="Date" rules="required"
-                                            v-slot="{ errors }">
-                            <img class="absolute top-0 left-0 ml-2 " src="@/assets/img/date.svg" alt="date-icon">
-                            <v-date-picker
-                                    v-model='form.date'
-                                    :popover="popover"
-                                    :min-date="new Date()"
-                                    @input="changeText"
-                                    :input-props='{
+                <div class="relative custom-input mb-2">
+                    <img class="absolute top-0 left-0 ml-2 " src="@/assets/img/date.svg" alt="date-icon">
+                    <v-date-picker
+                            v-model='form.date'
+                            :popover="popover"
+                            @input="changeDate()"
+                            :input-props='{
                                           class: "w-full rounded-sm px-8",
                                           placeholder: "Search By Date",
                                         }'
-                            />
-                            <p class="message-danger" v-if="errors[0]">{{ errors[0] }}</p>
-                        </ValidationProvider>
-                    </form>
-                </ValidationObserver>
+                    />
+                </div>
                 <hr class="mb-4">
                 <div class="mb-4 3sm:mb-0" v-for="(item,index) in meals" :key="index">
                     <p class="mb-4">{{item.date}}</p>
@@ -53,6 +45,7 @@
             return {
                 meals: [],
                 form: {
+                    user_id: this.$route.params.user,
                     date: null,
                 },
                 popover: {
@@ -64,24 +57,25 @@
             openMeal() {
                 this.$store.dispatch("getMealShow", true);
             },
-            changeText() {
-                this.axios.post('/c_panel/advice', this.form).then((res) => {
-                    this.success = true;
-                    this.loading = false;
+            formatDate() {
+                let $date = this.form.date;
+                let dd = String($date.getDate()).padStart(2, '0');
+                let mm = String($date.getMonth() + 1).padStart(2, '0'); //January is 0!
+                let yyyy = $date.getFullYear();
+                $date = mm + '-' + dd + '-' + yyyy;
+                return this.form.date = $date;
+            },
+            changeDate() {
+                this.formatDate();
+                this.axios.post('c_panel/meal/user/today/all', this.form).then((res) => {
                     this.form = {
-                        name: null,
                         date: null,
                     };
-                    setTimeout(function () {
-                        $this.success = false;
-                        $this.$emit('close');
-                        location.reload();
-                    }, 2000);
-                    this.$refs['AddAdvice'].reset();
+                    this.meals = this.meals = res.data.data;
                 }).catch((error) => {
                     if (error.response) {
                         if (error.response.status === 422) {
-                            log
+                            console.log('test');
                         }
                     }
                 });
