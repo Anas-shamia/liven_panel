@@ -84,6 +84,7 @@
                             // this.loading = false;
                             // this.auth.setUserToken(res.data.data.access_token);
                             localStorage.setItem('token',res.data.token);
+                            localStorage.setItem('user',res.data.user);
                             this.$router.push('/users');
                             // this.$auth.ready();
                         }).catch((error) => {
@@ -93,19 +94,6 @@
                                 if (error.response.status === 422) {
                                     this.$refs['obsForm'].setErrors(error.response.data.errors);
                                 }
-                                // if (
-                                //     error.response.status === 401 &&
-                                //     ['UnauthorizedAccess', 'InvalidToken'].indexOf(res.data.code) > -1
-                                // ) {
-                                //     Vue.auth.logout({
-                                //         redirect: {name: 'auth-login'}
-                                //     });
-                                // }
-                                //
-                                // // System Error
-                                // else if (error.response.status === 500) {
-                                //     Vue.router.push({name: 'error-500'});
-                                // }
                             }
                         });
                     }

@@ -1,55 +1,44 @@
 <template>
-    <div>
+    <div v-if="meals.length">
         <h3 class="text-blue-900 font-medium text-2xl 4xl:text-lg mb-6">Meals History</h3>
         <perfect-scrollbar class="meals-history">
             <div class="bg-white-900 custom-shadow rounded-lg px-10 py-6 3sm:px-4 3sm:py-4">
-                <div class="relative custom-input mb-4">
-                    <input type="text" class="w-full px-8 py-2 rounded-sm" placeholder="Search by date">
-                    <img class="absolute top-0 left-0 ml-2" src="@/assets/img/date.svg" alt="date-icon">
-                </div>
+                <ValidationObserver ref="AddAdvice">
+                    <form>
+                        <ValidationProvider class="relative custom-input mb-2" tag="div"
+                                            vid="date" name="Date" rules="required"
+                                            v-slot="{ errors }">
+                            <img class="absolute top-0 left-0 ml-2 " src="@/assets/img/date.svg" alt="date-icon">
+                            <v-date-picker
+                                    v-model='form.date'
+                                    :popover="popover"
+                                    :min-date="new Date()"
+                                    @input="changeText"
+                                    :input-props='{
+                                          class: "w-full rounded-sm px-8",
+                                          placeholder: "Search By Date",
+                                        }'
+                            />
+                            <p class="message-danger" v-if="errors[0]">{{ errors[0] }}</p>
+                        </ValidationProvider>
+                    </form>
+                </ValidationObserver>
                 <hr class="mb-4">
-                <div class="mb-4 3sm:mb-0">
-                    <p class="mb-4">Today</p>
+                <div class="mb-4 3sm:mb-0" v-for="(item,index) in meals" :key="index">
+                    <p class="mb-4">{{item.date}}</p>
                     <ul class="flex items-center 3sm:flex-wrap 3sm:justify-center  -mx-4 4xl:-mx-2">
-                        <li class="w-1/3 3sm:w-1/2 px-4 4xl:px-2 3sm:mb-4">
+                        <li class="w-1/3 3sm:w-1/2 px-4 4xl:px-2 3sm:mb-4" v-for="(meal,index) in item.meals_today"
+                            :key="index">
                             <div class="relative rounded-lg overflow-hidden" @click="openMeal()">
-                                <img class="w-full h-full" src="@/assets/img/meal.jpg" alt="meal">
-                                <span class="absolute inset-x-0 bottom-0 py-2 text-white-900 text-center font-medium text-lg 4xl:text-base block span-overlay">Breakfast</span>
-                            </div>
-                        </li>
-                        <li class="w-1/3 3sm:w-1/2 px-4 4xl:px-2 3sm:mb-4">
-                            <div class="relative rounded-lg overflow-hidden">
-                                <img class="w-full h-full" src="@/assets/img/meal-2.jpg" alt="meal">
-                                <span class="absolute inset-x-0 bottom-0 py-2 text-white-900 text-center font-medium text-lg 4xl:text-base block span-overlay">Lunch</span>
-                            </div>
-                        </li>
-                        <li class="w-1/3 3sm:w-1/2 px-4 4xl:px-2 3sm:mb-4">
-                            <div class="relative rounded-lg overflow-hidden">
-                                <img class="w-full h-full" src="@/assets/img/meal-one.jpg" alt="meal">
-                                <span class="absolute inset-x-0 bottom-0 py-2 text-white-900 text-center font-medium text-lg 4xl:text-base block span-overlay">Dinner</span>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="mb-4 3sm:mb-0">
-                    <p class="mb-4">Today</p>
-                    <ul class="flex items-center 3sm:flex-wrap 3sm:justify-center  -mx-4 4xl:-mx-2">
-                        <li class="w-1/3 3sm:w-1/2 px-4 4xl:px-2 3sm:mb-4">
-                            <div class="relative rounded-lg overflow-hidden" @click="openMeal()">
-                                <img class="w-full h-full" src="@/assets/img/meal.jpg" alt="meal">
-                                <span class="absolute inset-x-0 bottom-0 py-2 text-white-900 text-center font-medium text-lg 4xl:text-base block span-overlay">Breakfast</span>
-                            </div>
-                        </li>
-                        <li class="w-1/3 3sm:w-1/2 px-4 4xl:px-2 3sm:mb-4">
-                            <div class="relative rounded-lg overflow-hidden">
-                                <img class="w-full h-full" src="@/assets/img/meal-2.jpg" alt="meal">
-                                <span class="absolute inset-x-0 bottom-0 py-2 text-white-900 text-center font-medium text-lg 4xl:text-base block span-overlay">Lunch</span>
-                            </div>
-                        </li>
-                        <li class="w-1/3 3sm:w-1/2 px-4 4xl:px-2 3sm:mb-4">
-                            <div class="relative rounded-lg overflow-hidden">
-                                <img class="w-full h-full" src="@/assets/img/meal-one.jpg" alt="meal">
-                                <span class="absolute inset-x-0 bottom-0 py-2 text-white-900 text-center font-medium text-lg 4xl:text-base block span-overlay">Dinner</span>
+                                <img class="meal-img object-cover w-full" :src="meal.image_url" alt="meal">
+                                <span class="absolute inset-x-0 bottom-0 py-2 text-white-900 text-center font-medium text-lg 4xl:text-base block span-overlay"
+                                      v-if="meal.type === '1'">Breakfast</span>
+                                <span class="absolute inset-x-0 bottom-0 py-2 text-white-900 text-center font-medium text-lg 4xl:text-base block span-overlay"
+                                      v-if="meal.type === '2'">Lunch</span>
+                                <span class="absolute inset-x-0 bottom-0 py-2 text-white-900 text-center font-medium text-lg 4xl:text-base block span-overlay"
+                                      v-if="meal.type === '3'">Dinner</span>
+                                <span class="absolute inset-x-0 bottom-0 py-2 text-white-900 text-center font-medium text-lg 4xl:text-base block span-overlay"
+                                      v-if="meal.type === '4'">Snacks</span>
                             </div>
                         </li>
                     </ul>
@@ -62,31 +51,46 @@
     export default {
         data() {
             return {
-                meals: [
-                    {
-                        date: 'Today',
-                        meal: [
-                            {
-                                src: 'img/meal.jpg',
-                                title: 'Breakfast'
-                            },
-                            {
-                                src: '/img/meal1.jpg',
-                                title: 'Lunch'
-                            },
-                            {
-                                src: '/img/meal2.jpg',
-                                title: 'Dinner'
-                            }
-                        ]
-                    }
-                ]
+                meals: [],
+                form: {
+                    date: null,
+                },
+                popover: {
+                    visibility: 'focus',
+                },
             }
         },
         methods: {
             openMeal() {
                 this.$store.dispatch("getMealShow", true);
-            }
+            },
+            changeText() {
+                this.axios.post('/c_panel/advice', this.form).then((res) => {
+                    this.success = true;
+                    this.loading = false;
+                    this.form = {
+                        name: null,
+                        date: null,
+                    };
+                    setTimeout(function () {
+                        $this.success = false;
+                        $this.$emit('close');
+                        location.reload();
+                    }, 2000);
+                    this.$refs['AddAdvice'].reset();
+                }).catch((error) => {
+                    if (error.response) {
+                        if (error.response.status === 422) {
+                            log
+                        }
+                    }
+                });
+            },
+        },
+        mounted() {
+            const $id = this.$route.params.user;
+            this.axios.get(`c_panel/meal/user/all?user_id=${$id}`)
+                .then(response => (this.meals = response.data.data))
         }
 
     }
@@ -101,6 +105,10 @@
         height: 600px;
         overflow-y: scroll;
         touch-action: none;
+    }
+
+    .meal-img {
+        height: 130px;
     }
 
     .custom-input {

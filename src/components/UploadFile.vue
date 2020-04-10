@@ -11,7 +11,7 @@
                     <ValidationObserver ref="AddFile">
                         <form @submit.prevent="handleSubmit">
                             <ValidationProvider tag="div"
-                                                vid="import_file" name="import_file"
+                                                vid="import_file" name="import_file" rules=""
                                                 v-slot="{ errors }">
                                 <div class="relative mx-auto text-center border-2 border-dashed border-gray-400 py-4">
                                     <button class="btn mx-auto w-1/4">
@@ -52,6 +52,7 @@
             return {
                 success: false,
                 loading: false,
+                file: null,
                 form: {
                     user_id: this.user_id,
                     import_file: null,
@@ -66,7 +67,7 @@
                         this.loading = true;
                         const formData = new FormData();
                         formData.append('user_id', this.form.user_id);
-                        formData.append('import_file', this.form.import_file);
+                        formData.append('import_file', this.file);
                         this.axios.post('/c_panel/diabetes/upload/cgm', formData, {
                             headers: {
                                 'Content-Type': 'multipart/form-data'
@@ -97,29 +98,18 @@
             onFileChange(e) {
                 var files = e.target.files || e.dataTransfer.files;
                 if (!files.length) return;
-                this.createInput(files[0]);
+                const $file = files[0];
+                this.file = $file;
+                this.createInput($file);
             },
             createInput(file) {
-                let promise = new Promise((resolve, reject) => {
-                    var reader = new FileReader();
-                    var vm = this;
-                    reader.onload = e => {
-                        resolve((vm.form.import_file = reader.result));
-                        console.log(vm.form.import_file);
-                    };
-                    reader.readAsText(file);
-                });
+                const reader = new FileReader();
+                const vm = this;
+                reader.onload = (e) => {
+                    vm.form.import_file = e.target.result;
+                };
+                reader.readAsDataURL(file);
 
-                promise.then(
-                    result => {
-                        /* handle a successful result */
-                        // console.log(this.form.import_file);
-                    },
-                    error => {
-                        /* handle an error */
-                        console.log(error);
-                    }
-                );
             }
         }
     }

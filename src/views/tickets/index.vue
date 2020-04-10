@@ -66,7 +66,7 @@
                         label: 'Ticket No.'
                     },
                     {
-                        prop: 'description',
+                        prop: 'title',
                         label: 'Ticket Title'
                     },
                     {
@@ -137,7 +137,7 @@
             // },
         },
         mounted() {
-            this.axios.get('c_panel/ticket/all',)
+            this.axios.get('/c_panel/ticket/all',)
                 .then(response => (this.tableData = response.data.data))
         },
         created() {

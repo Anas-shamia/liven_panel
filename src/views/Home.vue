@@ -111,7 +111,7 @@
             }
         },
         mounted() {
-            this.axios.get('c_panel/users/all',)
+            this.axios.get('c_panel/users/patient/all',)
                 .then(response => (this.tableData = response.data.data))
         }
 

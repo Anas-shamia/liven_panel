@@ -53,8 +53,8 @@
                         <div class="w-1/2 3sm:w-full px-6 4xl:px-4 3sm:px-4">
                             <BloodSugar/>
                         </div>
-                        <div class="w-1/2 3sm:w-full px-6 4xl:px-4 3sm:px-4">
-                            <MealsHistory/>
+                        <div class="w-1/2 3sm:w-full px-6 4xl:px-4 3sm:px-4" v-if="profile.has_meals">
+                            <MealsHistory />
                         </div>
                     </div>
                 </div>
@@ -121,7 +121,7 @@
                 return this.$store.state.openCall;
             },
             sortReports: function () {
-                if (this.profile.reports.length){
+                if (this.profile.reports.length) {
                     return this.profile.reports = _.orderBy(this.profile.reports, ['id'], ['desc']);
                 }
             }

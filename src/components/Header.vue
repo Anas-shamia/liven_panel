@@ -28,10 +28,15 @@
                                      to="/tickets" exact>
                             <span class="block py-2 px-10 md:px-6 md:py-1">Tickets</span>
                         </router-link>
-                        <router-link tag="li"
+                        <router-link tag="li" v-if="user === 'admin'"
                                      class="cursor-pointer text-white-900 text-xl 4xl:text-lg 3lg:text-base mr-12 3lg:mr-6 md:mr-2 "
                                      to="/dietician" exact>
                             <span class="block py-2 px-10 md:px-6 md:py-1">Dietician</span>
+                        </router-link>
+                        <router-link tag="li"
+                                     class="cursor-pointer text-white-900 text-xl 4xl:text-lg 3lg:text-base mr-12 3lg:mr-6 md:mr-2 "
+                                     to="/advices" exact>
+                            <span class="block py-2 px-10 md:px-6 md:py-1">Advices</span>
                         </router-link>
                     </ul>
                 </div>
@@ -71,6 +76,9 @@
             menuOpen() {
                 return this.$store.state.menuOpen;
             },
+            user() {
+                return localStorage.getItem('user') ? localStorage.getItem('user') : null;
+            }
         },
         methods: {
             toggleMenu() {
