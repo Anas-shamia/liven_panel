@@ -12,7 +12,15 @@
             layout() {
                 return (this.$route.meta.layout || default_layout) + '-layout';
             }
-        }
+        },
+        created() {
+            if(localStorage.getItem('token')) {
+                this.$router.push('/users');
+            }
+            else {
+                this.$router.push('/login');
+            }
+        },
     }
 </script>
 <style lang="scss">
