@@ -28,7 +28,15 @@
                     </template>
                 </el-table-column>
 
-
+                <el-table-column label="CGM File">
+                    <template slot-scope="scope">
+                        <el-button
+                                type="link"
+                                @click="openModal(scope.row)">
+                            Upload
+                        </el-button>
+                    </template>
+                </el-table-column>
                 <el-table-column label="Details">
                     <template slot-scope="scope">
                         <el-button
@@ -38,13 +46,21 @@
                     </template>
                 </el-table-column>
             </data-tables>
+            <UploadFile v-if="open" @close="open = false" :user_id="this.my_user"/>
         </div>
     </div>
 </template>
 <script>
+    import UploadFile from '../components/UploadFile'
+
     export default {
+        components: {
+            UploadFile
+        },
         data() {
             return {
+                open: false,
+                my_user: null,
                 filters: [
                     {
                         prop: ['name', 'phone'],
@@ -89,6 +105,10 @@
             handleEdit(index, row) {
                 this.$router.push(`/${row.id}/details`);
             },
+            openModal(row) {
+                this.my_user = row.id;
+                this.open = !this.open;
+            }
         },
         mounted() {
             this.axios.get('c_panel/users/all',)

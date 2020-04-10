@@ -15,21 +15,12 @@
                 <div class="mb-8 3sm:mb-4">
                     <h3 class="text-blue-900 font-medium text-2xl 4xl:text-lg mb-6">Reports</h3>
                     <div class="bg-white-900 px-4 py-8 3sm:py-4 rounded-lg">
-                        <ul class="mb-8 3sm:mb-4">
-                            <li class="border-b border-gray-800 mb-4 3sm:mb-2 flex items-center">
-                                <p class="mb-2 text-black-900 font-medium text-base 3sm:text-sm flex-grow">Weight
-                                    Statistics</p>
-                                <p class="mb-2 text-base 3sm:text-xs text-gray-700">Today , 02:30PM</p>
-                            </li>
-                            <li class="border-b border-gray-800 mb-4 3sm:mb-2 flex items-center">
-                                <p class="mb-2 text-black-900 font-medium text-base 3sm:text-sm flex-grow">Blood
-                                    Sugar</p>
-                                <p class="mb-2 text-base 3sm:text-xs text-gray-700">Today , 02:30PM</p>
-                            </li>
-                            <li class="border-b border-gray-800 mb-4 3sm:mb-2 flex items-center">
-                                <p class="mb-2 text-black-900 font-medium text-base 3sm:text-sm flex-grow">Meals
-                                    History</p>
-                                <p class="mb-2 text-base 3sm:text-xs text-gray-700">Today , 02:30PM</p>
+                        <ul class="mb-8 3sm:mb-4" v-if="profile.reports.length">
+                            <li class="border-b border-gray-800 mb-4 3sm:mb-2 flex items-center"
+                                v-for="(item,index) in sortReports" :key="index" v-if="index <= 2">
+                                <p class="mb-2 text-black-900 font-medium text-base 3sm:text-sm flex-grow">
+                                    {{item.title}}</p>
+                                <p class="mb-2 text-base 3sm:text-xs text-gray-700">{{item.created_at}}</p>
                             </li>
                         </ul>
                         <button type="button"
@@ -53,7 +44,8 @@
                     <mealInfo/>
                 </div>
                 <div class="w-full" v-if="ShowMealsComponent === false && OpenCallComponent === false">
-                    <SubscriptionDuration/>
+                    <SubscriptionDuration :start_date="profile.subscription_date"
+                                          :end_date="profile.subscription_end_date"/>
                     <WeightStatistics :user_id="profile.id" :weight="profile.weight" :height="profile.length"
                                       :waist="profile.body.length ? profile.body[0].waist: '0'"
                                       :hip="profile.body.length ? profile.body[0].highest: '0'"/>
@@ -127,6 +119,11 @@
             },
             OpenCallComponent() {
                 return this.$store.state.openCall;
+            },
+            sortReports: function () {
+                if (this.profile.reports.length){
+                    return this.profile.reports = _.orderBy(this.profile.reports, ['id'], ['desc']);
+                }
             }
         },
 

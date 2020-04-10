@@ -28,16 +28,17 @@
                                      to="/tickets" exact>
                             <span class="block py-2 px-10 md:px-6 md:py-1">Tickets</span>
                         </router-link>
-                        <!--                        <router-link tag="li"-->
-                        <!--                                     class="cursor-pointer text-white-900 text-xl 4xl:text-lg 3lg:text-base mr-12 3lg:mr-6 md:mr-2 "-->
-                        <!--                                     to="/admin/users" exact>-->
-                        <!--                            <span class="block py-2 px-10 md:px-6 md:py-1">Dietician</span>-->
-                        <!--                        </router-link>-->
+                        <router-link tag="li"
+                                     class="cursor-pointer text-white-900 text-xl 4xl:text-lg 3lg:text-base mr-12 3lg:mr-6 md:mr-2 "
+                                     to="/dietician" exact>
+                            <span class="block py-2 px-10 md:px-6 md:py-1">Dietician</span>
+                        </router-link>
                     </ul>
                 </div>
             </header>
-            <div>
-                <p class="flex items-center cursor-pointer text-white-900 text-lg 4xl:text-base 3lg:text-base md:text-sm mr-12 3lg:mr-6 md:mr-2 3sm:mr-0 3sm:py-0 3sm:px-0 bg-purple-200 rounded-full 2md:bg-transparent py-2 px-6">
+            <div class="relative inline-block">
+                <p class="flex items-center cursor-pointer text-white-900 text-lg 4xl:text-base 3lg:text-base md:text-sm  3sm:py-0 3sm:px-0 bg-purple-200 rounded-full 2md:bg-transparent py-2 px-6"
+                   @click="openMenu()">
                     <span class="2md:hidden">Liven Admin</span>
                     <span class="bg-primary-900 rounded-full h-4 w-4 flex items-center justify-center ml-3 2md:hidden">
                         <img src="@/assets/img/chevron-down.svg" alt="icon">
@@ -50,12 +51,22 @@
                               class=""></path>
                     </svg>
                 </p>
+                <ul class="absolute inset-x-0 bg-white-900 rounded-lg mt-2 dropdown-menu" :class="open? 'active':''">
+                    <li class="py-2 px-4">
+                        <a class="text-base font-bold text-black-600 cursor-pointer" @click="logout()">Logout</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
 </template>
 <script>
     export default {
+        data() {
+            return {
+                open: false
+            }
+        },
         computed: {
             menuOpen() {
                 return this.$store.state.menuOpen;
@@ -77,6 +88,13 @@
                 this.$store.dispatch("getMealShow", false);
                 document.getElementsByTagName('body')[0].classList.remove('active-menu');
             },
+            openMenu() {
+                this.open = !this.open;
+            },
+            logout() {
+                localStorage.removeItem('token');
+                this.$router.push('/login');
+            }
         },
         watch: {
             '$route': function ($val) {
@@ -93,6 +111,16 @@
 <style scoped lang="scss">
     .header {
         filter: drop-shadow(0px 4px 16px rgba(0, 0, 0, 0.16));
+    }
+
+    .dropdown-menu {
+        transform: scaleY(0);
+        transform-origin: top;
+        transition: all 0.25s ease;
+
+        &.active {
+            transform: scaleY(1);
+        }
     }
 
     .menu-icon {

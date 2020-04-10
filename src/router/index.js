@@ -6,6 +6,7 @@ import Tickets from '../views/tickets/details.vue'
 import Comments from '../views/tickets/comments.vue'
 import Statistics from '../views/tickets/statistics.vue'
 import Login from '../views/Login.vue'
+import Dietician from '../views/Dietician.vue'
 
 
 Vue.use(VueRouter);
@@ -46,6 +47,12 @@ const routes = [
         name: 'statistics',
         meta: {layout: 'default'},
         component: Statistics,
+    },
+    {
+        path: '/dietician',
+        name: 'dietician',
+        meta: {layout: 'default'},
+        component: Dietician,
     },
 ];
 

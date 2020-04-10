@@ -1,5 +1,5 @@
 <template>
-    <div class="container-content pb-24">
+    <div class="container-content pb-24" v-if="tickets">
         <div class="flex flex-wrap -mx-4">
             <div class="w-1/4 3sm:w-full px-4 profile-info">
                 <Profile/>
@@ -13,7 +13,7 @@
                                 {{item.id}}</h2>
                             <span class="bg-purple-300 py-1 px-4 text-white-900 text-sm rounded-lg 3sm:px-3 3sm:text-xs 3sm:py-2px"
                                   v-if="item.status === 0">Open</span>
-                            <span class="bg-purple-300 py-1 px-4 text-white-900 text-sm rounded-lg 3sm:px-3 3sm:text-xs 3sm:py-2px"
+                            <span class="closed py-1 px-4 text-white-900 text-sm rounded-lg 3sm:px-3 3sm:text-xs 3sm:py-2px"
                                   v-if="item.status === 1">Closed</span>
                         </div>
 
@@ -29,15 +29,15 @@
                             </p>
                         </div>
 
-                        <div class="px-12 3sm:px-4 py-8 3sm:py-4 " v-for="(reply,index) in item.replays" :key="index">
+                        <div class="px-12 3sm:px-4 py-4 3sm:py-4 reply-box" v-for="(reply,index) in item.replays"
+                             :key="index">
                             <p class="text-gray-900 text-lg mb-2 font-semibold 3sm:text-sm">You</p>
                             <p class="text-blue-90 font-medium text-base 3sm:text-sm">
                                 {{reply.replay_text}}
                             </p>
                         </div>
-
                     </div>
-                    <div class="w-full">
+                    <div class="w-full" v-if="tickets[0].status === 0">
                         <ValidationObserver ref="AddComment">
                             <form @submit.prevent="handleSubmit">
                                 <div class="flex items-center 3sm:flex-wrap w-full bg-white-900 rounded-sm comments-shadow mt-4 px-12 3sm:px-4 py-4">
@@ -61,9 +61,13 @@
                                 <p class="p-3 text-base text-blue-800 font-medium">Sent Successfully</p>
                             </div>
                             <button type="submit"
-                                    class="comment-button text-white-900 py-2 px-8 bg-blue-900 border border-blue-900 rounded-lg 3sm:rounded mt-4 3sm:text-sm 3sm:py-1 3sm:w-full">
+                                    class="comment-button text-white-900 py-2 px-8 bg-blue-900 border border-blue-900 rounded-lg 3sm:rounded mt-4 3sm:text-sm 3sm:py-1 3sm:w-full"
+                                    @click="closeTicket" :disabled="ticketLoading">
                                 Close Ticket
                             </button>
+                            <div class="bg-green-100 mt-4 rounded-10px text-center" v-if="ticketSuccess">
+                                <p class="p-3 text-base text-blue-800 font-medium">Ticket Closed Successfully</p>
+                            </div>
                         </ValidationObserver>
                     </div>
                 </div>
@@ -84,9 +88,15 @@
                 tickets: null,
                 success: false,
                 loading: false,
+                ticketLoading: false,
+                ticketSuccess: false,
                 form: {
                     ticket_id: this.$route.params.id,
                     replay_text: null
+                },
+                ticket: {
+                    ticket_id: this.$route.params.id,
+                    status: 1,
                 }
             }
         },
@@ -108,6 +118,7 @@
                             };
                             setTimeout(function () {
                                 $this.success = false;
+                                location.reload();
                             }, 2000);
                             this.$refs['AddComment'].reset();
                         }).catch((error) => {
@@ -118,6 +129,23 @@
                                 }
                             }
                         });
+                    }
+                });
+            },
+            closeTicket() {
+                this.axios.post('/c_panel/ticket/status/update', this.ticket).then((res) => {
+                    this.ticketSuccess = true;
+                    this.ticketLoading = false;
+                    setTimeout(function () {
+                        $this.ticketSuccess = false;
+                        location.reload();
+                    }, 2000);
+                }).catch((error) => {
+                    this.ticketLoading = false;
+                    if (error.response) {
+                        if (error.response.status === 422) {
+                            console.log('error');
+                        }
                     }
                 });
             },
@@ -144,7 +172,8 @@
         filter: drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.16));
     }
 
-    .comment-box {
+    .comment-box,
+    .reply-box {
         border-bottom: 1px solid #E6E6E6;
     }
 
@@ -155,5 +184,9 @@
             background-color: transparent;
             color: #12133A;
         }
+    }
+
+    .closed {
+        background-color: #82C99D;
     }
 </style>
