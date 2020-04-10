@@ -66,15 +66,15 @@
     </div>
 </template>
 <script>
-    import Profile from "../../components/userDetails/Profile";
-    import SubscriptionDuration from "../../components/userDetails/SubscriptionDuration";
-    import WeightStatistics from "../../components/userDetails/WeightStatistics";
-    import BloodSugar from "../../components/userDetails/BloodSugar";
-    import MealsHistory from "../../components/userDetails/MealsHistory";
-    import SendNotification from "../../components/userDetails/SendNotification";
-    import SendReport from "../../components/userDetails/SendReport";
-    import callPatient from "../../components/userDetails/CallPatient";
-    import mealInfo from "../../components/userDetails/MealInfo";
+    import Profile from "../components/userDetails/Profile";
+    import SubscriptionDuration from "../components/userDetails/SubscriptionDuration";
+    import WeightStatistics from "../components/userDetails/WeightStatistics";
+    import BloodSugar from "../components/userDetails/BloodSugar";
+    import MealsHistory from "../components/userDetails/MealsHistory";
+    import SendNotification from "../components/userDetails/SendNotification";
+    import SendReport from "../components/userDetails/SendReport";
+    import callPatient from "../components/userDetails/CallPatient";
+    import mealInfo from "../components/userDetails/MealInfo";
 
     export default {
         data() {

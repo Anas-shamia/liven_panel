@@ -206,7 +206,7 @@
             },
             saveProperties() {
                 const $form = {
-                    meal_id: 1,
+                    meal_id: '7-1',
                     properties: this.selectedResults
                 };
                 this.loading = true;

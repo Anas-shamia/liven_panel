@@ -8,11 +8,13 @@ import Statistics from '../views/tickets/statistics.vue'
 import Login from '../views/Login.vue'
 import Dietician from '../views/Dietician.vue'
 import Advices from '../views/Advices.vue'
+import SugarMeasurements from '../views/SugarMeasurements.vue'
 
 
 Vue.use(VueRouter);
 
-const routes = [
+let routes;
+routes = [
     {
         path: '/users',
         name: 'Users',
@@ -60,6 +62,12 @@ const routes = [
         name: 'advices',
         meta: {layout: 'default'},
         component: Advices,
+    },
+    {
+        path: '/sugar-measurements',
+        name: 'sugar',
+        meta: {layout: 'default'},
+        component: SugarMeasurements,
     },
 ];
 
