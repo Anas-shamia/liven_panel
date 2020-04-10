@@ -11,7 +11,7 @@
                     <ValidationObserver ref="AddFile">
                         <form @submit.prevent="handleSubmit">
                             <ValidationProvider tag="div"
-                                                vid="import_file" name="import_file" rules=""
+                                                vid="import_file" name="import_file"
                                                 v-slot="{ errors }">
                                 <div class="relative mx-auto text-center border-2 border-dashed border-gray-400 py-4">
                                     <button class="btn mx-auto w-1/4">
@@ -33,7 +33,7 @@
                             <button type="submit"
                                     class="w-full rounded bg-primary-900 text-white-900 text-lg 3sm:text-base 3sm:py-2 py-3 block text-center my-3 3sm:mb-0"
                                     :disabled="loading">
-                                Create
+                                Upload
                             </button>
                             <div class="bg-green-100 mt-4 rounded-10px text-center" v-if="success">
                                 <p class="p-3 text-base text-blue-800 font-medium">Sent Successfully</p>
