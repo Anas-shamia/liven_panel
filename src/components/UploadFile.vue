@@ -11,8 +11,8 @@
                     <ValidationObserver ref="AddFile">
                         <form @submit.prevent="handleSubmit">
                             <ValidationProvider tag="div"
-                                                vid="import_file" name="import_file" rules=""
-                                                v-slot="{ errors }">
+                                                vid="import_file" ref="import_file" name="import_file" rules="required"
+                                                v-slot="{ validate, errors }">
                                 <div class="relative mx-auto text-center border-2 border-dashed border-gray-400 py-4">
                                     <button class="btn mx-auto w-1/4">
                                         <svg aria-hidden="true" focusable="false" data-prefix="fas"
@@ -100,6 +100,7 @@
                 if (!files.length) return;
                 const $file = files[0];
                 this.file = $file;
+                this.$refs.import_file.validate(e);
                 this.createInput($file);
             },
             createInput(file) {

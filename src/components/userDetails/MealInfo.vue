@@ -83,6 +83,14 @@
                             <input type="text" class="form-control" placeholder="0"
                                    v-model="parseFloat(meal.food.nutrients.ENERC_KCAL).toFixed(2)">
                         </div>
+                        <div class="px-4 3sm:px-2  w-2/12 3sm:w-1/2 3sm:mb-4">
+                            <label for="" class="block">Nutrients</label>
+                            <ul>
+                                <li>Protein: {{parseFloat(meal.food.nutrients.PROCNT).toFixed(2)}}</li>
+                                <li>Fat: {{parseFloat(meal.food.nutrients.FAT).toFixed(2)}}</li>
+                                <li>Carbs: {{parseFloat(meal.food.nutrients.CHOCDF).toFixed(2)}}</li>
+                            </ul>
+                        </div>
                         <div class="px-4 flex items-center  w-2/12 3sm:w-full 3sm:mt-4 3sm:justify-end">
                             <input type="checkbox" @input="onChange($event,meal)"/>
                             <!--                            <span class="mx-2">-->
@@ -109,14 +117,22 @@
                         <div class="px-4 3sm:px-2 w-2/12 3sm:w-1/5">
                             <p class="block">Total</p>
                         </div>
-                        <div class="px-4 3sm:px-2 w-4/12 3sm:w-2/5">
+                        <div class="px-4 3sm:px-2 w-3/12 3sm:w-2/5">
                             <input type="text" class="form-control" v-model="sumQty" placeholder="Quantity">
                         </div>
-                        <div class="px-4 3sm:px-2 w-4/12 3sm:w-2/5 ml-auto">
+                        <div class="px-4 3sm:px-2 w-3/12 3sm:w-2/5 ml-auto">
                             <input type="text" class="form-control" v-model="sumCalory" placeholder="Calories">
+                        </div>
+                        <div class="px-4 3sm:px-2 w-2/12 3sm:w-1/5">
+                            <button class="font-medium rounded bg-primary-900 text-white-900 text-base 3sm:font-normal p-2 mx-auto block text-center"
+                                    type="button" @click="saveProperties" :disabled="selectedResults<=0">Save
+                            </button>
                         </div>
                     </div>
 
+                    <div class="bg-green-100 mt-4 rounded-10px text-center" v-if="success">
+                        <p class="p-3 text-base text-blue-800 font-medium">Save Successfully</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -148,6 +164,8 @@
                 selectedResults: [],
                 sumQty: 0,
                 sumCalory: 0,
+                success: false,
+                loading: false,
             }
         },
         methods: {
@@ -185,6 +203,23 @@
                     $calories += x.food.nutrients.ENERC_KCAL;
                 });
                 this.sumCalory = parseFloat($calories).toFixed(2);
+            },
+            saveProperties() {
+                const $form = {
+                    meal_id: 1,
+                    properties: this.selectedResults
+                };
+                this.loading = true;
+                const $this = this;
+                this.axios.post('/c_panel/meal/properties', $form).then((res) => {
+                    this.success = true;
+                    this.loading = false;
+                    setTimeout(function () {
+                        $this.success = false;
+                    }, 2000);
+                }).catch((error) => {
+                    this.loading = false;
+                });
             },
         }
     }
