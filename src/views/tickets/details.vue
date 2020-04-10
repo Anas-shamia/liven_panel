@@ -51,7 +51,7 @@
                                       :hip="profile.body.length ? profile.body[0].highest: '0'"/>
                     <div class="flex flex-wrap -mx-6 4xl:-mx-4 3sm:-mx-4">
                         <div class="w-1/2 3sm:w-full px-6 4xl:px-4 3sm:px-4">
-                            <BloodSugar/>
+                            <BloodSugar :user_id="profile.id"/>
                         </div>
                         <div class="w-1/2 3sm:w-full px-6 4xl:px-4 3sm:px-4" v-if="profile.has_meals">
                             <MealsHistory />

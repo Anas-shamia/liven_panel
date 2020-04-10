@@ -1,6 +1,6 @@
 <template>
     <div class="3sm:mb-4">
-        <router-link tag="div" to="/sugar-measurements">
+        <router-link tag="div" :to="`/${this.user_id}/sugar-measurements`">
             <h3 class="text-blue-900 font-medium text-2xl 4xl:text-lg mb-6 3sm:mb-4">Blood Sugar</h3>
 
             <div class="bg-white-900 custom-shadow rounded-lg px-10 py-6 3sm:px-4 3sm:py-3">
@@ -21,6 +21,7 @@
 </template>
 <script>
     export default {
+        props: ['user_id'],
         data() {
             return {
                 measurement: [],

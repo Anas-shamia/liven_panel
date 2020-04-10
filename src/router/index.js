@@ -64,7 +64,7 @@ routes = [
         component: Advices,
     },
     {
-        path: '/sugar-measurements',
+        path: '/:user/sugar-measurements',
         name: 'sugar',
         meta: {layout: 'default'},
         component: SugarMeasurements,
