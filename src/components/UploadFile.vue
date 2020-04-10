@@ -25,6 +25,7 @@
                                                   class=""></path>
                                         </svg>
                                     </button>
+                                    <span class="block">{{fileName}}</span>
                                     <input type="file" class="absolute inset-0 opacity-0 w-full" @change="onFileChange"
                                            accept=".xls">
                                 </div>
@@ -56,7 +57,8 @@
                 form: {
                     user_id: this.user_id,
                     import_file: null,
-                }
+                },
+                fileName: '',
             }
         },
         methods: {
@@ -100,6 +102,7 @@
                 if (!files.length) return;
                 const $file = files[0];
                 this.file = $file;
+                this.fileName = this.file.name;
                 this.$refs.import_file.validate(e);
                 this.createInput($file);
             },
