@@ -171,7 +171,12 @@
                         </div><!--bg white-->
 
                         <div class="bg-white-900 custom-shadow rounded-lg py-3 3sm:py-4 px-4 mt-4">
-                            <p class="border-b border-gray-800 pb-2">Meal Type (old)</p>
+                            <div class="flex items-center border-b border-gray-800 pb-2">
+                                <p class="flex-1">Meal Type (old)</p>
+                                <button class="font-medium rounded bg-primary-900 text-white-900 text-base 3sm:font-normal p-2 mx-auto block text-center"
+                                        type="button" @click="clearProperties">Clear
+                                </button>
+                            </div>
 
                             <div class="flex items-center 3sm:flex-wrap -mx-4 3sm:-mx-2 mt-6"
                                  v-for="(meal, index) in mealInfo.properties"
@@ -316,10 +321,15 @@
                 }
                 this.getTotal();
             },
+            clearProperties() {
+                this.mealInfo.properties = [];
+            },
             saveProperties() {
+                let $properties = this.mealInfo.properties;
+                $properties = $properties.concat(this.selectedResults);
                 const $form = {
                     meal_id: this.$route.params.meal,
-                    properties: this.selectedResults
+                    properties: $properties
                 };
                 this.loading = true;
                 const $this = this;
