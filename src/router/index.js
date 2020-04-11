@@ -10,6 +10,7 @@ import Dietician from '../views/Dietician.vue'
 import Advices from '../views/Advices.vue'
 import SugarMeasurements from '../views/SugarMeasurements.vue'
 import MealInfo from '../views/MealInfo.vue'
+import Reports from '../views/Reports.vue'
 
 
 Vue.use(VueRouter);
@@ -75,6 +76,12 @@ routes = [
         name: 'mealInfo',
         meta: {layout: 'default'},
         component: MealInfo,
+    },
+    {
+        path: '/:user/reports',
+        name: 'reports',
+        meta: {layout: 'default'},
+        component: Reports,
     },
 ];
 

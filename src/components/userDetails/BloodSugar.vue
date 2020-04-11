@@ -30,24 +30,6 @@
         data() {
             return {
                 measurement: [],
-                // data: [
-                //     {
-                //         name: "15 min",
-                //         y: 80,
-                //     },
-                //     {
-                //         name: "30 min",
-                //         y: 100,
-                //     },
-                //     {
-                //         name: "45 min",
-                //         y: 200,
-                //     },
-                //     {
-                //         name: "60 min",
-                //         y: 120,
-                //     },
-                // ],
                 chartOptions: {
                     chart: {
                         type: 'spline'

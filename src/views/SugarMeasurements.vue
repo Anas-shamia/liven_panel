@@ -10,7 +10,6 @@
                          @click="showDetails()">User Details
             </router-link>
         </div>
-
         <div class="flex flex-wrap -mx-4">
             <div class="w-1/4 3sm:w-full px-4 profile-info">
                 <Profile/>
@@ -43,7 +42,7 @@
                     <callPatient/>
                 </div>
                 <div class="w-full" v-if="OpenCallComponent === false">
-                    <div v-if="measurementAllByType.length">
+                    <div>
                         <div class="custom-shadow relative z-9 rounded-lg mb-8 ">
                             <div class="relative custom-input mb-0">
                                 <img class="absolute top-0 left-0 ml-2 focus:outline-none" src="@/assets/img/date.svg"
@@ -62,10 +61,17 @@
                         </div>
                         <ul class="flex flex-wrap items-center -mx-2 mb-6">
                             <li class="w-1/3 px-2 text-center">
+                                <div @click="changeChart('today')" class="rounded-25px py-2 cursor-pointer"
+                                     :class="selectedChart==='today'?'bg-primary-900 text-white-900':'bg-white-900 text-primary-900'"
+                                >
+                                    <span class="text-base font-medium">يوم</span>
+                                </div>
+                            </li>
+                            <li class="w-1/3 px-2 text-center">
                                 <div @click="changeChart('week')" class="rounded-25px py-2 cursor-pointer"
                                      :class="selectedChart==='week'?'bg-primary-900 text-white-900':'bg-white-900 text-primary-900'"
                                 >
-                                    <span class="text-base font-medium">اسبوع</span>
+                                    <span class="text-base font-medium">أسبوع</span>
                                 </div>
                             </li>
                             <li class="w-1/3 px-2 text-center">
@@ -75,19 +81,12 @@
                                     <span class="text-base font-medium">شهر</span>
                                 </div>
                             </li>
-                            <li class="w-1/3 px-2 text-center">
-                                <div @click="changeChart('year')" class="rounded-25px py-2 cursor-pointer"
-                                     :class="selectedChart==='year'?'bg-primary-900 text-white-900':'bg-white-900 text-primary-900'"
-                                >
-                                    <span class="text-base font-medium">سنة</span>
-                                </div>
-                            </li>
                         </ul>
-                        <highcharts :options="chartOptions" v-if="measurementAllByType.length"></highcharts>
+                        <highcharts :options="chartOptions"></highcharts>
                     </div>
-                    <p class="text-blue-900 font-medium text-2xl 4xl:text-lg mb-6 3sm:mb-4" v-else>
-                        Please Add Measurements
-                    </p>
+                    <!--                    <p class="text-blue-900 font-medium text-2xl 4xl:text-lg mb-6 3sm:mb-4" v-else>-->
+                    <!--                        Please Add Measurements-->
+                    <!--                    </p>-->
                 </div>
             </div>
         </div>
@@ -109,6 +108,7 @@
                 openReport: false,
                 openCall: false,
                 profile: null,
+                selectedChart: '',
                 measurementAllByType: [],
                 user_id: this.$route.params.user,
                 popover: {
@@ -150,19 +150,13 @@
 
                     plotOptions: {
                         series: {
-                            color: '#9355AA',
                             dataLabels: {
                                 enabled: true,
                             }
                         }
                     },
 
-                    series: [
-                        {
-                            name: 'CGM',
-                            data: []
-                        }
-                    ],
+                    series: null,
 
                     responsive: {
                         rules: [{
@@ -200,12 +194,11 @@
             changeChart(type) {
                 const $id = this.$route.params.user;
                 this.selectedChart = type;
-                this.chartOptions.series[0].data = [];
-                console.log(`c_panel/diabetes/user/chart/${this.selectedChart}?user_id=${$id}`);
-                this.axios.get(`c_panel/diabetes/user/chart/${this.selectedChart}?user_id=${$id}`)
+                // this.chartOptions.series[0].data = [];
+                this.axios.get(`/c_panel/diabetes/user/chart/${this.selectedChart}?user_id=${$id}`)
                     .then(response => {
                         this.measurementAllByType = response.data.data;
-                        this.chartOptions.series[0].data = this.measurementAllByType;
+                        this.chartOptions.series = this.measurementAllByType;
                     });
 
             },
@@ -247,15 +240,14 @@
             }
         },
         // watch: {
-        //     measurement($val) {
-        //         if ($val) {
-        //             this.chartOptions.series[0].data = $val.map(x => {
-        //                 return {
-        //                     name: x.name ? x.name : '0',
-        //                     y: x.y ? x.y : 0
-        //                 }
-        //             });
-        //         }
+        //     measurementAllByType($val) {
+        //         console.log($val);
+        //         this.chartOptions.series = $val.data.map(x => {
+        //             return {
+        //                 name: x.time,
+        //                 y: x.value
+        //             }
+        //         });
         //     }
         // },
         mounted() {
@@ -264,7 +256,7 @@
                 .then(response => (this.profile = response.data.data[0]))
         },
         created() {
-            this.changeChart('week');
+            this.changeChart('today');
         }
     }
 </script>

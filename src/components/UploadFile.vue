@@ -27,7 +27,7 @@
                                     </button>
                                     <span class="block">{{fileName}}</span>
                                     <input type="file" class="absolute inset-0 opacity-0 w-full" @change="onFileChange"
-                                           accept=".xls">
+                                           accept=".xls,.csv">
                                 </div>
                                 <p class="message-danger">{{ errors[0] }}</p>
                             </ValidationProvider>
