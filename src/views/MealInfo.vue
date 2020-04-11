@@ -35,7 +35,7 @@
                                      alt="img">
                             </div>
                         </div>
-                    </div>
+                    </div><!--wrap-->
                     <div class="w-3/4 3sm:w-full 3sm:mb-4 px-4 4xl:px-2" v-if="mealInfo">
                         <div class="bg-white-900 custom-shadow rounded-lg py-3 3sm:py-4 px-4">
                             <p class="border-b border-gray-800 pb-2">Meal Type</p>
@@ -79,7 +79,8 @@
                                     </div>
                                 </div>
                                 <textarea class="bg-white-900 resize-none w-full px-4 py-2 rounded meal-area"
-                                          placeholder="Notes From patient" disabled readonly>{{mealInfo.notes}}</textarea>
+                                          placeholder="Notes From patient" disabled
+                                          readonly>{{mealInfo.notes}}</textarea>
                             </form>
 
                             <div class="w-1/2 mt-4 mx-auto">
@@ -95,7 +96,9 @@
                                 </div>
                                 <div class="px-4 3sm:px-2 w-2/12 3sm:w-1/2 3sm:mb-4">
                                     <label for="" class="block">Quantity</label>
-                                    <input type="text" class="form-control" placeholder="0" value="100"/>
+                                    <input type="text" class="form-control" placeholder="0"
+                                           :data-kcal="meal.food.nutrients.ENERC_KCAL"
+                                           @input="changeQty($event,meal,index)" v-model="meal.quantity"/>
                                 </div>
                                 <div class="px-4 3sm:px-2  w-3/12 3sm:w-1/2 3sm:mb-4">
                                     <label for="" class="block">Unit</label>
@@ -145,11 +148,15 @@
                                 <div class="px-4 3sm:px-2 w-2/12 3sm:w-1/5">
                                     <p class="block">Total</p>
                                 </div>
-                                <div class="px-4 3sm:px-2 w-3/12 3sm:w-2/5">
+                                <div class="px-4 3sm:px-2 w-2/12 3sm:w-2/5">
                                     <input type="text" class="form-control" v-model="sumQty" placeholder="Quantity">
                                 </div>
-                                <div class="px-4 3sm:px-2 w-3/12 3sm:w-2/5 ml-auto">
+                                <div class="px-4 3sm:px-2 w-2/12 3sm:w-2/5 ml-auto">
                                     <input type="text" class="form-control" v-model="sumCalory" placeholder="Calories">
+                                </div>
+                                <div class="px-4 3sm:px-2 w-2/12 3sm:w-2/5 ml-auto">
+                                    <input type="text" class="form-control" v-model="sumNutrients"
+                                           placeholder="Nutrients">
                                 </div>
                                 <div class="px-4 3sm:px-2 w-2/12 3sm:w-1/5">
                                     <button class="font-medium rounded bg-primary-900 text-white-900 text-base 3sm:font-normal p-2 mx-auto block text-center"
@@ -161,11 +168,49 @@
                             <div class="bg-green-100 mt-4 rounded-10px text-center" v-if="success">
                                 <p class="p-3 text-base text-blue-800 font-medium">Save Successfully</p>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        </div><!--bg white-->
+
+                        <div class="bg-white-900 custom-shadow rounded-lg py-3 3sm:py-4 px-4 mt-4">
+                            <p class="border-b border-gray-800 pb-2">Meal Type (old)</p>
+
+                            <div class="flex items-center 3sm:flex-wrap -mx-4 3sm:-mx-2 mt-6"
+                                 v-for="(meal, index) in mealInfo.properties"
+                                 :key="index">
+                                <div class="px-4 3sm:px-2 w-4/12 3sm:w-1/2 3sm:mb-4">
+                                    <p class="form-control">{{meal.food.label}}</p>
+                                </div>
+                                <div class="px-4 3sm:px-2 w-2/12 3sm:w-1/2 3sm:mb-4">
+                                    <label for="" class="block">Quantity</label>
+                                    <input type="text" class="form-control" placeholder="Quantity" v-model="meal.quantity"/>
+                                </div>
+                                <div class="px-4 3sm:px-2  w-3/12 3sm:w-1/2 3sm:mb-4">
+                                    <label for="" class="block">Unit</label>
+                                    <input type="text" class="form-control" placeholder="Unit" value="g"/>
+                                </div>
+                                <div class="px-4 3sm:px-2  w-3/12 3sm:w-1/2 3sm:mb-4">
+                                    <label for="" class="block">Category</label>
+                                    <input type="text" class="form-control" placeholder="Category"
+                                           v-model="meal.food.category"/>
+                                </div>
+                                <div class="px-4 3sm:px-2  w-2/12 3sm:w-1/2 3sm:mb-4">
+                                    <label for="" class="block">calories</label>
+                                    <input type="text" class="form-control" placeholder="0"
+                                           v-model="parseFloat(meal.food.nutrients.ENERC_KCAL).toFixed(2)">
+                                </div>
+                                <div class="px-4 3sm:px-2  w-2/12 3sm:w-1/2 3sm:mb-4">
+                                    <label for="" class="block">Nutrients</label>
+                                    <ul>
+                                        <li>Protein: {{parseFloat(meal.food.nutrients.PROCNT).toFixed(2)}}</li>
+                                        <li>Fat: {{parseFloat(meal.food.nutrients.FAT).toFixed(2)}}</li>
+                                        <li>Carbs: {{parseFloat(meal.food.nutrients.CHOCDF).toFixed(2)}}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div><!--bg white-->
+                    </div><!--info-->
+                </div><!--wrap-->
+            </div><!--w 3/4-->
+        </div><!--wrap-->
 
     </div>
 </template>
@@ -199,9 +244,11 @@
                     unit: '',
                 }],
                 results: [],
+                resultsOriginal: [],
                 selectedResults: [],
                 sumQty: 0,
                 sumCalory: 0,
+                sumNutrients: 0,
                 success: false,
                 loading: false,
             }
@@ -215,6 +262,19 @@
             removeMeal: function (index) {
                 this.meals.splice(this.meals.indexOf(index), 1);
             },
+            changeQty($e, meal, index) {
+                let $meal = this.results[index];
+                const $qty = parseInt($e.target.value);
+                const $mealOriginal = this.resultsOriginal[index];
+                const $kcalOriginal = parseFloat($mealOriginal.food.nutrients.ENERC_KCAL).toFixed(2) / 100;
+                $meal.food.nutrients.ENERC_KCAL = $kcalOriginal * $qty;
+
+                const $selectedIdx = this.selectedResults.findIndex((x) => {
+                    return x === meal;
+                });
+                this.selectedResults[$selectedIdx] = $meal;
+                this.getTotal();
+            },
             getCalory($val) {
                 return parseFloat($val).toFixed(2);
             },
@@ -222,9 +282,28 @@
                 if (this.search) {
                     this.axios.get(`https://api.edamam.com/api/food-database/parser?ingr=${this.search}&app_id=691cdfff&app_key=85704859d9ba587b4181bb4d6af9215e`)
                         .then(res => {
-                            this.results = res.data.hints;
+                            this.results = res.data.hints.map((x) => {
+                                return {
+                                    ...x,
+                                    quantity: 100
+                                }
+                            });
+                            this.resultsOriginal = _.cloneDeep(this.results);
                         });
                 }
+            },
+            getTotal() {
+                let $calories = 0;
+                let $sumNutrients = 0;
+                let $sumQty = 0;
+                this.selectedResults.forEach((x) => {
+                    $calories += x.food.nutrients.ENERC_KCAL;
+                    $sumNutrients += x.food.nutrients.PROCNT + x.food.nutrients.FAT + x.food.nutrients.CHOCDF;
+                    $sumQty += parseFloat(x.quantity);
+                });
+                this.sumCalory = parseFloat($calories).toFixed(2);
+                this.sumNutrients = parseFloat($sumNutrients).toFixed(2);
+                this.sumQty = parseFloat($sumQty).toFixed(2);
             },
             onChange($e, item) {
                 if ($e.target.checked) {
@@ -235,12 +314,7 @@
                     });
                     this.selectedResults.splice($idx, 1);
                 }
-                this.sumQty = this.selectedResults.length * 100;
-                let $calories = 0;
-                this.selectedResults.forEach((x) => {
-                    $calories += x.food.nutrients.ENERC_KCAL;
-                });
-                this.sumCalory = parseFloat($calories).toFixed(2);
+                this.getTotal();
             },
             saveProperties() {
                 const $form = {
@@ -252,6 +326,7 @@
                 this.axios.post('/c_panel/meal/properties', $form).then((res) => {
                     this.success = true;
                     this.loading = false;
+                    this.loadMealInfo();
                     setTimeout(function () {
                         $this.success = false;
                     }, 2000);
@@ -267,7 +342,12 @@
             },
             showDetails() {
                 this.$store.dispatch("getCallOpen", false);
-            }
+            },
+            loadMealInfo() {
+                const $id = this.$route.params.meal;
+                this.axios.get(`c_panel/meal/info?id=${$id}`)
+                    .then(response => (this.mealInfo = response.data.data))
+            },
         },
         computed: {
             OpenCallComponent() {
@@ -275,9 +355,7 @@
             },
         },
         mounted() {
-            const $id = this.$route.params.meal;
-            this.axios.get(`c_panel/meal/info?id=${$id}`)
-                .then(response => (this.mealInfo = response.data.data))
+            this.loadMealInfo();
         }
     }
 </script>
