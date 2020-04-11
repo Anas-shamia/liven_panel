@@ -44,20 +44,26 @@
                 <div class="w-full" v-if="OpenCallComponent === false">
                     <div>
                         <div class="custom-shadow relative z-9 rounded-lg mb-8 ">
-                            <div class="relative custom-input mb-0">
+                            <div class="relative w-1/4 custom-input mb-0 flex items-center border-b ">
                                 <img class="absolute top-0 left-0 ml-2 focus:outline-none" src="@/assets/img/date.svg"
                                      alt="date-icon">
                                 <v-date-picker
                                         v-model='form.date'
                                         :popover="popover"
-                                        @input="changeDate()"
                                         :input-props='{
                                           class: "w-full rounded-sm px-8 focus:outline-none bg-transparent z-9",
                                           placeholder: "Search By Date",
                                         }'
                                 />
+                                <span class="cursor-pointer" @click="changeDate()">
+                         <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="check" role="img"
+                              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
+                              class="svg-inline--fa fa-check w-6"><path
+                                 fill="currentColor"
+                                 d="M435.848 83.466L172.804 346.51l-96.652-96.652c-4.686-4.686-12.284-4.686-16.971 0l-28.284 28.284c-4.686 4.686-4.686 12.284 0 16.971l133.421 133.421c4.686 4.686 12.284 4.686 16.971 0l299.813-299.813c4.686-4.686 4.686-12.284 0-16.971l-28.284-28.284c-4.686-4.686-12.284-4.686-16.97 0z"
+                                 class=""></path></svg>
+                    </span>
                             </div>
-                            <hr class="mb-4">
                         </div>
                         <ul class="flex flex-wrap items-center -mx-2 mb-6">
                             <li class="w-1/3 px-2 text-center">
@@ -82,7 +88,13 @@
                                 </div>
                             </li>
                         </ul>
-                        <highcharts :options="chartOptions"></highcharts>
+                        <p class="text-blue-900 font-medium text-2xl 4xl:text-lg mb-6 3sm:mb-4" v-if="!chartOptions.series">
+                            There is No Values to show
+                        </p>
+                        <div>
+                            <highcharts :options="chartOptions"></highcharts>
+                        </div>
+
                     </div>
                     <!--                    <p class="text-blue-900 font-medium text-2xl 4xl:text-lg mb-6 3sm:mb-4" v-else>-->
                     <!--                        Please Add Measurements-->
@@ -211,19 +223,20 @@
                 return this.form.date = $date;
             },
             changeDate() {
-                // this.formatDate();
-                // this.axios.post('c_panel/meal/user/today/all', this.form).then((res) => {
-                //     this.form = {
-                //         date: null,
-                //     };
-                //     this.meals = this.meals = res.data.data;
-                // }).catch((error) => {
-                //     if (error.response) {
-                //         if (error.response.status === 422) {
-                //             console.log('test');
-                //         }
-                //     }
-                // });
+                this.formatDate();
+                this.form.user_id = this.$route.params.user;
+                this.axios.post('c_panel/user/public/search', this.form).then((res) => {
+                    this.form = {
+                        date: null,
+                    };
+                    this.chartOptions.series = res.data.data.chart_diabetes.length ? res.data.data.chart_diabetes[0] : null;
+                }).catch((error) => {
+                    if (error.response) {
+                        if (error.response.status === 422) {
+                            console.log('test');
+                        }
+                    }
+                });
             },
         },
         computed: {
