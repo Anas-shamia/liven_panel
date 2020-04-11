@@ -86,10 +86,11 @@
                             const $token = res.data.token;
                             localStorage.setItem('token',$token);
                             localStorage.setItem('user',res.data.user);
-                            setTimeout(function () {
-                                window.location.replace('/users');
-                                // $this.$router.push('/users');
-                            }, 500);
+                            $this.$router.push('/users');
+
+                            // setTimeout(function () {
+                            //     // window.location.replace('/users');
+                            // }, 500);
                             // this.$auth.ready();
                         }).catch((error) => {
                             this.loading = false;

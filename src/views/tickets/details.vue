@@ -40,10 +40,7 @@
                 <div class="w-3/5" v-if="OpenCallComponent ">
                     <callPatient/>
                 </div>
-                <div class="w-full" v-if="ShowMealsComponent ">
-                    <mealInfo/>
-                </div>
-                <div class="w-full" v-if="ShowMealsComponent === false && OpenCallComponent === false">
+                <div class="w-full" v-if="OpenCallComponent === false">
                     <SubscriptionDuration :start_date="profile.subscription_date"
                                           :end_date="profile.subscription_end_date"/>
                     <WeightStatistics :user_id="profile.id" :weight="profile.weight" :height="profile.length"
@@ -54,7 +51,7 @@
                             <BloodSugar :user_id="profile.id"/>
                         </div>
                         <div class="w-1/2 3sm:w-full px-6 4xl:px-4 3sm:px-4" v-if="profile.has_meals">
-                            <MealsHistory />
+                            <MealsHistory :the_id="profile.id"/>
                         </div>
                     </div>
                 </div>
@@ -74,7 +71,6 @@
     import SendNotification from "../../components/userDetails/SendNotification";
     import SendReport from "../../components/userDetails/SendReport";
     import callPatient from "../../components/userDetails/CallPatient";
-    import mealInfo from "../../components/userDetails/MealInfo";
 
     export default {
         data() {
@@ -96,7 +92,6 @@
             SendNotification,
             SendReport,
             callPatient,
-            mealInfo
         },
         methods: {
             openNotification() {
@@ -106,18 +101,13 @@
                 this.openReport = !this.openReport;
             },
             openCalls() {
-                this.$store.dispatch("getMealShow", false);
                 this.$store.dispatch("getCallOpen", true);
             },
             showDetails() {
                 this.$store.dispatch("getCallOpen", false);
-                this.$store.dispatch("getMealShow", false);
             }
         },
         computed: {
-            ShowMealsComponent() {
-                return this.$store.state.showMeal;
-            },
             OpenCallComponent() {
                 return this.$store.state.openCall;
             },

@@ -9,6 +9,7 @@ import Login from '../views/Login.vue'
 import Dietician from '../views/Dietician.vue'
 import Advices from '../views/Advices.vue'
 import SugarMeasurements from '../views/SugarMeasurements.vue'
+import MealInfo from '../views/MealInfo.vue'
 
 
 Vue.use(VueRouter);
@@ -68,6 +69,12 @@ routes = [
         name: 'sugar',
         meta: {layout: 'default'},
         component: SugarMeasurements,
+    },
+    {
+        path: '/:user/:meal/meal-info',
+        name: 'mealInfo',
+        meta: {layout: 'default'},
+        component: MealInfo,
     },
 ];
 
