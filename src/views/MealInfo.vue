@@ -328,7 +328,7 @@
                     this.selectedResults.push(item);
                 } else {
                     const $idx = this.selectedResults.findIndex((x) => {
-                        return x.food.foodId === item.food.foodId;
+                        return x.food.foodId == item.food.foodId;
                     });
                     this.selectedResults.splice($idx, 1);
                 }
@@ -339,7 +339,6 @@
             },
             saveProperties() {
                 let $properties = this.mealInfo.properties;
-                console.log(this.selectedResults);
                 $properties = $properties.concat(this.selectedResults);
                 const $form = {
                     meal_id: this.$route.params.meal,
