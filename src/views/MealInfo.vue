@@ -369,7 +369,14 @@
             loadMealInfo() {
                 const $id = this.$route.params.meal;
                 this.axios.get(`c_panel/meal/info?id=${$id}`)
-                    .then(response => (this.mealInfo = response.data.data))
+                    .then(response => {
+                        this.mealInfo = response.data.data;
+                        if(!this.mealInfo.hasOwnProperty('properties')) {
+                            this.mealInfo = Object.assign(this.mealInfo, {
+                                properties: []
+                            });
+                        }
+                    });
             },
         },
         computed: {
