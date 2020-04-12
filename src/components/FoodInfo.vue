@@ -26,14 +26,16 @@
                                 <p class="text-primary-900 font-medium text-2xl 4xl:text-lg">Notes</p>
                                 <p class="text-base text-blue-800">{{item.notes}}</p>
                             </div>
-                            <div class="table-section"  v-if="item.properties">
+                            <div class="table-section" v-if="item.properties">
                                 <table class="w-full">
                                     <thead>
                                     <tr>
                                         <th class="w-1/3 text-left px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">Food</th>
-                                        <th class="w-1/4 text-left px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">Quantity</th>
+                                        <th class="w-1/4 text-left px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">Quantity
+                                        </th>
                                         <th class="w-1/4 text-left px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">Unit</th>
-                                        <th class="w-1/4 text-left px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">Calories</th>
+                                        <th class="w-1/4 text-left px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">Calories
+                                        </th>
                                         <th class="w-1/4 text-left px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">Protein</th>
                                         <th class="w-1/4 text-left px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">Fat</th>
                                         <th class="w-1/4 text-left px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">Carbs</th>
@@ -43,7 +45,8 @@
                                     <tr v-for="(meal, index) in item.properties" :key="index">
                                         <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">{{meal.food.label}}
                                         </td>
-                                        <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">{{meal.quantity}}</td>
+                                        <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">{{meal.quantity}}
+                                        </td>
                                         <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">g</td>
                                         <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
                                             {{parseFloat(meal.food.nutrients.ENERC_KCAL).toFixed(2)}}
@@ -99,18 +102,27 @@
         min-height: 50vh;
         overflow-y: scroll;
     }
-    .table-section{
-        height: 200px;
+
+    .table-section {
+        max-height: 400px;
+        overflow-y: scroll;
+
+        table {
+            max-height: 100%;
+        }
     }
-    .modal-height{
+
+    .modal-height {
         height: 400px;
     }
+
     thead {
         tr th {
             background-color: #EFF2F7;
             color: #555F6B;
         }
     }
+
     tbody {
         td {
             border-color: #C0CCDA;
