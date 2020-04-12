@@ -223,7 +223,19 @@
                 this.axios.get(`/c_panel/diabetes/user/chart/${this.selectedChart}?user_id=${$id}`)
                     .then(response => {
                         this.measurementAllByType = response.data.data;
-                        this.chartOptions.series = this.measurementAllByType;
+                        const $first = [
+                            {
+                                name: '12:00 am',
+                                y: 0
+                            }
+                        ];
+                        let measurements = this.measurementAllByType.map((x) => {
+                            return {
+                                name: x.name,
+                                data: $first.concat(x.data)
+                            };
+                        });
+                        this.chartOptions.series = measurements;
                     });
 
             },
