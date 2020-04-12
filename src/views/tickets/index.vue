@@ -12,7 +12,7 @@
         </div>
         <div class="py-6 tickets-table">
             <data-tables :data="tableData" :filters="filters" :page-size="1"
-                         :pagination-props="{ background: true, pageSizes: [5, 10, 20] }">
+                         :pagination-props="{ background: true, pageSizes: [10, 20, 50] }">
                 <el-table-column v-for="(title,index) in titles" :prop="title.prop" :label="title.label" :key="index"
                                  :width="title.prop ==='id' ?120 : ''"
                                  :sortable="(title.prop === 'id' || title.prop === 'date' || title.prop === 'user')"

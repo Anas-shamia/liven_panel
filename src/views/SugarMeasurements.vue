@@ -88,22 +88,28 @@
                                 </div>
                             </li>
                         </ul>
-                        <p class="text-blue-900 font-medium text-2xl 4xl:text-lg mb-6 3sm:mb-4" v-if="!chartOptions.series">
+                        <p class="text-blue-900 font-medium text-2xl 4xl:text-lg mb-6 3sm:mb-4"
+                           v-if="!chartOptions.series">
                             There is No Values to show
                         </p>
                         <div>
                             <highcharts :options="chartOptions"></highcharts>
                         </div>
 
+                        <div class="time-line">
+                            <ul>
+                                <li v-for="(item,index) in meals" :key="index" @click="openFoodModal">{{index+1}}</li>
+                            </ul>
+                        </div>
+
                     </div>
-                    <!--                    <p class="text-blue-900 font-medium text-2xl 4xl:text-lg mb-6 3sm:mb-4" v-else>-->
-                    <!--                        Please Add Measurements-->
-                    <!--                    </p>-->
+
                 </div>
             </div>
         </div>
         <SendNotification v-if="open" @close="open = false"/>
         <SendReport v-if="openReport" @close="openReport = false" :profile_id="profile.id"/>
+        <FoodInfo v-if="openFood" @close="openFood = false" :profile_id="profile.id" :foods="meals"/>
 
     </div>
 </template>
@@ -112,16 +118,19 @@
     import SendNotification from "../components/userDetails/SendNotification";
     import SendReport from "../components/userDetails/SendReport";
     import callPatient from "../components/userDetails/CallPatient";
+    import FoodInfo from "../components/FoodInfo";
 
     export default {
         data() {
             return {
                 open: false,
                 openReport: false,
+                openFood: false,
                 openCall: false,
                 profile: null,
                 selectedChart: '',
                 measurementAllByType: [],
+                meals: [],
                 user_id: this.$route.params.user,
                 popover: {
                     visibility: 'focus',
@@ -187,6 +196,7 @@
             SendNotification,
             SendReport,
             callPatient,
+            FoodInfo
         },
         methods: {
             openNotification() {
@@ -194,6 +204,9 @@
             },
             openReportModal() {
                 this.openReport = !this.openReport;
+            },
+            openFoodModal() {
+                this.openFood = !this.openFood;
             },
             openCalls() {
                 this.$store.dispatch("getMealShow", false);
@@ -230,6 +243,7 @@
                         date: null,
                     };
                     this.chartOptions.series = res.data.data.chart_diabetes.length ? res.data.data.chart_diabetes[0] : null;
+                    this.meals = res.data.data.meals.length ? res.data.data.meals : null;
                 }).catch((error) => {
                     if (error.response) {
                         if (error.response.status === 422) {
@@ -274,3 +288,43 @@
     }
 </script>
 
+<style scoped lang="scss">
+    .time-line {
+        margin-top: 20px;
+        text-align: center;
+
+        ul {
+            text-align: justify;
+            position: relative;
+            overflow: hidden;
+            margin: 0;
+            display: inline-block;
+        }
+
+        ul:before, li:after {
+            content: '';
+            width: 100%;
+            border: 2px solid #693574;
+            position: absolute;
+            top: 1em;
+            margin-top: -2px;
+            z-index: 1;
+        }
+
+        li {
+            width: 2em;
+            height: 2em;
+            text-align: center;
+            line-height: 2em;
+            border-radius: 50%;
+            background: #693574;
+            margin: 0 1em;
+            display: inline-block;
+            color: white;
+            position: relative;
+            z-index: 2;
+            transition: all 0.25s ease;
+            cursor: pointer;
+        }
+    }
+</style>
