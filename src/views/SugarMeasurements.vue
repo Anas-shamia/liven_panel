@@ -90,11 +90,25 @@
                         </ul>
                         <p class="text-blue-900 font-medium text-2xl 4xl:text-lg mb-6 3sm:mb-4"
                            v-if="!chartOptions.series">
-                            There is No Values to show
+                            There is No Measurements in this Day
                         </p>
                         <div>
                             <highcharts :options="chartOptions"></highcharts>
                         </div>
+                        <ul class="flex items-center justify-between bg-white-900 px-16 pb-2" v-if="chartOptions.series">
+                            <li class="text-xs font-bold text-blue-800">00:00</li>
+                            <li class="text-xs font-bold text-blue-800">2:00</li>
+                            <li class="text-xs font-bold text-blue-800">4:00</li>
+                            <li class="text-xs font-bold text-blue-800">6:00</li>
+                            <li class="text-xs font-bold text-blue-800">8:00</li>
+                            <li class="text-xs font-bold text-blue-800">10:00</li>
+                            <li class="text-xs font-bold text-blue-800">12:00</li>
+                            <li class="text-xs font-bold text-blue-800">14:00</li>
+                            <li class="text-xs font-bold text-blue-800">16:00</li>
+                            <li class="text-xs font-bold text-blue-800">18:00</li>
+                            <li class="text-xs font-bold text-blue-800">20:00</li>
+                            <li class="text-xs font-bold text-blue-800">22:00</li>
+                        </ul>
 
                         <div class="time-line">
                             <ul>
@@ -140,42 +154,51 @@
                     date: null,
                 },
                 chartOptions: {
-                    chart: {
-                        type: 'spline'
-                    },
                     title: {
                         text: ''
                     },
                     credits: {
                         enabled: false
                     },
-                    accessibility: {
-                        announceNewData: {
-                            enabled: true
-                        }
-                    },
-                    xAxis: {
-                        type: 'category',
-                        title: {
-                            text: 'Time'
-                        }
-                    },
                     yAxis: {
                         title: {
                             text: 'CGM'
-                        }
+                        },
+                        plotLines: [{
+                            value: 70,
+                            color: 'red',
+                            dashStyle: 'shortdash',
+                            width: 3,
+                            label: {
+                                text: '70 mg/dl'
+                            }
+                        }, {
+                            value: 180,
+                            color: 'red',
+                            dashStyle: 'shortdash',
+                            width: 3,
+                            label: {
+                                text: '180 mg/dl'
+                            }
+                        }]
                     },
-                    legend: {
-                        enabled: false
+                    xAxis: {
+                        title: {
+                            text: 'Time'
+                        },
+                        labels: {
+                            enabled: false
+                        }
                     },
 
                     plotOptions: {
                         series: {
-                            dataLabels: {
-                                enabled: true,
-                            }
+                            label: {
+                                connectorAllowed: false
+                            },
                         }
                     },
+
 
                     series: null,
 
@@ -223,22 +246,23 @@
                 this.axios.get(`/c_panel/diabetes/user/chart/${this.selectedChart}?user_id=${$id}`)
                     .then(response => {
                         this.measurementAllByType = response.data.data;
-                        const $first = [
-                            {
-                                name: '2020-03-20',
-                                data: [
-                                    {
-                                        name: '12:00 am',
-                                        y: 0
-                                    }
-                                ],
-                            }
-                        ];
-                        let measurements = this.measurementAllByType;
-                        if (this.selectedChart === 'month')
-                            measurements = $first.concat(this.measurementAllByType);
-                        console.log(measurements);
-                        this.chartOptions.series = measurements;
+                        this.chartOptions.series = this.measurementAllByType;
+                        // const $first = [
+                        //     {
+                        //         name: '2020-03-20',
+                        //         data: [
+                        //             {
+                        //                 name: '12:00 am',
+                        //                 y: 0
+                        //             }
+                        //         ],
+                        //     }
+                        // ];
+                        // let measurements = this.measurementAllByType;
+                        // if (this.selectedChart === 'month')
+                        //     measurements = $first.concat(this.measurementAllByType);
+                        // console.log(measurements);
+                        // this.chartOptions.series = measurements;
                     });
 
             },

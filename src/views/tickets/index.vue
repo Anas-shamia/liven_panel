@@ -137,8 +137,16 @@
             // },
         },
         mounted() {
-            this.axios.get('/c_panel/ticket/all',)
-                .then(response => (this.tableData = response.data.data))
+            const $user = localStorage.getItem('user') ? localStorage.getItem('user') : null;
+            if($user === 'admin'){
+                this.axios.get('/c_panel/ticket/all',)
+                    .then(response => (this.tableData = response.data.data))
+            }
+            if($user === 'dietitian'){
+                this.axios.get('/c_panel/ticket/dietitian/all',)
+                    .then(response => (this.tableData = response.data.data))
+            }
+
         },
         created() {
         }

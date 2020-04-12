@@ -38,7 +38,7 @@
             </div>
             <div class="w-3/4 3sm:w-full px-4">
                 <h2 class="text-2xl 4xl:text-lg text-blue-900 mb-6">Body Stats</h2>
-                <highcharts :options="chartOptions2"></highcharts>
+<!--                <highcharts :options="chartOptions2"></highcharts>-->
                 <div class="flex flex-wrap -mx-6 4xl:-mx-6 3sm:-mx-2 mt-8">
                     <div class="w-1/4 3sm:w-1/2 3sm:mb-4 px-6 4xl:px-4 3sm:px-2">
                         <div class="relative weight-box bg-white-900 flex items-start 3sm:flex-wrap 3sm:justify-center py-8 px-6 3sm:px-4 3sm:py-4 rounded-lg custom-shadow">
@@ -199,80 +199,41 @@
                         type: 'column'
                     },
                     title: {
-                        text: 'Weight'
+                        text: 'Monthly Average Rainfall'
                     },
-                    accessibility: {
-                        announceNewData: {
-                            enabled: true
-                        }
-                    },
-                    credits: {
-                        enabled: false
+                    subtitle: {
+                        text: 'Source: WorldClimate.com'
                     },
                     xAxis: {
-                        type: 'category',
-                        title: {
-                            text: 'Years'
-                        }
+                        categories: [
+                            'Jan',
+                            'Feb',
+                            'Mar',
+                            'Apr',
+                            'May',
+                            'Jun',
+                            'Jul',
+                            'Aug',
+                            'Sep',
+                            'Oct',
+                            'Nov',
+                            'Dec'
+                        ],
+                        crosshair: true
                     },
                     yAxis: {
+                        min: 0,
                         title: {
-                            text: 'Dollars'
+                            text: 'Rainfall (mm)'
                         }
-
-                    },
-                    legend: {
-                        enabled: false
                     },
                     plotOptions: {
-                        series: {
-                            borderWidth: 0,
-                            dataLabels: {
-                                enabled: true,
-                            }
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
                         }
                     },
-
-                    tooltip: {
-                        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                    },
-
-                    series: [
-                        {
-                            name: "Dollars",
-                            colorByPoint: true,
-                            data: [
-                                {
-                                    name: "2010",
-                                    y: 100,
-                                },
-                                {
-                                    name: "2012",
-                                    y: 200,
-                                },
-                                {
-                                    name: "2014",
-                                    y: 300,
-                                },
-                                {
-                                    name: "2016",
-                                    y: 400,
-                                },
-                                {
-                                    name: "2018",
-                                    y: 500,
-                                },
-                                {
-                                    name: "2019",
-                                    y: 600,
-                                },
-                                {
-                                    name: "2020",
-                                    y: 0,
-                                }
-                            ]
-                        }
-                    ]
+                    series: null
                 },
                 profile: null,
                 history: null,
@@ -282,7 +243,8 @@
                     weight: null,
                     waist: null,
                     highest: null
-                }
+                },
+                chart:[]
             }
         },
         components: {
@@ -341,6 +303,11 @@
                         highest: this.last.highest
                     };
                 });
+            // this.axios.get(`/c_panel/body/user/chart?user_id=${$id}`)
+            //     .then(response => {
+            //         this.chart = response.data.data;
+            //         this.chartOptions2.series = this.chart;
+            //     });
         }
     }
 </script>

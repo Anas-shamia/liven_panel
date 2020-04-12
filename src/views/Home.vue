@@ -57,6 +57,7 @@
         components: {
             UploadFile
         },
+
         data() {
             return {
                 open: false,
@@ -111,8 +112,16 @@
             }
         },
         mounted() {
-            this.axios.get('c_panel/users/patient/all',)
-                .then(response => (this.tableData = response.data.data))
+            const $user = localStorage.getItem('user') ? localStorage.getItem('user') : null;
+            if($user === 'admin'){
+                this.axios.get('c_panel/users/patient/all',)
+                    .then(response => (this.tableData = response.data.data))
+            }
+            if($user === 'dietitian'){
+                this.axios.get('/c_panel/users/patient/of/dietitian/all',)
+                    .then(response => (this.tableData = response.data.data))
+            }
+
         }
 
     }

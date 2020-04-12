@@ -53,7 +53,7 @@
                     },
                     yAxis: {
                         title: {
-                            text: 'CGM'
+                            text: 'معدل السكر'
                         }
                     },
                     legend: {
@@ -71,7 +71,7 @@
 
                     series: [
                         {
-                            name: 'CGM',
+                            name: 'معدل السكر',
                             data: []
                         }
                     ],

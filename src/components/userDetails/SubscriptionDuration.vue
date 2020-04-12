@@ -28,7 +28,7 @@
             </div>
             <button type="button"
                     class="font-medium rounded px-4 mt-4 bg-primary-900 text-white-900 text-lg 3sm:text-base 3sm:font-normal py-2 block text-center"
-                    @click="openAssignModal()">Assign To Dietician
+                    @click="openAssignModal()" v-if="user==='admin'">Assign To Dietician
             </button>
             <span class="absolute right-0 top-0 mt-4 mr-5 cursor-pointer" @click="openEdit()" v-if="!open">
             <svg aria-hidden="true" focusable="false" data-prefix="far" data-icon="edit" role="img"
@@ -104,6 +104,11 @@
             openAssignModal() {
                 this.openAssign = !this.openAssign;
             },
+        },
+        computed: {
+            user() {
+                return localStorage.getItem('user') ? localStorage.getItem('user') : null;
+            }
         }
     }
 </script>
