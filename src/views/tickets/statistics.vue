@@ -333,7 +333,14 @@
             this.axios.get(`/c_panel/body/user/all?user_id=${$id}`)
                 .then(response => (this.history = response.data.data));
             this.axios.get(`/c_panel/body/user/last?user_id=${$id}`)
-                .then(response => (this.last = response.data.data[0]));
+                .then(response => {
+                    this.last = response.data.data[0];
+                    this.form = {
+                        weight: this.last.weight,
+                        waist: this.last.waist,
+                        highest: this.last.highest
+                    };
+                });
         }
     }
 </script>
