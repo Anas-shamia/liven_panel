@@ -225,16 +225,19 @@
                         this.measurementAllByType = response.data.data;
                         const $first = [
                             {
-                                name: '12:00 am',
-                                y: 0
+                                name: '2020-03-20',
+                                data: [
+                                    {
+                                        name: '12:00 am',
+                                        y: 0
+                                    }
+                                ],
                             }
                         ];
-                        let measurements = this.measurementAllByType.map((x) => {
-                            return {
-                                name: x.name,
-                                data: $first.concat(x.data)
-                            };
-                        });
+                        let measurements = this.measurementAllByType;
+                        if (this.selectedChart === 'month')
+                            measurements = $first.concat(this.measurementAllByType);
+                        console.log(measurements);
                         this.chartOptions.series = measurements;
                     });
 
