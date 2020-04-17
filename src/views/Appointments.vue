@@ -50,6 +50,7 @@
     export default {
         data() {
             return {
+                appointment: [],
                 form: {
                     day: null,
                     from: null,
@@ -125,7 +126,11 @@
                     }
                 });
             }
-        }
+        },
+        // mounted() {
+        //     this.axios.get('c_panel/appointment',)
+        //         .then(response => (this.appointment = response.data.data[0]))
+        // }
     }
 </script>
 <style lang="scss" scoped>
