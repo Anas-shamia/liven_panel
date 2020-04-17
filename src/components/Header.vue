@@ -38,6 +38,11 @@
                                      to="/advices" exact>
                             <span class="block py-2 px-10 md:px-6 md:py-1">Advices</span>
                         </router-link>
+                        <router-link tag="li" v-if="user === 'dietitian'"
+                                     class="cursor-pointer text-white-900 text-xl 4xl:text-lg 3lg:text-base mr-12 3lg:mr-6 md:mr-2 "
+                                     to="/appointments" exact>
+                            <span class="block py-2 px-10 md:px-6 md:py-1">Appointments</span>
+                        </router-link>
                     </ul>
                 </div>
             </header>

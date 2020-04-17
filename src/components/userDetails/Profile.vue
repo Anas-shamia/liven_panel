@@ -1,8 +1,8 @@
 <template>
     <div class="bg-white-900 px-3 py-10 rounded-lg mb-6 3sm:mb-4 3sm:py-5">
         <div class="mx-auto text-center mb-8 3sm:mb-4">
-            <img class="object-cover w-24 h-24 rounded-full mx-auto mb-6" v-if="userProfile.image"
-                 :src="userProfile.image"
+            <img class="object-cover w-24 h-24 rounded-full mx-auto mb-6" v-if="userProfile.url"
+                 :src="userProfile.url"
                  alt="profile-pic">
             <img class="object-cover w-24 h-24 rounded-full mx-auto mb-6" v-else src="@/assets/img/avatar.svg"
                  alt="profile-pic">
