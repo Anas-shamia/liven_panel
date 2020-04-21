@@ -14,19 +14,26 @@
             <data-tables :data="tableData" :filters="filters" :page-size="1"
                          :pagination-props="{ background: true, pageSizes: [10, 20, 50] }">
                 <el-table-column v-for="(title,index) in titles" :prop="title.prop" :label="title.label" :key="index"
-                                 :width="title.prop ==='id' ?120 : ''"
+                                 :width="title.prop ==='rownum' ?120 : ''"
                                  :sortable="(title.prop === 'age' || title.prop === 'type' || title.prop === 'name')"
-                                 :filters="title.prop === 'gender'?[{ text: 'ذكر', value: 'ذكر' }, { text: 'أنثى', value: 'أنثى' }]:null"
-                                 :filter-method="title.prop === 'gender'?filterTag:null"
+                                 :filters="title.prop === 'gender'?[{ text: 'Male', value: 'Male' }, { text: 'Female', value: 'Female' }]:null || title.prop === 'subscription_state'?[{ text: 'paid', value: 'paid' }, { text: 'free', value: 'free' }]:null"
+                                 :filter-method="title.prop === 'gender'?filterTag:null || title.prop === 'subscription_state'?filterSub:null"
                 >
+
                     <template slot-scope="scope">
-                        <el-tag v-if="title.prop === 'gender'"
-                                :type="scope.row.gender === 'ذكر' ? 'male-class' : 'female-class'"
+                        <div v-if="title.prop === 'dietitian' && scope.row.dietitian">
+                           <span> {{scope.row.dietitian.name}}</span>
+                        </div>
+                        <el-tag v-else-if="title.prop === 'gender'"
+                                :type="scope.row.gender === 'Male' ? 'male-class' : 'female-class'"
                                 disable-transitions>{{scope.row.gender}}
                         </el-tag>
                         <div v-else>{{scope.row[title.prop]}}</div>
                     </template>
                 </el-table-column>
+
+
+
 
                 <el-table-column label="CGM File">
                     <template slot-scope="scope">
@@ -70,7 +77,7 @@
                 ],
                 titles: [
                     {
-                        prop: 'id',
+                        prop: 'rownum',
                         label: '#'
                     },
                     {
@@ -90,6 +97,10 @@
                         label: 'Age'
                     },
                     {
+                      prop: 'dietitian',
+                      label: 'Dietitian'
+                    },
+                    {
                         prop: 'subscription_state',
                         label: 'Type'
                     },
@@ -103,6 +114,9 @@
             filterTag(value, row) {
                 return row.gender === value;
             },
+            filterSub(value, row) {
+                return row.subscription_state === value;
+            },
             handleEdit(index, row) {
                 this.$router.push(`/${row.id}/details`);
             },
@@ -113,11 +127,11 @@
         },
         mounted() {
             const $user = localStorage.getItem('user') ? localStorage.getItem('user') : null;
-            if($user === 'admin'){
+            if ($user === 'admin') {
                 this.axios.get('c_panel/users/patient/all',)
                     .then(response => (this.tableData = response.data.data))
             }
-            if($user === 'dietitian'){
+            if ($user === 'dietitian') {
                 this.axios.get('/c_panel/users/patient/of/dietitian/all',)
                     .then(response => (this.tableData = response.data.data))
             }
