@@ -49,7 +49,7 @@
             <div class="relative inline-block">
                 <p class="flex items-center cursor-pointer text-white-900 text-lg 4xl:text-base 3lg:text-base md:text-sm  3sm:py-0 3sm:px-0 bg-purple-200 rounded-full 2md:bg-transparent py-2 px-6"
                    @click="openMenu()">
-                    <span class="2md:hidden">Liven Admin</span>
+                    <span class="2md:hidden">Liven {{user}}</span>
                     <span class="bg-primary-900 rounded-full h-4 w-4 flex items-center justify-center ml-3 2md:hidden">
                         <img src="@/assets/img/chevron-down.svg" alt="icon">
                     </span>

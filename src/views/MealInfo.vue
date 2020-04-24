@@ -77,8 +77,11 @@
                                             <span class="text-blue-900 text-base px-3">{{mealInfo.timing}}</span>
                                         </p>
                                         <div class="mt-4">
-                                            <img class="w-full object-cover rounded-lg meal-img"
+                                            <img v-if="mealInfo.image_url" class="w-full object-cover rounded-lg meal-img"
                                                  :src="mealInfo.image_url"
+                                                 alt="img">
+                                            <img v-else class="w-full object-cover rounded-lg meal-img"
+                                                 src="@/assets/img/default-img.png"
                                                  alt="img">
                                         </div>
                                     </div>
@@ -105,48 +108,49 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="(meal, index) in results" :key="index">
-                                        <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
-                                            {{meal.food.label}}
+                                <tr v-for="(meal, index) in results" :key="index">
+                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
+                                        {{meal.food.label}}
 
-                                        </td>
-                                        <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
-                                            <input type="text" class="form-control" placeholder="0"
-                                                   :data-kcal="meal.food.nutrients.ENERC_KCAL"
-                                                   @input="changeQty($event,meal,index)" v-model="meal.quantity"/>
-                                        </td>
-                                        <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
-                                            g
-                                        </td>
-                                        <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
-                                            {{meal.food.category}}
-                                        </td>
-                                        <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
-                                            <input type="text" class="form-control" placeholder="0"
-                                                   v-model="parseFloat(meal.food.nutrients.ENERC_KCAL).toFixed(2)">
-                                        </td>
-                                        <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
-                                            {{parseFloat(meal.food.nutrients.PROCNT).toFixed(2)}}
-                                        </td>
-                                        <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
-                                            {{parseFloat(meal.food.nutrients.FAT).toFixed(2)}}
-                                        </td>
-                                        <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
-                                            {{parseFloat(meal.food.nutrients.CHOCDF).toFixed(2)}}
-                                        </td>
-                                        <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
-                                            <input class="custom-radio" :id="`check_${index}`" type="checkbox" @input="onChange($event,meal)"/>
-                                            <label :for="`check_${index}`">
-                                                <span></span>
-                                            </label>
-                                        </td>
-                                    </tr>
+                                    </td>
+                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
+                                        <input type="text" class="form-control" placeholder="0"
+                                               :data-kcal="meal.food.nutrients.ENERC_KCAL"
+                                               :data-fat="meal.food.nutrients.FAT"
+                                               @input="changeQty($event,meal,index)" v-model="meal.quantity"/>
+                                    </td>
+                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
+                                        g
+                                    </td>
+                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
+                                        {{meal.food.category}}
+                                    </td>
+                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
+                                        {{parseFloat(meal.food.nutrients.ENERC_KCAL).toFixed(2)}}
+                                    </td>
+                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
+                                        {{parseFloat(meal.food.nutrients.PROCNT).toFixed(2)}}
+                                    </td>
+                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
+                                        {{parseFloat(meal.food.nutrients.FAT).toFixed(2)}}
+                                    </td>
+                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
+                                        {{parseFloat(meal.food.nutrients.CHOCDF).toFixed(2)}}
+                                    </td>
+                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
+                                        <input class="custom-radio" :id="`check_${index}`" type="checkbox"
+                                               @input="onChange($event,meal)"/>
+                                        <label :for="`check_${index}`">
+                                            <span></span>
+                                        </label>
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
 
 
                             <div class="flex items-center flex-wrap -mx-4 3sm:-mx-2 mt-10">
-                                <div class="px-4 3sm:px-2 w-2/12 3sm:w-1/5">
+                                <div class="px-4 3sm:px-2 w-1/12 3sm:w-1/5">
                                     <p class="block">Total</p>
                                 </div>
                                 <div class="px-4 3sm:px-2 w-2/12 3sm:w-2/5">
@@ -158,11 +162,18 @@
                                     <input type="text" class="form-control" v-model="sumCalory" placeholder="Calories">
                                 </div>
                                 <div class="px-4 3sm:px-2 w-2/12 3sm:w-2/5 ml-auto">
-                                    <label>Nutrients</label>
-                                    <input type="text" class="form-control" v-model="sumNutrients"
-                                           placeholder="Nutrients">
+                                    <label>Protein</label>
+                                    <input type="text" class="form-control" v-model="sumFat" placeholder="Calories">
                                 </div>
-                                <div class="px-4 3sm:px-2 w-2/12 3sm:w-1/5">
+                                <div class="px-4 3sm:px-2 w-2/12 3sm:w-2/5 ml-auto">
+                                    <label>Fat</label>
+                                    <input type="text" class="form-control" v-model="sumProtein" placeholder="Calories">
+                                </div>
+                                <div class="px-4 3sm:px-2 w-2/12 3sm:w-2/5 ml-auto">
+                                    <label>Carbs</label>
+                                    <input type="text" class="form-control" v-model="sumCarbs" placeholder="Calories">
+                                </div>
+                                <div class="px-4 3sm:px-2 w-1/12 3sm:w-1/5">
                                     <button class="font-medium rounded bg-primary-900 text-white-900 text-base 3sm:font-normal p-2 mx-auto block text-center"
                                             type="button" @click="saveProperties" :disabled="selectedResults<=0">Save
                                     </button>
@@ -266,6 +277,9 @@
                 selectedResults: [],
                 sumQty: 0,
                 sumCalory: 0,
+                sumFat: 0,
+                sumProtein: 0,
+                sumCarbs: 0,
                 sumNutrients: 0,
                 success: false,
                 loading: false,
@@ -285,7 +299,13 @@
                 const $qty = parseInt($e.target.value);
                 const $mealOriginal = this.resultsOriginal[index];
                 const $kcalOriginal = parseFloat($mealOriginal.food.nutrients.ENERC_KCAL).toFixed(2) / 100;
+                const $fatOriginal = parseFloat($mealOriginal.food.nutrients.FAT).toFixed(2) / 100;
+                const $procnt = parseFloat($mealOriginal.food.nutrients.PROCNT).toFixed(2) / 100;
+                const $carbs = parseFloat($mealOriginal.food.nutrients.CHOCDF).toFixed(2) / 100;
                 $meal.food.nutrients.ENERC_KCAL = $kcalOriginal * $qty;
+                $meal.food.nutrients.FAT = $fatOriginal * $qty;
+                $meal.food.nutrients.PROCNT = $procnt * $qty;
+                $meal.food.nutrients.CHOCDF = $carbs * $qty;
 
                 const $selectedIdx = this.selectedResults.findIndex((x) => {
                     return x === meal;
@@ -312,15 +332,25 @@
             },
             getTotal() {
                 let $calories = 0;
+                let $fat = 0;
+                let $protein = 0;
+                let $carbs = 0;
                 let $sumNutrients = 0;
                 let $sumQty = 0;
                 this.selectedResults.forEach((x) => {
                     $calories += x.food.nutrients.ENERC_KCAL;
-                    $sumNutrients += x.food.nutrients.PROCNT + x.food.nutrients.FAT + x.food.nutrients.CHOCDF;
+                    $fat += x.food.nutrients.FAT;
+                    $protein += x.food.nutrients.PROCNT;
+                    $carbs += x.food.nutrients.CHOCDF;
+                    // $sumNutrients += x.food.nutrients.PROCNT + x.food.nutrients.FAT + x.food.nutrients.CHOCDF;
                     $sumQty += parseFloat(x.quantity);
+                    console.log($fat);
                 });
                 this.sumCalory = parseFloat($calories).toFixed(2);
-                this.sumNutrients = parseFloat($sumNutrients).toFixed(2);
+                this.sumFat = parseFloat($fat).toFixed(2);
+                // this.sumNutrients = parseFloat($protein).toFixed(2);
+                this.sumProtein = parseFloat($protein).toFixed(2);
+                this.sumCarbs = parseFloat($carbs).toFixed(2);
                 this.sumQty = parseFloat($sumQty).toFixed(2);
             },
             onChange($e, item) {
@@ -336,6 +366,7 @@
             },
             clearProperties() {
                 this.mealInfo.properties = [];
+                this.saveProperties();
             },
             saveProperties() {
                 let $properties = this.mealInfo.properties;
@@ -371,7 +402,7 @@
                 this.axios.get(`c_panel/meal/info?id=${$id}`)
                     .then(response => {
                         this.mealInfo = response.data.data;
-                        if(!this.mealInfo.hasOwnProperty('properties')) {
+                        if (!this.mealInfo.hasOwnProperty('properties')) {
                             this.mealInfo = Object.assign(this.mealInfo, {
                                 properties: []
                             });

@@ -27,15 +27,31 @@
                                  :sortable="(title.prop === 'date')"
                 >
                 </el-table-column>
+
+                <el-table-column label="View">
+                    <template slot-scope="scope">
+                        <el-button
+                                type="link"
+                                @click="openReportModal(scope.row)">
+                            View
+                        </el-button>
+                    </template>
+                </el-table-column>
             </data-tables>
         </div>
+        <ViewReport v-if="openReport" @close="openReport = false" :id="myId" :url="'/c_panel/report'"/>
     </div>
 </template>
 <script>
-
+    import ViewReport from '../components/userDetails/ViewReport';
     export default {
+        components:{
+            ViewReport
+        },
         data() {
             return {
+                myId: null,
+                openReport: false,
                 user_id: this.$route.params.user,
                 filters: [
                     {
@@ -53,7 +69,7 @@
                         label: 'Title'
                     },
                     {
-                        prop: 'content',
+                        prop: 'content_sub',
                         label: 'Content'
                     },
                     {
@@ -65,6 +81,12 @@
                 search: '',
                 tableData: []
             }
+        },
+        methods:{
+            openReportModal(row) {
+                this.myId = row.id;
+                this.openReport = !this.openReport;
+            },
         },
         mounted() {
             const $id = this.$route.params.user;

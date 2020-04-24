@@ -118,7 +118,7 @@
                             };
                             setTimeout(function () {
                                 $this.success = false;
-                                location.reload();
+                                $this.loadTicket();
                             }, 2000);
                             this.$refs['AddComment'].reset();
                         }).catch((error) => {
@@ -133,6 +133,7 @@
                 });
             },
             closeTicket() {
+                const $this = this;
                 this.axios.post('/c_panel/ticket/status/update', this.ticket).then((res) => {
                     this.ticketSuccess = true;
                     this.ticketLoading = false;
@@ -149,6 +150,11 @@
                     }
                 });
             },
+            loadTicket() {
+                const $id = this.$route.params.id;
+                this.axios.get(`c_panel/ticket/replays?ticket_id=${$id}`,)
+                    .then(response => (this.tickets = response.data.data))
+            }
         },
         computed: {
             OpenCallComponent() {
@@ -156,9 +162,7 @@
             }
         },
         mounted() {
-            const $id = this.$route.params.id;
-            this.axios.get(`c_panel/ticket/replays?ticket_id=${$id}`,)
-                .then(response => (this.tickets = response.data.data))
+            this.loadTicket();
         },
     }
 </script>

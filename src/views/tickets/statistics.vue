@@ -5,22 +5,16 @@
                 <Profile/>
                 <div class="mb-8 3sm:mb-4">
                     <h3 class="text-blue-900 font-medium text-2xl 4xl:text-lg mb-6">Reports</h3>
-                    <div class="bg-white-900 px-4 py-8 3sm:py-4 rounded-lg">
-                        <ul class="mb-8 3sm:mb-4">
-                            <li class="border-b border-gray-800 mb-4 3sm:mb-2 flex items-center">
-                                <p class="mb-2 text-black-900 font-medium text-base 3sm:text-sm flex-grow">Weight
-                                    Statistics</p>
-                                <p class="mb-2 text-base 3sm:text-xs text-gray-700">Today , 02:30PM</p>
-                            </li>
-                            <li class="border-b border-gray-800 mb-4 3sm:mb-2 flex items-center">
-                                <p class="mb-2 text-black-900 font-medium text-base 3sm:text-sm flex-grow">Blood
-                                    Sugar</p>
-                                <p class="mb-2 text-base 3sm:text-xs text-gray-700">Today , 02:30PM</p>
-                            </li>
-                            <li class="border-b border-gray-800 mb-4 3sm:mb-2 flex items-center">
-                                <p class="mb-2 text-black-900 font-medium text-base 3sm:text-sm flex-grow">Meals
-                                    History</p>
-                                <p class="mb-2 text-base 3sm:text-xs text-gray-700">Today , 02:30PM</p>
+                    <div class="bg-white-900 px-4 py-6 3sm:py-4 rounded-lg">
+                        <router-link tag="p" :to="`/${profile.id}/reports`"
+                                     class="mb-2 text-blue-800 text-sm font-bold underline">See All Reports
+                        </router-link>
+                        <ul class="mb-8 3sm:mb-4" v-if="profile.reports.length">
+                            <li class="border-b border-gray-800 mb-4 3sm:mb-2 flex items-center"
+                                v-for="(item,index) in sortReports" :key="index" v-if="index <= 2">
+                                <p class="mb-2 text-black-900 font-medium text-base 3sm:text-sm flex-grow">
+                                    {{item.title}}</p>
+                                <p class="mb-2 text-base 3sm:text-xs text-gray-700">{{item.created_at}}</p>
                             </li>
                         </ul>
                         <button type="button"
@@ -38,7 +32,7 @@
             </div>
             <div class="w-3/4 3sm:w-full px-4">
                 <h2 class="text-2xl 4xl:text-lg text-blue-900 mb-6">Body Stats</h2>
-<!--                <highcharts :options="chartOptions2"></highcharts>-->
+                <!--                <highcharts :options="chartOptions2"></highcharts>-->
                 <div class="flex flex-wrap -mx-6 4xl:-mx-6 3sm:-mx-2 mt-8">
                     <div class="w-1/4 3sm:w-1/2 3sm:mb-4 px-6 4xl:px-4 3sm:px-2">
                         <div class="relative weight-box bg-white-900 flex items-start 3sm:flex-wrap 3sm:justify-center py-8 px-6 3sm:px-4 3sm:py-4 rounded-lg custom-shadow">
@@ -179,7 +173,7 @@
             </div>
 
             <SendNotification v-if="open" @close="open = false"/>
-            <SendReport v-if="openReport" @close="openReport = false"/>
+            <SendReport v-if="openReport" @close="openReport = false" :profile_id="profile.id"/>
         </div>
     </div>
 </template>
@@ -244,7 +238,7 @@
                     waist: null,
                     highest: null
                 },
-                chart:[]
+                chart: []
             }
         },
         components: {
@@ -287,6 +281,13 @@
                     }
                 });
             },
+        },
+        computed: {
+            sortReports: function () {
+                if (this.profile.reports.length) {
+                    return this.profile.reports = _.orderBy(this.profile.reports, ['id'], ['desc']);
+                }
+            }
         },
         mounted() {
             const $id = this.$route.params.user;

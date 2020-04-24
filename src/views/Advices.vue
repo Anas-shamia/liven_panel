@@ -23,18 +23,44 @@
                                  :sortable="(title.prop === 'date')"
                 >
                 </el-table-column>
+
+                <el-table-column label="View">
+                    <template slot-scope="scope">
+                        <el-button
+                                type="link"
+                                @click="openAdviceModal(scope.row)">
+                            View
+                        </el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column label="Delete">
+                    <template slot-scope="scope">
+                        <el-button
+                                type="link"
+                                @click="openDeleteModal(scope.row)">
+                            Delete
+                        </el-button>
+                    </template>
+                </el-table-column>
             </data-tables>
         </div>
         <AddAdvice v-if="openModal" @close="openModal = false"/>
+        <ConfirmDelete v-if="openDelete" @close="openDelete = false" :id="myId" :url="'/c_panel/advice'"/>
+        <ViewAdvice v-if="openAdvice" @close="openAdvice = false" :id="myId" :url="'/c_panel/advice'"/>
     </div>
 </template>
 <script>
     import AddAdvice from '../components/AddAdvice'
+    import ConfirmDelete from '../components/ConfirmDelete';
+    import ViewAdvice from '../components/userDetails/ViewAdvice';
 
     export default {
         data() {
             return {
+                myId: null,
+                openDelete: false,
                 openModal: false,
+                openAdvice: false,
                 filters: [
                     {
                         prop: ['title', 'date'],
@@ -61,11 +87,21 @@
             }
         },
         components: {
-            AddAdvice
+            AddAdvice,
+            ConfirmDelete,
+            ViewAdvice
         },
         methods: {
             openAddAdvice() {
                 this.openModal = !this.openModal;
+            },
+            openDeleteModal(row) {
+                this.myId = row.id;
+                this.openDelete = !this.openDelete;
+            },
+            openAdviceModal(row) {
+                this.myId = row.id;
+                this.openAdvice = !this.openAdvice;
             },
         },
         mounted() {

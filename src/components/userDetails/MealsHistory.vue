@@ -27,13 +27,16 @@
                 <hr class="mb-4">
                 <div class="mb-4 3sm:mb-0" v-for="(item,index) in meals" :key="index" v-if="meals.length">
                     <p class="mb-4">{{item.date}}</p>
-                    <ul class="flex items-center 3sm:flex-wrap 3sm:justify-center  -mx-4 4xl:-mx-2">
+                    <ul class="flex items-center 3sm:flex-wrap 3sm:justify-center -mx-2">
                         <router-link tag="li" :to="`/${the_id}/${meal.id}/meal-info`"
-                                     class="w-1/3 3sm:w-1/2 px-4 4xl:px-2 3sm:mb-4"
+                                     class="w-1/3 3sm:w-1/2 px-2 3sm:mb-4"
                                      v-for="(meal,index) in item.meals_today"
                                      :key="index">
                             <div class="relative rounded-lg overflow-hidden" @click="openMeal()">
-                                <img class="meal-img object-cover w-full" :src="meal.image_url" alt="meal">
+                                <img class="meal-img object-cover w-full" v-if="meal.image_url" :src="meal.image_url"
+                                     alt="meal">
+                                <img class="meal-img object-cover w-full" v-else src="@/assets/img/default-img.png"
+                                     alt="">
                                 <span class="absolute inset-x-0 bottom-0 py-2 text-white-900 text-center font-medium text-lg 4xl:text-base block span-overlay"
                                       v-if="meal.type === '1'">Breakfast</span>
                                 <span class="absolute inset-x-0 bottom-0 py-2 text-white-900 text-center font-medium text-lg 4xl:text-base block span-overlay"

@@ -1,7 +1,7 @@
 <template>
     <div class="flex items-center justify-center">
         <div class="fixed inset-0 z-9 overlay flex items-center justify-center" @click.self="$emit('close')">
-            <div class="w-2/5 foods-modal 3sm:w-full 3sm:mx-4 bg-white-900 mx-auto flex items-center justify-center rounded-lg custom-shadow px-6 py-10 3sm:px-4 3sm:py-5">
+            <div class="w-2/5 4xl:w-2/3 foods-modal 3sm:w-full 3sm:mx-4 bg-white-900 mx-auto flex items-center justify-center rounded-lg custom-shadow px-6 py-10 3sm:px-4 3sm:py-5">
                 <div class="w-full modal-height">
                     <h3 class="text-blue-900 text-2xl 4xl:text-lg mb-6 flex items-center">
                         <span class="flex-grow">Meals Details</span>
@@ -19,8 +19,11 @@
                                   v-if="item.type === '3'">Dinner</span>
                             <span class="py-2 text-primary-900 font-medium text-lg 4xl:text-base block"
                                   v-if="item.type === '4'">Snacks</span>
-                            <div class="" v-if="item.image">
-                                <img class="object-cover w-1/3 mx-auto" :src="item.image_url" alt="">
+                            <div class="">
+                                <img class="object-cover w-1/3 mx-auto" v-if="item.image_url" :src="item.image_url"
+                                     alt="">
+                                <img class="object-cover w-1/3 mx-auto" v-else src="@/assets/img/default-img.png"
+                                     alt="">
                             </div>
                             <div class="pb-4 border-b" v-if="item.notes">
                                 <p class="text-primary-900 font-medium text-2xl 4xl:text-lg">Notes</p>

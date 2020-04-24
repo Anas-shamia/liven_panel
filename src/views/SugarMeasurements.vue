@@ -15,7 +15,8 @@
                 <Profile/>
                 <div class="mb-8 3sm:mb-4">
                     <h3 class="text-blue-900 font-medium text-2xl 4xl:text-lg mb-6">Reports</h3>
-                    <div class="bg-white-900 px-4 py-8 3sm:py-4 rounded-lg">
+                    <div class="bg-white-900 px-4 py-6 3sm:py-4 rounded-lg">
+                        <router-link tag="p" :to="`/${profile.id}/reports`" class="mb-2 text-blue-800 text-sm font-bold underline">See All Reports</router-link>
                         <ul class="mb-8 3sm:mb-4" v-if="profile.reports.length">
                             <li class="border-b border-gray-800 mb-4 3sm:mb-2 flex items-center"
                                 v-for="(item,index) in sortReports" :key="index" v-if="index <= 2">
