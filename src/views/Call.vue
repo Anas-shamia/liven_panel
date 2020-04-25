@@ -14,7 +14,7 @@
       <div class="panel-body">
         App ID: <input id="appId" type="text" value="" size="36"></input>
         Channel: <input id="channel" type="text" value="1000" size="4"></input>
-        Host: <input id="videoCheck" type="checkbox" checked></input>
+        Host: <input id="video" type="checkbox" checked></input>
         <button id="join" class="btn btn-primary" @click="join()">Join</button>
         <button id="leave" class="btn btn-primary" @click="leave()">Leave</button>
         <button id="publish" class="btn btn-primary" @click="publish()">Publish</button>
@@ -29,6 +29,7 @@
 </template>
 
 <script>
+  import $ from 'jquery';
   let client, localStream, camera, microphone;
   export default {
     data() {
