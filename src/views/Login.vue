@@ -86,6 +86,7 @@
                             const $token = res.data.token;
                             localStorage.setItem('token',$token);
                             localStorage.setItem('user',res.data.user);
+                            localStorage.setItem('user_name',res.data.user_name);
                             $this.$router.push('/users');
 
                             // setTimeout(function () {

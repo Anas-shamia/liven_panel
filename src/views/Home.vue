@@ -129,7 +129,7 @@
             const $user = localStorage.getItem('user') ? localStorage.getItem('user') : null;
             if ($user === 'admin') {
                 this.axios.get('c_panel/users/patient/all',)
-                    .then(response => (this.tableData = response.data.data))
+                    .then(response => (this.tableData = response.data.data.data))
             }
             if ($user === 'dietitian') {
                 this.axios.get('/c_panel/users/patient/of/dietitian/all',)

@@ -16,7 +16,9 @@
                 <div class="mb-8 3sm:mb-4">
                     <h3 class="text-blue-900 font-medium text-2xl 4xl:text-lg mb-6">Reports</h3>
                     <div class="bg-white-900 px-4 py-6 3sm:py-4 rounded-lg">
-                        <router-link tag="p" :to="`/${profile.id}/reports`" class="mb-2 text-blue-800 text-sm font-bold underline">See All Reports</router-link>
+                        <router-link tag="p" :to="`/${profile.id}/reports`"
+                                     class="mb-2 text-blue-800 text-sm font-bold underline">See All Reports
+                        </router-link>
                         <ul class="mb-8 3sm:mb-4" v-if="profile.reports.length">
                             <li class="border-b border-gray-800 mb-4 3sm:mb-2 flex items-center"
                                 v-for="(item,index) in sortReports" :key="index" v-if="index <= 2">
@@ -96,7 +98,8 @@
                         <div>
                             <highcharts :options="chartOptions"></highcharts>
                         </div>
-                        <ul class="flex items-center justify-between bg-white-900 px-16 pb-2" v-if="chartOptions.series">
+                        <ul class="flex items-center justify-between bg-white-900 px-16 pb-2"
+                            v-if="chartOptions.series">
                             <li class="text-xs font-bold text-blue-800">00:00</li>
                             <li class="text-xs font-bold text-blue-800">2:00</li>
                             <li class="text-xs font-bold text-blue-800">4:00</li>
@@ -143,7 +146,7 @@
                 openFood: false,
                 openCall: false,
                 profile: null,
-                selectedChart: '',
+                selectedChart: 'today',
                 measurementAllByType: [],
                 meals: [],
                 user_id: this.$route.params.user,
@@ -152,7 +155,7 @@
                 },
                 form: {
                     user_id: this.$route.params.user,
-                    date: null,
+                    date: new Date(),
                 },
                 chartOptions: {
                     title: {
@@ -243,7 +246,6 @@
             changeChart(type) {
                 const $id = this.$route.params.user;
                 this.selectedChart = type;
-                // this.chartOptions.series[0].data = [];
                 this.axios.get(`/c_panel/diabetes/user/chart/${this.selectedChart}?user_id=${$id}`)
                     .then(response => {
                         this.measurementAllByType = response.data.data;
@@ -269,11 +271,13 @@
             },
             formatDate() {
                 let $date = this.form.date;
-                let dd = String($date.getDate()).padStart(2, '0');
-                let mm = String($date.getMonth() + 1).padStart(2, '0'); //January is 0!
-                let yyyy = $date.getFullYear();
-                $date = mm + '-' + dd + '-' + yyyy;
-                return this.form.date = $date;
+                if ($date){
+                    let dd = String($date.getDate()).padStart(2, '0');
+                    let mm = String($date.getMonth() + 1).padStart(2, '0'); //January is 0!
+                    let yyyy = $date.getFullYear();
+                    $date = mm + '-' + dd + '-' + yyyy;
+                    return this.form.date = $date;
+                }
             },
             changeDate() {
                 this.formatDate();
@@ -324,6 +328,7 @@
         },
         created() {
             this.changeChart('today');
+            this.changeDate();
         }
     }
 </script>

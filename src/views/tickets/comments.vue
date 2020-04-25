@@ -31,8 +31,8 @@
 
                         <div class="px-12 3sm:px-4 py-4 3sm:py-4 reply-box" v-for="(reply,index) in item.replays"
                              :key="index">
-                            <p class="text-gray-900 text-lg mb-2 font-semibold 3sm:text-sm">You</p>
-                            <p class="text-blue-90 font-medium text-base 3sm:text-sm">
+                            <p class="text-gray-900 text-lg mb-2 font-semibold 3sm:text-sm" :class="(reply.replay_author === 'Liven') ? 'text-right':'text-left'">{{reply.replay_author}}</p>
+                            <p class="text-blue-90 font-medium text-base 3sm:text-sm" :class="(reply.replay_author === 'Liven') ? 'text-right':'text-left'">
                                 {{reply.replay_text}}
                             </p>
                         </div>

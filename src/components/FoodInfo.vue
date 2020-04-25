@@ -19,10 +19,10 @@
                                   v-if="item.type === '3'">Dinner</span>
                             <span class="py-2 text-primary-900 font-medium text-lg 4xl:text-base block"
                                   v-if="item.type === '4'">Snacks</span>
-                            <div class="">
-                                <img class="object-cover w-1/3 mx-auto" v-if="item.image_url" :src="item.image_url"
+                            <div class="mb-4">
+                                <img class="object-cover food-img rounded-lg w-1/3 mx-auto" v-if="item.image_url" :src="item.image_url"
                                      alt="">
-                                <img class="object-cover w-1/3 mx-auto" v-else src="@/assets/img/default-img.png"
+                                <img class="object-cover food-img rounded-lg w-1/3 mx-auto" v-else src="@/assets/img/default-img.png"
                                      alt="">
                             </div>
                             <div class="pb-4 border-b" v-if="item.notes">
@@ -91,6 +91,9 @@
     }
 </script>
 <style lang="scss">
+    .food-img{
+        height: 200px;
+    }
     .form-group label,
     .form-group textarea {
         color: #A0AEC0;

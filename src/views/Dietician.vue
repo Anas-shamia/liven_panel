@@ -23,21 +23,48 @@
                                  :sortable="(title.prop === 'name')"
                 >
                 </el-table-column>
+
+                <el-table-column label="Change Password">
+                    <template slot-scope="scope">
+                        <el-button
+                                type="link"
+                                @click="openChangePassword(scope.row)">
+                            Change Password
+                        </el-button>
+                    </template>
+                </el-table-column>
+
+                <el-table-column label="Lock/Unlock">
+                    <template slot-scope="scope">
+                        <el-button
+                                type="link"
+                                @click="openStatusModal(scope.row)">
+                            Lock/Unlock
+                        </el-button>
+                    </template>
+                </el-table-column>
             </data-tables>
         </div>
         <AddDietician v-if="openModal" @close="openModal = false"/>
+        <ChangePassword v-if="openChange" @close="openChange = false" :id="myId" :url="'/c_panel/advice'"/>
+        <LockStatus v-if="openStatus" @close="openStatus = false" :id="myId" :url="'/c_panel/advice'"/>
     </div>
 </template>
 <script>
     import AddDietician from '../components/AddDietician'
+    import ChangePassword from '../components/ChangePassword'
+    import LockStatus from '../components/LockStatus'
 
     export default {
         data() {
             return {
                 openModal: false,
+                myId: null,
+                openChange: false,
+                openStatus: false,
                 filters: [
                     {
-                        prop: ['name', 'phone','email'],
+                        prop: ['name', 'phone', 'email'],
                         value: ''
                     },
                 ],
@@ -65,11 +92,21 @@
             }
         },
         components: {
-            AddDietician
+            AddDietician,
+            ChangePassword,
+            LockStatus
         },
         methods: {
             openAddDietician() {
                 this.openModal = !this.openModal;
+            },
+            openChangePassword(row) {
+                this.myId = row.id;
+                this.openChange = !this.openChange;
+            },
+            openStatusModal(row) {
+                this.myId = row.id;
+                this.openStatus = !this.openStatus;
             },
         },
         mounted() {

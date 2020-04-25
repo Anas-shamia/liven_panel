@@ -18,8 +18,22 @@
                     />
                 </div>
             </div>
-            <p class="text-gray-600 font-medium 3sm:font-normal text-xl 4xl:text-lg 3sm:text-base 3sm:mb-2 mb-4">
-                Subscription End: <span class="pl-4">{{this.end_date}}</span></p>
+            <div class="flex items-center mb-4 3sm:mb-2">
+                <p class="text-gray-600 font-medium 3sm:font-normal text-xl 4xl:text-lg 3sm:text-base pr-4">
+                    Subscription End:</p>
+                <span class="text-gray-600 font-medium 3sm:font-normal text-xl 4xl:text-lg 3sm:text-base" v-if="!open">{{this.end_date}}</span>
+                <div v-if="open">
+                    <v-date-picker
+                            v-model='form.subscription_end_date'
+                            :popover="popover"
+                            :min-date="new Date()"
+                            :input-props='{
+                          class: "form-control",
+                          placeholder: "Subscription End",
+                        }'
+                    />
+                </div>
+            </div>
             <div class="flex items-center 3sm:flex-wrap">
                 <p class="text-gray-600 font-medium 3sm:font-normal text-xl 4xl:text-lg 3sm:text-base 3sm:mb-2 capitalize">
                     The next meeting will be on:</p>
@@ -64,6 +78,7 @@
                 form: {
                     user_id: this.$route.params.user,
                     subscription_start_date: null,
+                    subscription_end_date: null,
                 },
                 popover: {
                     visibility: 'focus',
@@ -79,16 +94,26 @@
                 $date = mm + '-' + dd + '-' + yyyy;
                 return this.form.subscription_start_date = $date;
             },
+            formatEndDate() {
+                let $date = this.form.subscription_end_date;
+                let dd = String($date.getDate()).padStart(2, '0');
+                let mm = String($date.getMonth() + 1).padStart(2, '0'); //January is 0!
+                let yyyy = $date.getFullYear();
+                $date = mm + '-' + dd + '-' + yyyy;
+                return this.form.subscription_end_date = $date;
+            },
             openEdit() {
                 this.open = !this.open;
             },
             saveDate() {
                 this.open = false;
                 this.formatDate();
+                this.formatEndDate();
                 this.axios.post('/c_panel/user/subscription', this.form).then((res) => {
                     this.open = false;
                     this.form = {
                         subscription_start_date: null,
+                        subscription_end_date: null
                     };
                     setTimeout(function () {
                         location.reload();

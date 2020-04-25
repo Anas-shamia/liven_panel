@@ -23,6 +23,7 @@
                                 <input class="form-control" type="text" placeholder="Email"
                                        :class="{ 'has-danger': errors.length }" v-model="form.email"/>
                                 <p class="message-danger">{{ errors[0] }}</p>
+                                <p>dd:{{errors}}</p>
                             </ValidationProvider>
                             <ValidationProvider class="form-group mb-8 3sm:mb-4" tag="div"
                                                 vid="phone" name="Mobile" rules="required|integer"
@@ -61,10 +62,10 @@
                 success: false,
                 loading: false,
                 form: {
-                    name:null,
-                    email:null,
-                    phone:null,
-                    password:null
+                    name: null,
+                    email: null,
+                    phone: null,
+                    password: null
                 }
             }
         },
@@ -78,10 +79,10 @@
                             this.success = true;
                             this.loading = false;
                             this.form = {
-                                name:null,
-                                email:null,
-                                phone:null,
-                                password:null
+                                name: null,
+                                email: null,
+                                phone: null,
+                                password: null
                             };
                             setTimeout(function () {
                                 $this.success = false;
@@ -93,7 +94,9 @@
                             this.loading = false;
                             if (error.response) {
                                 if (error.response.status === 422) {
-                                    this.$refs['AddDietician'].setErrors(error.response.data.errors);
+                                    const serverErrors = error.response.data.errors;
+                                    if (serverErrors)
+                                        this.$refs['AddDietician'].setErrors(serverErrors);
                                 }
                             }
                         });

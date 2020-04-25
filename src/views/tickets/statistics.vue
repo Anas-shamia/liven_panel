@@ -32,7 +32,7 @@
             </div>
             <div class="w-3/4 3sm:w-full px-4">
                 <h2 class="text-2xl 4xl:text-lg text-blue-900 mb-6">Body Stats</h2>
-                <!--                <highcharts :options="chartOptions2"></highcharts>-->
+                <highcharts :options="chartOptions2"></highcharts>
                 <div class="flex flex-wrap -mx-6 4xl:-mx-6 3sm:-mx-2 mt-8">
                     <div class="w-1/4 3sm:w-1/2 3sm:mb-4 px-6 4xl:px-4 3sm:px-2">
                         <div class="relative weight-box bg-white-900 flex items-start 3sm:flex-wrap 3sm:justify-center py-8 px-6 3sm:px-4 3sm:py-4 rounded-lg custom-shadow">
@@ -192,33 +192,20 @@
                     chart: {
                         type: 'column'
                     },
-                    title: {
-                        text: 'Monthly Average Rainfall'
+                    credits: {
+                        enabled: false
                     },
-                    subtitle: {
-                        text: 'Source: WorldClimate.com'
+                    title: {
+                        text: ''
                     },
                     xAxis: {
-                        categories: [
-                            'Jan',
-                            'Feb',
-                            'Mar',
-                            'Apr',
-                            'May',
-                            'Jun',
-                            'Jul',
-                            'Aug',
-                            'Sep',
-                            'Oct',
-                            'Nov',
-                            'Dec'
-                        ],
+                        categories: [],
                         crosshair: true
                     },
                     yAxis: {
                         min: 0,
                         title: {
-                            text: 'Rainfall (mm)'
+                            text: 'Values'
                         }
                     },
                     plotOptions: {
@@ -262,7 +249,7 @@
             },
             saveData() {
                 this.edit = false;
-                this.form.id = this.last.id
+                this.form.id = this.last.id;
                 this.axios.post('/c_panel/body/update', this.form).then((res) => {
                     this.open = false;
                     this.form = {
@@ -304,11 +291,12 @@
                         highest: this.last.highest
                     };
                 });
-            // this.axios.get(`/c_panel/body/user/chart?user_id=${$id}`)
-            //     .then(response => {
-            //         this.chart = response.data.data;
-            //         this.chartOptions2.series = this.chart;
-            //     });
+            this.axios.get(`/c_panel/body/user/chart?user_id=${$id}`)
+                .then(response => {
+                    this.chart = response.data.data;
+                    this.chartOptions2.series = this.chart.series;
+                    this.chartOptions2.xAxis.categories = this.chart.categories;
+                });
         }
     }
 </script>
