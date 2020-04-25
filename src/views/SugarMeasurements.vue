@@ -158,10 +158,6 @@
                     date: new Date(),
                 },
                 chartOptions: {
-                    chart: {
-                        type: 'spline',
-                        backgroundColor: 'transparent'
-                    },
                     title: {
                         text: ''
                     },
@@ -205,12 +201,7 @@
                             },
                         }
                     },
-                    series: [
-                        {
-                            name: 'معدل السكر ',
-                            data: []
-                        }
-                    ],
+                    series: null,
 
 
                     responsive: {
@@ -253,11 +244,10 @@
             changeChart(type) {
                 const $id = this.$route.params.user;
                 this.selectedChart = type;
-                this.chartOptions.series[0].data = [];
                 this.axios.get(`/c_panel/diabetes/user/chart/${this.selectedChart}?user_id=${$id}`)
                     .then(response => {
                         this.measurementAllByType = response.data.data;
-                        // this.chartOptions.series = this.measurementAllByType;
+                        this.chartOptions.series = this.measurementAllByType;
                     });
 
             },
@@ -299,32 +289,24 @@
                 }
             }
         },
-        measurementAllByType($val) {
-            if (this.selectedChart === 'today') {
-                this.chartOptions.series[0].data = $val.map(x => {
-                    return {
-                        name: x.time,
-                        y: x.y
-                    }
-                });
-            } else {
-                console.log($val);
-                this.chartOptions.series[0].data = $val.map(x => {
-                    return {
-                        name: x.date_style,
-                        y: x.y
-                    }
-                });
-            }
-
-        },
+        // watch: {
+        //     measurementAllByType($val) {
+        //         console.log($val);
+        //         this.chartOptions.series = $val.data.map(x => {
+        //             return {
+        //                 name: x.time,
+        //                 y: x.value
+        //             }
+        //         });
+        //     }
+        // },
         mounted() {
             const $id = this.$route.params.user;
             this.axios.get(`c_panel/user/profile?user_id=${$id}`)
                 .then(response => (this.profile = response.data.data[0]))
         },
         created() {
-            this.changeChart('week');
+            this.changeChart('today');
             this.changeDate();
         }
     }

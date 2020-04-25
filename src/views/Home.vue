@@ -131,7 +131,7 @@
                 const $user = localStorage.getItem('user') ? localStorage.getItem('user') : null;
                 let $url = '/c_panel/users/patient/all';
 
-                if ($user === 'dit')
+                if ($user === 'dietitian')
                     $url = '/c_panel/users/patient/of/dietitian/all';
 
                 this.axios.get(`${$url}?per_page=${q.pageSize}&page=${q.page}`)
