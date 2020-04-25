@@ -12,7 +12,7 @@ import SugarMeasurements from '../views/SugarMeasurements.vue'
 import MealInfo from '../views/MealInfo.vue'
 import Reports from '../views/Reports.vue'
 import Appointments from '../views/Appointments.vue'
-
+import Call from '../views/Call.vue'
 
 Vue.use(VueRouter);
 
@@ -89,6 +89,12 @@ routes = [
         name: 'appointment',
         meta: {layout: 'default'},
         component: Appointments,
+    },
+    {
+        path: '/call',
+        name: 'call',
+        meta: {layout: 'default'},
+        component: Call,
     },
 ];
 
