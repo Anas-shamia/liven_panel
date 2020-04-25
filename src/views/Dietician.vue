@@ -22,6 +22,13 @@
                                  :width="title.prop ==='id' ?120 : ''"
                                  :sortable="(title.prop === 'name')"
                 >
+
+                    <template slot-scope="scope">
+                        <div v-if="title.prop === 'user_status' && scope.row.dietitian">
+                            <span> {{scope.row.dietitian.name}}</span>
+                        </div>
+                        <div v-else>{{scope.row[title.prop]}}</div>
+                    </template>
                 </el-table-column>
 
                 <el-table-column label="Change Password">
@@ -47,7 +54,8 @@
         </div>
         <AddDietician v-if="openModal" @close="openModal = false"/>
         <ChangePassword v-if="openChange" @close="openChange = false" :id="myId" :url="'/c_panel/advice'"/>
-        <LockStatus v-if="openStatus" @close="openStatus = false" :id="myId" :url="'/c_panel/advice'"/>
+        <LockStatus v-if="openStatus" @close="openStatus = false" :id="myId"
+                    :url="'/c_panel/user/change/block/unblock'"/>
     </div>
 </template>
 <script>
@@ -84,6 +92,10 @@
                     {
                         prop: 'phone',
                         label: 'Phone'
+                    },
+                    {
+                        prop: 'user_status',
+                        label: 'Status'
                     },
 
                 ],

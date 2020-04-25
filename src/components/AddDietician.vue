@@ -23,7 +23,6 @@
                                 <input class="form-control" type="text" placeholder="Email"
                                        :class="{ 'has-danger': errors.length }" v-model="form.email"/>
                                 <p class="message-danger">{{ errors[0] }}</p>
-                                <p>dd:{{errors}}</p>
                             </ValidationProvider>
                             <ValidationProvider class="form-group mb-8 3sm:mb-4" tag="div"
                                                 vid="phone" name="Mobile" rules="required|integer"
@@ -95,6 +94,7 @@
                             if (error.response) {
                                 if (error.response.status === 422) {
                                     const serverErrors = error.response.data.errors;
+                                    console.log(serverErrors);
                                     if (serverErrors)
                                         this.$refs['AddDietician'].setErrors(serverErrors);
                                 }

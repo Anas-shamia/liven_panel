@@ -194,7 +194,6 @@
                             enabled: false
                         }
                     },
-
                     plotOptions: {
                         series: {
                             label: {
@@ -202,9 +201,8 @@
                             },
                         }
                     },
-
-
                     series: null,
+
 
                     responsive: {
                         rules: [{
@@ -250,42 +248,23 @@
                     .then(response => {
                         this.measurementAllByType = response.data.data;
                         this.chartOptions.series = this.measurementAllByType;
-                        // const $first = [
-                        //     {
-                        //         name: '2020-03-20',
-                        //         data: [
-                        //             {
-                        //                 name: '12:00 am',
-                        //                 y: 0
-                        //             }
-                        //         ],
-                        //     }
-                        // ];
-                        // let measurements = this.measurementAllByType;
-                        // if (this.selectedChart === 'month')
-                        //     measurements = $first.concat(this.measurementAllByType);
-                        // console.log(measurements);
-                        // this.chartOptions.series = measurements;
                     });
 
             },
-            formatDate() {
-                let $date = this.form.date;
-                if ($date){
+            formatDate($date) {
+                if ($date) {
                     let dd = String($date.getDate()).padStart(2, '0');
                     let mm = String($date.getMonth() + 1).padStart(2, '0'); //January is 0!
                     let yyyy = $date.getFullYear();
-                    $date = mm + '-' + dd + '-' + yyyy;
-                    return this.form.date = $date;
+                    let $formated = mm + '-' + dd + '-' + yyyy;
+                    return $formated;
                 }
             },
             changeDate() {
-                this.formatDate();
-                this.form.user_id = this.$route.params.user;
-                this.axios.post('c_panel/user/public/search', this.form).then((res) => {
-                    this.form = {
-                        date: null,
-                    };
+                const $form = _.cloneDeep(this.form);
+                $form.user_id = this.$route.params.user;
+                $form.date = this.formatDate($form.date);
+                this.axios.post('c_panel/user/public/search', $form).then((res) => {
                     this.chartOptions.series = res.data.data.chart_diabetes.length ? res.data.data.chart_diabetes[0] : null;
                     this.meals = res.data.data.meals.length ? res.data.data.meals : null;
                 }).catch((error) => {

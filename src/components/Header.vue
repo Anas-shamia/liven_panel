@@ -24,7 +24,7 @@
                             <span class="block py-2 px-10 md:px-6 md:py-1">Users</span>
                         </router-link>
                         <router-link tag="li"
-                                     class="cursor-pointer text-white-900 text-xl 4xl:text-lg 3lg:text-base mr-12 3lg:mr-6 md:mr-2 "
+                                     class="cursor-pointer text-white-900 text-xl 4xl:text-lg 3lg:text-base mr-12 3lg:mr-6 md:mr-2 " :class="{'router-link-active': subIsActive('/tickets')}"
                                      to="/tickets" exact>
                             <span class="block py-2 px-10 md:px-6 md:py-1">Tickets</span>
                         </router-link>
@@ -112,6 +112,12 @@
                 localStorage.removeItem('user');
                 localStorage.removeItem('user_name');
                 this.$router.push('/login');
+            },
+            subIsActive(input) {
+                const paths = Array.isArray(input) ? input : [input];
+                return paths.some(path => {
+                    return this.$route.path.indexOf(path) === 0 // current path starts with this path string
+                })
             }
         },
         watch: {

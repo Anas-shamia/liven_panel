@@ -42,7 +42,12 @@
                                 </svg>
                             </div>
                             <p class="message-danger">{{ errors[0] }}</p>
+                            <div v-if="myErrors" class="mb-4">
+                                <p class="message-danger">{{myErrors}}</p>
+                            </div>
                         </ValidationProvider>
+
+
                         <button type="submit"
                                 class="login-btn border border-transparent w-full block text-center bg-primary-900 text-white-900 text-xl 3sm:text-base rounded py-4 3sm:py-2">
                             Login
@@ -66,6 +71,7 @@
                 loading: false,
                 error: false,
                 errorMsg: null,
+                myErrors: null,
                 form: {
                     email: 'admin@liven.com',
                     password: 12345678,
@@ -84,9 +90,9 @@
                             // this.loading = false;
                             // this.auth.setUserToken(res.data.data.access_token);
                             const $token = res.data.token;
-                            localStorage.setItem('token',$token);
-                            localStorage.setItem('user',res.data.user);
-                            localStorage.setItem('user_name',res.data.user_name);
+                            localStorage.setItem('token', $token);
+                            localStorage.setItem('user', res.data.user);
+                            localStorage.setItem('user_name', res.data.user_name);
                             $this.$router.push('/users');
 
                             // setTimeout(function () {
@@ -98,7 +104,7 @@
                             this.error = true;
                             if (error.response) {
                                 if (error.response.status === 422) {
-                                    this.$refs['obsForm'].setErrors(error.response.data.errors);
+                                    this.myErrors = error.response.data.message;
                                 }
                             }
                         });
@@ -112,9 +118,10 @@
     }
 </script>
 <style lang="scss" scoped>
-    .login-btn{
+    .login-btn {
         transition: all 0.25s ease;
-        &:hover{
+
+        &:hover {
             background: #fff;
             border-color: #693574;
             color: #693574;
