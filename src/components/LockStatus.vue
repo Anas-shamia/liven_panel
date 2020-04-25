@@ -8,15 +8,7 @@
                         <img class="w-4 cursor-pointer" src="@/assets/img/close.svg" alt="close"
                              @click="$emit('close')">
                     </h3>
-                    <div class="mb-6">
-                        <v-select
-                                class="form-control"
-                                :options="status"
-                                label="name"
-                                placeholder="Change Status"
-                                v-model="form.status">
-                        </v-select>
-                    </div>
+                    <p>Are you Sure you want to change this status ?</p>
                     <div class="bg-green-100 mt-4 rounded-10px text-center" v-if="success">
                         <p class="p-3 text-base text-blue-800 font-medium">Changed Successfully</p>
                     </div>
@@ -49,25 +41,16 @@
                 success: false,
                 myID: this.id,
                 myUrl: this.url,
-                status:[
-                    {
-                        value: 0,
-                        name:'Lock'
-                    },
-                    {
-                        value:1,
-                        name: 'Unlock'
-                    }
-                ],
                 form: {
-                    status: null,
+                    user_id: this.myID,
                 }
             }
         },
         methods: {
-            deleteSugar(itemID) {
+            deleteSugar() {
                 const $this = this;
-                this.axios.delete(`${this.myUrl}/${itemID}`).then((res) => {
+                this.form.user_id = this.myID;
+                this.axios.post(`${this.myUrl}`, this.form).then((res) => {
                     this.success = true;
                     setTimeout(function () {
                         $this.success = false;

@@ -47,7 +47,8 @@
         </div>
         <AddDietician v-if="openModal" @close="openModal = false"/>
         <ChangePassword v-if="openChange" @close="openChange = false" :id="myId" :url="'/c_panel/advice'"/>
-        <LockStatus v-if="openStatus" @close="openStatus = false" :id="myId" :url="'/c_panel/advice'"/>
+        <LockStatus v-if="openStatus" @close="openStatus = false" :id="myId"
+                    :url="'/c_panel/user/change/block/unblock'"/>
     </div>
 </template>
 <script>
