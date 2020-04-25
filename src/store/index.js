@@ -9,7 +9,7 @@ import VueAuth from '@websanova/vue-auth'
 
 Vue.use(VueAxios, axios);
 
-Vue.axios.defaults.baseURL = 'http://it-team-dev.com/api';
+Vue.axios.defaults.baseURL = 'https://it-team-dev.com/api';
 
 Vue.axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
 //`Bearer ${localStorage.getItem('token')}`;

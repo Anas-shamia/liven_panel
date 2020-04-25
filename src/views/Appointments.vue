@@ -50,15 +50,40 @@
                     </button>
                 </td>
             </tr>
+            <tr v-for="(item,index) in appointment" :key="index">
+                <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
+                    {{item.names}}
+                </td>
+                <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
+                    {{item.from}}
+                </td>
+                <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
+                    {{item.to}}
+                </td>
+                <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
+                    <button type="button" class="bg-blue-800 text-white-900 px-4 py-1 text-base rounded-lg mx-2"
+                            @click="openDeleteModal(item.id)">
+                        Delete
+                    </button>
+                </td>
+            </tr>
             </tbody>
         </table>
+        <ConfirmDelete v-if="openDelete" @close="openDelete = false" :id="myId" :url="'/c_panel/appointment'"/>
     </div>
 </template>
 <script>
+    import ConfirmDelete from '../components/ConfirmDelete';
+
     export default {
+        components: {
+            ConfirmDelete
+        },
         data() {
             return {
                 appointment: [],
+                myId: null,
+                openDelete: false,
                 form: {
                     day: null,
                     from: null,
@@ -226,11 +251,15 @@
                     }
                 });
             },
+            openDeleteModal(row) {
+                this.myId = row;
+                this.openDelete = !this.openDelete;
+            },
 
         },
         mounted() {
-            // this.axios.get('c_panel/appointment',)
-            //     .then(response => (this.appointment = response.data.data[0]))
+            this.axios.get('c_panel/appointment',)
+                .then(response => (this.appointment = response.data.data))
         }
     }
 </script>

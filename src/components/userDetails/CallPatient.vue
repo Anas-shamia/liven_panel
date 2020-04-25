@@ -21,28 +21,32 @@
 
             <div id="div_join" class="panel panel-default">
                 <div class="panel-body mb-4">
-                  <div class="flex items-center">
-                      <div class="mb-4">
-                          App ID: <input id="appId" type="text" value="" size="36"></input>
-                      </div>
-                      <div class="mb-4 mx-4">
-                          Channel: <input id="channel" type="text" value="1000" size="4"></input>
-                      </div>
-                      <div class="mb-4 mx-4">
-                          Host: <input id="videoCheck" type="checkbox" checked></input>
-                      </div>
-                  </div>
+                    <div class="">
+                        <div class="flex items-center flex-wrap mb-4">
+                            <label class="w-1/4 text-base text-blue-800 rtl:pl-8 ltr:pr-8">App ID:</label>
+                            <input id="appId"  class="w-3/4 bg-white-900 rounded-25px py-3 px-6 focus:outline-none border border-transparent" type="text" value="" size="36">
+                        </div>
+                        <div class="flex items-center flex-wrap mb-4">
+                            <label class="w-1/4 text-base text-blue-800 rtl:pl-8 ltr:pr-8">Channel:</label>
+                            <input id="channel" class="w-3/4 bg-white-900 rounded-25px py-3 px-6 focus:outline-none border border-transparent" type="text" value="1000" size="4">
+                        </div>
+                        <div class="mb-4  flex justify-end " style="direction: rtl">
+                            <input class="custom-checkbox" id="video" type="checkbox" checked>
+                            <label for="video" class="text-base flex items-center ">
+                                <span class="mx-4"></span>
+                                <span class="text-sm text-blue-800">:Host</span>
+                            </label>
+                        </div>
+                    </div>
                     <div class="flex items-center mt-4">
                         <button id="join" class="bg-blue-800 text-white-900 rounded-lg px-4 mr-2 py-2" @click="join()">Join</button>
                         <button id="leave" class="bg-blue-800 text-white-900 rounded-lg px-4 mx-2 py-2" @click="leave()">Leave</button>
-                        <button id="publish" class="bg-blue-800 text-white-900 rounded-lg px-4 mx-2 py-2" @click="publish()">Publish</button>
-                        <button id="unpublish" class="bg-blue-800 text-white-900 rounded-lg px-4 mx-2 py-2" @click="unpublish()">Unpublish</button>
                     </div>
                 </div>
             </div>
 
-            <div id="video" style="margin:0 auto;">
-                <div id="agora_local" style="float:right;width:210px;height:147px;display:inline-block;"></div>
+            <div id="video" style="width: 300px; height: 300px; margin: 0 auto 40px;">
+                <div id="agora_local" style="width: 100%;"></div>
             </div>
         </div>
     </div>
@@ -54,6 +58,7 @@
     }
 </style>
 <script>
+    import $ from 'jquery';
     let client, localStream, camera, microphone;
     export default {
         data() {
@@ -61,7 +66,7 @@
         },
         methods: {
             initCall() {
-                if (!AgoraRTC.checkSystemRequirements()) {
+                if(!AgoraRTC.checkSystemRequirements()) {
                     alert("Your browser does not support WebRTC!");
                 }
                 AgoraRTC.Logger.error('this is error');
@@ -104,20 +109,13 @@
                 client = AgoraRTC.createClient({mode: 'live'});
                 client.init(appId.value, function () {
                     console.log("AgoraRTC client initialized");
-                    client.join(channel_key, channel.value, null, function (uid) {
+                    client.join(channel_key, channel.value, null, function(uid) {
                         console.log("User " + uid + " join channel successfully");
 
                         if (document.getElementById("video").checked) {
                             camera = videoSource.value;
                             microphone = audioSource.value;
-                            localStream = AgoraRTC.createStream({
-                                streamID: uid,
-                                audio: true,
-                                cameraId: camera,
-                                microphoneId: microphone,
-                                video: document.getElementById("video").checked,
-                                screen: false
-                            });
+                            localStream = AgoraRTC.createStream({streamID: uid, audio: true, cameraId: camera, microphoneId: microphone, video: document.getElementById("video").checked, screen: false});
                             //localStream = AgoraRTC.createStream({streamID: uid, audio: false, cameraId: camera, microphoneId: microphone, video: false, screen: true, extensionId: 'minllpmhdgpndnkomcoccfekfegnlikg'});
                             if (document.getElementById("video").checked) {
                                 localStream.setVideoProfile('720p_3');
@@ -125,16 +123,16 @@
                             }
 
                             // The user has granted access to the camera and mic.
-                            localStream.on("accessAllowed", function () {
+                            localStream.on("accessAllowed", function() {
                                 console.log("accessAllowed");
                             });
 
                             // The user has denied access to the camera and mic.
-                            localStream.on("accessDenied", function () {
+                            localStream.on("accessDenied", function() {
                                 console.log("accessDenied");
                             });
 
-                            localStream.init(function () {
+                            localStream.init(function() {
                                 console.log("getUserMedia successfully");
                                 localStream.play('agora_local');
 
@@ -149,7 +147,7 @@
                                 console.log("getUserMedia failed", err);
                             });
                         }
-                    }, function (err) {
+                    }, function(err) {
                         console.log("Join channel failed", err);
                     });
                 }, function (err) {
@@ -157,12 +155,12 @@
                 });
 
                 let channelKey = "";
-                client.on('error', function (err) {
+                client.on('error', function(err) {
                     console.log("Got error msg:", err.reason);
                     if (err.reason === 'DYNAMIC_KEY_TIMEOUT') {
-                        client.renewChannelKey(channelKey, function () {
+                        client.renewChannelKey(channelKey, function(){
                             console.log("Renew channel key successfully");
-                        }, function (err) {
+                        }, function(err){
                             console.log("Renew channel key failed: ", err);
                         });
                     }
@@ -181,8 +179,8 @@
                 client.on('stream-subscribed', function (evt) {
                     var stream = evt.stream;
                     console.log("Subscribe remote stream successfully: " + stream.getId());
-                    if ($('div#video #agora_remote' + stream.getId()).length === 0) {
-                        $('div#video').append('<div id="agora_remote' + stream.getId() + '" style="float:left; width:810px;height:607px;display:inline-block;"></div>');
+                    if ($('div#video #agora_remote'+stream.getId()).length === 0) {
+                        $('div#video').append('<div id="agora_remote'+stream.getId()+'" style="float:left; width:810px;height:607px;display:inline-block;"></div>');
                     }
                     stream.play('agora_remote' + stream.getId());
                 });
@@ -204,25 +202,12 @@
                 });
             },
             leave() {
-                document.getElementById("leave").disabled = true;
+                document.getElementById("leave").disabled = false;
+                document.getElementById("join").disabled = false;
                 client.leave(function () {
                     console.log("Leavel channel successfully");
                 }, function (err) {
                     console.log("Leave channel failed");
-                });
-            },
-            publish() {
-                document.getElementById("publish").disabled = true;
-                document.getElementById("unpublish").disabled = false;
-                client.publish(localStream, function (err) {
-                    console.log("Publish local stream error: " + err);
-                });
-            },
-            unpublish() {
-                document.getElementById("publish").disabled = false;
-                document.getElementById("unpublish").disabled = true;
-                client.unpublish(localStream, function (err) {
-                    console.log("Unpublish local stream failed" + err);
                 });
             },
         },
@@ -231,3 +216,6 @@
         }
     }
 </script>
+<style>
+
+</style>
