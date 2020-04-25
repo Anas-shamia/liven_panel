@@ -4,15 +4,19 @@
             <div class="w-3/4 flex items-center">
                 <img class="mr-4" src="@/assets/img/user.svg" alt="user-icon">
                 <h2 class="text-2xl 4xl:text-lg text-blue-900">Users</h2>
-                <span class="bg-primary-900 text-white-900 rounded-full h-6 w-8 flex items-center justify-center mx-4">{{tableData.length}}</span>
+                <span class="bg-primary-900 text-white-900 rounded-full h-6 w-8 flex items-center justify-center mx-4">{{data.length}}</span>
             </div>
             <div class="w-1/4 3sm:w-full 3sm:mt-4">
                 <el-input placeholder="Search" v-model="filters[0].value"></el-input>
             </div>
         </div>
         <div class="py-6 users-table">
-            <data-tables :data="tableData" :filters="filters" :page-size="1"
-                         :pagination-props="{ background: true, pageSizes: [10, 20, 50] }">
+            <data-tables-server :data="data"
+                                :filters="filters"
+                                :page-size="1"
+                                :total="total"
+                                @query-change="loadData"
+                                :pagination-props="{ background: true, pageSizes: [5, 10, 20, 50] }">
                 <el-table-column v-for="(title,index) in titles" :prop="title.prop" :label="title.label" :key="index"
                                  :width="title.prop ==='rownum' ?120 : ''"
                                  :sortable="(title.prop === 'age' || title.prop === 'type' || title.prop === 'name')"
@@ -22,7 +26,7 @@
 
                     <template slot-scope="scope">
                         <div v-if="title.prop === 'dietitian' && scope.row.dietitian">
-                           <span> {{scope.row.dietitian.name}}</span>
+                            <span> {{scope.row.dietitian.name}}</span>
                         </div>
                         <el-tag v-else-if="title.prop === 'gender'"
                                 :type="scope.row.gender === 'Male' ? 'male-class' : 'female-class'"
@@ -31,8 +35,6 @@
                         <div v-else>{{scope.row[title.prop]}}</div>
                     </template>
                 </el-table-column>
-
-
 
 
                 <el-table-column label="CGM File">
@@ -52,7 +54,7 @@
                         </el-button>
                     </template>
                 </el-table-column>
-            </data-tables>
+            </data-tables-server>
             <UploadFile v-if="open" @close="open = false" :user_id="this.my_user"/>
         </div>
     </div>
@@ -97,8 +99,8 @@
                         label: 'Age'
                     },
                     {
-                      prop: 'dietitian',
-                      label: 'Dietitian'
+                        prop: 'dietitian',
+                        label: 'Dietitian'
                     },
                     {
                         prop: 'subscription_state',
@@ -107,7 +109,8 @@
 
                 ],
                 search: '',
-                tableData: []
+                data: [],
+                total: 0,
             }
         },
         methods: {
@@ -123,19 +126,32 @@
             openModal(row) {
                 this.my_user = row.id;
                 this.open = !this.open;
+            },
+            async loadData(q) {
+                const $user = localStorage.getItem('user') ? localStorage.getItem('user') : null;
+                let $url = '/c_panel/users/patient/all';
+
+                if ($user === 'dit')
+                    $url = '/c_panel/users/patient/of/dietitian/all';
+
+                this.axios.get(`${$url}?per_page=${q.pageSize}&page=${q.page}`)
+                    .then(response => {
+                        const $res = response.data.data;
+                        this.data = $res.data;
+                        this.total = $res.total;
+                    });
             }
         },
         mounted() {
-            const $user = localStorage.getItem('user') ? localStorage.getItem('user') : null;
-            if ($user === 'admin') {
-                this.axios.get('c_panel/users/patient/all',)
-                    .then(response => (this.tableData = response.data.data.data))
-            }
-            if ($user === 'dietitian') {
-                this.axios.get('/c_panel/users/patient/of/dietitian/all',)
-                    .then(response => (this.tableData = response.data.data))
-            }
-
+            // const $user = localStorage.getItem('user') ? localStorage.getItem('user') : null;
+            // if ($user === 'admin') {
+            //     this.axios.get('c_panel/users/patient/all',)
+            //         .then(response => (this.tableData = response.data.data.data))
+            // }
+            // if ($user === 'dietitian') {
+            //     this.axios.get('/c_panel/users/patient/of/dietitian/all',)
+            //         .then(response => (this.tableData = response.data.data))
+            // }
         }
 
     }
