@@ -114,7 +114,7 @@
                             <li class="text-xs font-bold text-blue-800">22:00</li>
                         </ul>
 
-                        <div class="time-line">
+                        <div class="time-line" v-if="selectedChart ==='today'">
                             <ul>
                                 <li v-for="(item,index) in meals" :key="index" @click="openFoodModal">{{index+1}}</li>
                             </ul>
@@ -127,8 +127,8 @@
         </div>
         <SendNotification v-if="open" @close="open = false"/>
         <SendReport v-if="openReport" @close="openReport = false" :profile_id="profile.id"/>
-        <FoodInfo v-if="openFood" @close="openFood = false" :profile_id="profile.id" :foods="meals"/>
-
+        <FoodInfo v-if="openFood" @close="openFood = false" :profile_id="profile.id"
+                  :foods="meals" :drug="medicine"/>
     </div>
 </template>
 <script>
@@ -149,6 +149,7 @@
                 selectedChart: 'today',
                 measurementAllByType: [],
                 meals: [],
+                medicine: [],
                 user_id: this.$route.params.user,
                 popover: {
                     visibility: 'focus',
@@ -267,6 +268,7 @@
                 this.axios.post('c_panel/user/public/search', $form).then((res) => {
                     this.chartOptions.series = res.data.data.chart_diabetes.length ? res.data.data.chart_diabetes[0] : null;
                     this.meals = res.data.data.meals.length ? res.data.data.meals : null;
+                    this.medicine = res.data.data.medicine.length ? res.data.data.medicine : null;
                 }).catch((error) => {
                     if (error.response) {
                         if (error.response.status === 422) {

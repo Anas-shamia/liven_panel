@@ -20,9 +20,11 @@
                             <span class="py-2 text-primary-900 font-medium text-lg 4xl:text-base block"
                                   v-if="item.type === '4'">Snacks</span>
                             <div class="mb-4">
-                                <img class="object-cover food-img rounded-lg w-1/3 mx-auto" v-if="item.image_url" :src="item.image_url"
+                                <img class="object-cover food-img rounded-lg w-1/3 mx-auto" v-if="item.image_url"
+                                     :src="item.image_url"
                                      alt="">
-                                <img class="object-cover food-img rounded-lg w-1/3 mx-auto" v-else src="@/assets/img/default-img.png"
+                                <img class="object-cover food-img rounded-lg w-1/3 mx-auto" v-else
+                                     src="@/assets/img/default-img.png"
                                      alt="">
                             </div>
                             <div class="pb-4 border-b" v-if="item.notes">
@@ -70,6 +72,18 @@
                             </div>
                         </div>
                     </div>
+                    <p class="py-2 text-blue-800 font-medium text-lg 4xl:text-base block">Medicines</p>
+                    <div v-for="(items,index) in drug" :key="`i${index}`" class="mb-8">
+                        <div v-if="items.medicine">
+                            <p>Name: {{items.medicine.name}}</p>
+                            <img class="object-cover food-img rounded-lg w-1/3 mx-auto" v-if="items.medicine.url"
+                                 :src="items.medicine.url"
+                                 alt="">
+                            <p v-else class="text-primary-900">There is no Picture</p>
+                        </div>
+                        <p v-if="items.notes"><span class="text-blue-800 text-base font-bold pr-4">Notes:</span>{{items.notes}}</p>
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -83,6 +97,9 @@
             },
             foods: {
                 type: Array
+            },
+            drug: {
+                type: Array
             }
         },
         data() {
@@ -91,9 +108,10 @@
     }
 </script>
 <style lang="scss">
-    .food-img{
+    .food-img {
         height: 200px;
     }
+
     .form-group label,
     .form-group textarea {
         color: #A0AEC0;

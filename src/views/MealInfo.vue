@@ -315,7 +315,7 @@
         },
         watch: {
             search: function ($val) {
-                if($val) {
+                if ($val) {
                     this.searchProcess();
                 }
             }
@@ -398,13 +398,15 @@
                 let $protein = 0;
                 let $carbs = 0;
                 let $sumQty = 0;
-                this.mealInfo.properties.forEach((x) => {
-                    $calories += x.food.nutrients.ENERC_KCAL;
-                    $fat += x.food.nutrients.FAT;
-                    $protein += x.food.nutrients.PROCNT;
-                    $carbs += x.food.nutrients.CHOCDF;
-                    $sumQty += parseFloat(x.quantity);
-                });
+                if (this.mealInfo.hasOwnProperty('properties')) {
+                    this.mealInfo.properties.forEach((x) => {
+                        $calories += x.food.nutrients.ENERC_KCAL;
+                        $fat += x.food.nutrients.FAT;
+                        $protein += x.food.nutrients.PROCNT;
+                        $carbs += x.food.nutrients.CHOCDF;
+                        $sumQty += parseFloat(x.quantity);
+                    });
+                }
                 this.sumCaloryHistory = parseFloat($calories).toFixed(2);
                 this.sumFatHistory = parseFloat($fat).toFixed(2);
                 this.sumProteinHistory = parseFloat($protein).toFixed(2);
