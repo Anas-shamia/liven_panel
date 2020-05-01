@@ -235,23 +235,22 @@
                                     <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
                                         Total
                                     </td>
-                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">quantity</td>
+                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">{{sumQtyHistory}}</td>
                                     <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs"></td>
                                     <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
                                     </td>
                                     <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
-                                      test
+                                        {{sumCaloryHistory}}
                                     </td>
                                     <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
-                                        test
+                                        {{sumProteinHistory}}
                                     </td>
                                     <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
-                                        test
+                                        {{sumFatHistory}}
                                     </td>
                                     <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
-                                      test
+                                        {{sumCarbsHistory}}
                                     </td>
-
                                 </tr>
                                 </tbody>
                             </table>
@@ -304,6 +303,12 @@
                 sumProtein: 0,
                 sumCarbs: 0,
                 sumNutrients: 0,
+                sumQtyHistory: 0,
+                sumCaloryHistory: 0,
+                sumFatHistory: 0,
+                sumProteinHistory: 0,
+                sumCarbsHistory: 0,
+                sumNutrientsHistory: 0,
                 success: false,
                 loading: false,
             }
@@ -339,20 +344,18 @@
             getCalory($val) {
                 return parseFloat($val).toFixed(2);
             },
-            changeText() {
-                if (this.search) {
-                    this.axios.get(`https://api.edamam.com/api/food-database/parser?ingr=${this.search}&app_id=691cdfff&app_key=85704859d9ba587b4181bb4d6af9215e`)
-                        .then(res => {
-                            this.results = res.data.hints.map((x) => {
-                                return {
-                                    ...x,
-                                    quantity: 100
-                                }
-                            });
-                            this.resultsOriginal = _.cloneDeep(this.results);
+            changeText: _.debounce(function (e) {
+                this.axios.get(`https://api.edamam.com/api/food-database/parser?ingr=${this.search}&app_id=691cdfff&app_key=85704859d9ba587b4181bb4d6af9215e`)
+                    .then(res => {
+                        this.results = res.data.hints.map((x) => {
+                            return {
+                                ...x,
+                                quantity: 100
+                            }
                         });
-                }
-            },
+                        this.resultsOriginal = _.cloneDeep(this.results);
+                    });
+            }, 500),
             getTotal() {
                 let $calories = 0;
                 let $fat = 0;
@@ -367,7 +370,6 @@
                     $carbs += x.food.nutrients.CHOCDF;
                     // $sumNutrients += x.food.nutrients.PROCNT + x.food.nutrients.FAT + x.food.nutrients.CHOCDF;
                     $sumQty += parseFloat(x.quantity);
-                    console.log($fat);
                 });
                 this.sumCalory = parseFloat($calories).toFixed(2);
                 this.sumFat = parseFloat($fat).toFixed(2);
@@ -375,6 +377,25 @@
                 this.sumProtein = parseFloat($protein).toFixed(2);
                 this.sumCarbs = parseFloat($carbs).toFixed(2);
                 this.sumQty = parseFloat($sumQty).toFixed(2);
+            },
+            getTotalHistory() {
+                let $calories = 0;
+                let $fat = 0;
+                let $protein = 0;
+                let $carbs = 0;
+                let $sumQty = 0;
+                this.mealInfo.properties.forEach((x) => {
+                    $calories += x.food.nutrients.ENERC_KCAL;
+                    $fat += x.food.nutrients.FAT;
+                    $protein += x.food.nutrients.PROCNT;
+                    $carbs += x.food.nutrients.CHOCDF;
+                    $sumQty += parseFloat(x.quantity);
+                });
+                this.sumCaloryHistory = parseFloat($calories).toFixed(2);
+                this.sumFatHistory = parseFloat($fat).toFixed(2);
+                this.sumProteinHistory = parseFloat($protein).toFixed(2);
+                this.sumCarbsHistory = parseFloat($carbs).toFixed(2);
+                this.sumQtyHistory = parseFloat($sumQty).toFixed(2);
             },
             onChange($e, item) {
                 if ($e.target.checked) {
@@ -432,6 +453,7 @@
                 this.axios.get(`c_panel/meal/info?id=${$id}`)
                     .then(response => {
                         this.mealInfo = response.data.data;
+                        this.getTotalHistory();
                         if (!this.mealInfo.hasOwnProperty('properties')) {
                             this.mealInfo = Object.assign(this.mealInfo, {
                                 properties: []

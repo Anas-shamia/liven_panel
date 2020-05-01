@@ -10,7 +10,7 @@
                     <v-date-picker
                             v-model='form.subscription_start_date'
                             :popover="popover"
-                            :min-date="new Date()"
+                            :max-date="maxDate"
                             :input-props='{
                           class: "form-control",
                           placeholder: "Subscription Start",
@@ -26,7 +26,7 @@
                     <v-date-picker
                             v-model='form.subscription_end_date'
                             :popover="popover"
-                            :min-date="new Date()"
+                            :min-date="minDate"
                             :input-props='{
                           class: "form-control",
                           placeholder: "Subscription End",
@@ -79,10 +79,22 @@
                     subscription_start_date: null,
                     subscription_end_date: null,
                 },
+                minDate: null,
+                maxDate: null,
                 popover: {
                     visibility: 'focus',
                 },
             }
+        },
+        watch: {
+            'form.subscription_start_date': function ($val) {
+                let date = new Date($val);
+                this.minDate = new Date(date.setDate(date.getDate() + 1));
+            },
+            'form.subscription_end_date': function ($val) {
+                let date = new Date($val);
+                this.maxDate = new Date(date.setDate(date.getDate() - 1));
+            },
         },
         methods: {
             formatDate() {
