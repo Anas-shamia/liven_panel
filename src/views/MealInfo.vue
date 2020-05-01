@@ -77,7 +77,8 @@
                                             <span class="text-blue-900 text-base px-3">{{mealInfo.timing}}</span>
                                         </p>
                                         <div class="mt-4">
-                                            <img v-if="mealInfo.image_url" class="w-full object-cover rounded-lg meal-img"
+                                            <img v-if="mealInfo.image_url"
+                                                 class="w-full object-cover rounded-lg meal-img"
                                                  :src="mealInfo.image_url"
                                                  alt="img">
                                             <img v-else class="w-full object-cover rounded-lg meal-img"
@@ -227,6 +228,28 @@
                                     </td>
                                     <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
                                         {{parseFloat(meal.food.nutrients.CHOCDF).toFixed(2)}}
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
+                                        Total
+                                    </td>
+                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">quantity</td>
+                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs"></td>
+                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
+                                    </td>
+                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
+                                      test
+                                    </td>
+                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
+                                        test
+                                    </td>
+                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
+                                        test
+                                    </td>
+                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
+                                      test
                                     </td>
 
                                 </tr>
@@ -380,6 +403,13 @@
                 this.axios.post('/c_panel/meal/properties', $form).then((res) => {
                     this.success = true;
                     this.loading = false;
+                    this.search = null;
+                    this.results = [];
+                    this.sumQty = 0;
+                    this.sumCalory = 0;
+                    this.sumFat = 0;
+                    this.sumProtein = 0;
+                    this.sumCarbs = 0;
                     this.loadMealInfo();
                     setTimeout(function () {
                         $this.success = false;

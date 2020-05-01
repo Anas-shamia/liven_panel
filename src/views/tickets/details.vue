@@ -15,7 +15,9 @@
                 <div class="mb-8 3sm:mb-4">
                     <h3 class="text-blue-900 font-medium text-2xl 4xl:text-lg mb-6">Reports</h3>
                     <div class="bg-white-900 px-4 py-6 3sm:py-4 rounded-lg">
-                        <router-link tag="p" :to="`/${profile.id}/reports`" class="mb-2 text-blue-800 text-sm font-bold underline">See All Reports</router-link>
+                        <router-link tag="p" :to="`/${profile.id}/reports`"
+                                     class="mb-2 text-blue-800 text-sm font-bold underline">See All Reports
+                        </router-link>
                         <ul class="mb-8 3sm:mb-4" v-if="profile.reports.length">
                             <li class="border-b border-gray-800 mb-4 3sm:mb-2 flex items-center"
                                 v-for="(item,index) in sortReports" :key="index" v-if="index <= 2">
@@ -43,7 +45,8 @@
                 </div>
                 <div class="w-full" v-if="OpenCallComponent === false">
                     <SubscriptionDuration :start_date="profile.subscription_date"
-                                          :end_date="profile.subscription_end_date"/>
+                                          :end_date="profile.subscription_end_date"
+                                          :next_meeting="next_meeting"/>
                     <WeightStatistics :user_id="profile.id" :weight="profile.weight" :height="profile.length"
                                       :waist="profile.body.length ? profile.body[0].waist: '0'"
                                       :hip="profile.body.length ? profile.body[0].highest: '0'"/>
@@ -79,7 +82,8 @@
                 open: false,
                 openReport: false,
                 openCall: false,
-                profile: null
+                profile: null,
+                next_meeting: null,
 
             }
         },
@@ -122,7 +126,10 @@
         mounted() {
             const $id = this.$route.params.user;
             this.axios.get(`c_panel/user/profile?user_id=${$id}`)
-                .then(response => (this.profile = response.data.data[0]))
+                .then(response => {
+                    this.profile = response.data.data[0];
+                    this.next_meeting = response.data.coming_appointment.length ? response.data.coming_appointment[0].concatenated_en : '';
+                })
         }
 
     }

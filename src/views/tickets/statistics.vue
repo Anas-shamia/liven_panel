@@ -33,6 +33,9 @@
             <div class="w-3/4 3sm:w-full px-4">
                 <h2 class="text-2xl 4xl:text-lg text-blue-900 mb-6">Body Stats</h2>
                 <highcharts :options="chartOptions2"></highcharts>
+                <div>
+                    <img class="w-full object-cover" src="@/assets/img/waist-hit.png" alt="">
+                </div>
                 <div class="flex flex-wrap -mx-6 4xl:-mx-6 3sm:-mx-2 mt-8">
                     <div class="w-1/4 3sm:w-1/2 3sm:mb-4 px-6 4xl:px-4 3sm:px-2">
                         <div class="relative weight-box bg-white-900 flex items-start 3sm:flex-wrap 3sm:justify-center py-8 px-6 3sm:px-4 3sm:py-4 rounded-lg custom-shadow">

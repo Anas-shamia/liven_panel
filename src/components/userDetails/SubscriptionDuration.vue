@@ -37,8 +37,7 @@
             <div class="flex items-center 3sm:flex-wrap">
                 <p class="text-gray-600 font-medium 3sm:font-normal text-xl 4xl:text-lg 3sm:text-base 3sm:mb-2 capitalize">
                     The next meeting will be on:</p>
-                <span class="3sm:w-1/2 text-gray-600 font-medium 3sm:font-normal text-xl 4xl:text-lg 3sm:text-base 3sm:px-0 3sm:flex-grow px-4">25-10-2020</span>
-                <span class="3sm:w-1/2 text-gray-600 font-medium 3sm:font-normal text-xl 4xl:text-lg 3sm:text-base">8:30 pm</span>
+                <span class="3sm:w-1/2 text-gray-600 font-medium 3sm:font-normal text-xl 4xl:text-lg 3sm:text-base 3sm:px-0 3sm:flex-grow px-4">{{this.next_meeting}}</span>
             </div>
             <button type="button"
                     class="font-medium rounded px-4 mt-4 bg-primary-900 text-white-900 text-lg 3sm:text-base 3sm:font-normal py-2 block text-center"
@@ -67,7 +66,7 @@
     import AssignDietician from "../../components/AssignDietician";
 
     export default {
-        props: ['start_date', 'end_date'],
+        props: ['start_date', 'end_date','next_meeting'],
         components: {
             AssignDietician
         },

@@ -62,6 +62,7 @@
         data() {
             return {
                 meals: [],
+                url:null,
                 form: {
                     user_id: this.$route.params.user,
                     date: null,
@@ -93,7 +94,7 @@
                         this.form = {
                             date: null,
                         };
-                        this.meals = this.meals = res.data.data;
+                        this.meals = res.data.data;
                     }).catch((error) => {
                         if (error.response) {
                             if (error.response.status === 422) {

@@ -54,23 +54,36 @@
                         </el-button>
                     </template>
                 </el-table-column>
+                <el-table-column label="Delete">
+                    <template slot-scope="scope">
+                        <el-button
+                                type="link"
+                                @click="openDeleteModal(scope.row)">
+                            Delete
+                        </el-button>
+                    </template>
+                </el-table-column>
             </data-tables-server>
+            <ConfirmDelete v-if="openDelete" @close="openDelete = false" :id="myId" :url="'/c_panel/user'"/>
             <UploadFile v-if="open" @close="open = false" :user_id="this.my_user"/>
         </div>
     </div>
 </template>
 <script>
     import UploadFile from '../components/UploadFile'
-
+    import ConfirmDelete from '../components/ConfirmDelete';
     export default {
         components: {
-            UploadFile
+            UploadFile,
+            ConfirmDelete
         },
 
         data() {
             return {
                 open: false,
                 my_user: null,
+                myId: null,
+                openDelete: false,
                 filters: [
                     {
                         prop: ['name', 'phone'],
@@ -114,6 +127,10 @@
             }
         },
         methods: {
+            openDeleteModal(row) {
+                this.myId = row.id;
+                this.openDelete = !this.openDelete;
+            },
             filterTag(value, row) {
                 return row.gender === value;
             },
@@ -124,6 +141,7 @@
                 this.$router.push(`/${row.id}/details`);
             },
             openModal(row) {
+                console.log(row);
                 this.my_user = row.id;
                 this.open = !this.open;
             },
