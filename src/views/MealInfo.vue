@@ -90,8 +90,7 @@
                             </div>
 
                             <div class="w-1/2 mt-4">
-                                <input type="text" class="form-control" placeholder="Search" @input="changeText"
-                                       v-model="search">
+                                <input type="text" class="form-control" placeholder="Search" @input="changeText"/>
                             </div>
 
                             <table class="table-fixed w-full mt-6" v-if="results.length">
@@ -311,6 +310,14 @@
                 sumNutrientsHistory: 0,
                 success: false,
                 loading: false,
+                debounce: null,
+            }
+        },
+        watch: {
+            search: function ($val) {
+                if($val) {
+                    this.searchProcess();
+                }
             }
         },
         methods: {
@@ -344,7 +351,14 @@
             getCalory($val) {
                 return parseFloat($val).toFixed(2);
             },
-            changeText: _.debounce(function (e) {
+            changeText(e) {
+                this.search = null;
+                clearTimeout(this.debounce);
+                this.debounce = setTimeout(() => {
+                    this.search = e.target.value;
+                }, 600)
+            },
+            searchProcess() {
                 this.axios.get(`https://api.edamam.com/api/food-database/parser?ingr=${this.search}&app_id=691cdfff&app_key=85704859d9ba587b4181bb4d6af9215e`)
                     .then(res => {
                         this.results = res.data.hints.map((x) => {
@@ -355,7 +369,7 @@
                         });
                         this.resultsOriginal = _.cloneDeep(this.results);
                     });
-            }, 500),
+            },
             getTotal() {
                 let $calories = 0;
                 let $fat = 0;
