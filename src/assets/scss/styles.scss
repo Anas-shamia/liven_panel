@@ -664,6 +664,7 @@ html[dir="ltr"] {
   background-image: url('/img/right-arrow.svg');
   width: 12px;
   height: 12px;
+  margin: 0 auto;
 
   &:before {
     display: none;
@@ -676,6 +677,7 @@ html[dir="ltr"] {
   background-image: url('/img/left-arrow.svg');
   width: 12px;
   height: 12px;
+  margin: 0 auto;
 
   &:before {
     display: none;
