@@ -97,6 +97,12 @@ routes = [
         meta: {layout: 'default'},
         component: Call,
     },
+    {
+        path: '/test',
+        name: 'test',
+        meta: {layout: 'default'},
+        component: Test,
+    },
 ];
 
 const router = new VueRouter({

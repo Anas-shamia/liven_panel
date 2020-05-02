@@ -48,7 +48,7 @@
                                     </thead>
                                     <tbody>
                                     <tr v-for="(meal, index) in item.properties" :key="index">
-                                        <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">{{meal.food.label}}
+                                        <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs" v-if="meal.food.label">{{meal.food.label}}
                                         </td>
                                         <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">{{meal.quantity}}
                                         </td>

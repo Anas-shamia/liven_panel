@@ -92,10 +92,10 @@
                             </li>
                         </ul>
                         <p class="text-blue-900 font-medium text-2xl 4xl:text-lg mb-6 3sm:mb-4"
-                           v-if="!chartOptions.series">
+                           v-if="!chartOptions.series[0].data.length">
                             There is No Measurements in this Day
                         </p>
-                        <div v-if="chartOptions.series">
+                        <div v-if="chartOptions.series[0].data.length">
                             <highcharts class="stock" :constructor-type="'stockChart'"
                                         :options="chartOptions"></highcharts>
                         </div>
@@ -207,7 +207,12 @@
                             },
                         }
                     },
-                    series: null,
+                    series: [
+                        {
+                            name: 'Value',
+                            data: [],
+                        }
+                    ],
 
 
                     responsive: {
@@ -253,7 +258,7 @@
                 this.axios.get(`/c_panel/diabetes/user/chart/${this.selectedChart}?user_id=${$id}`)
                     .then(response => {
                         this.measurementAllByType = response.data.data;
-                        this.chartOptions.series = this.measurementAllByType;
+                        this.chartOptions.series[0].data = this.measurementAllByType;
                     });
 
             },
@@ -271,7 +276,7 @@
                 $form.user_id = this.$route.params.user;
                 $form.date = this.formatDate($form.date);
                 this.axios.post('c_panel/user/public/search', $form).then((res) => {
-                    this.chartOptions.series = res.data.data.chart_diabetes.length ? res.data.data.chart_diabetes[0].data : null;
+                    this.chartOptions.series[0].data = res.data.data.chart_diabetes.length ? res.data.data.chart_diabetes : [];
                     this.meals = res.data.data.meals.length ? res.data.data.meals : null;
                     this.medicine = res.data.data.medicine.length ? res.data.data.medicine : null;
                 }).catch((error) => {

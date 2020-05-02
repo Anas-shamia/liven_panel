@@ -650,10 +650,52 @@ html[dir="ltr"] {
     cursor: pointer;
   }
 }
-.vdatetime{
-  .vdatetime-input{
+
+.vdatetime {
+  .vdatetime-input {
     background: transparent;
-    border-bottom: 1px solid rgba(60,60,60,.26);
+    border-bottom: 1px solid rgba(60, 60, 60, .26);
   }
 }
 
+.el-icon.el-icon-arrow-right {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url('/img/right-arrow.svg');
+  width: 12px;
+  height: 12px;
+
+  &:before {
+    display: none;
+  }
+}
+
+.el-icon.el-icon-arrow-left {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url('/img/left-arrow.svg');
+  width: 12px;
+  height: 12px;
+
+  &:before {
+    display: none;
+  }
+}
+
+.el-select__caret.el-input__icon.el-icon-arrow-up {
+  background-repeat: no-repeat;
+  background-image: url('/img/arrow-down.svg');
+  width: 8px;
+  height: 8px;
+  margin-right: 8px;
+  vertical-align: text-top;
+
+  &.is-reverse {
+    background-image: url('/img/arrow-up.svg');
+  }
+
+  &:before,
+  &:after {
+    opacity: 0;
+  }
+}
