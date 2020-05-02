@@ -13,6 +13,7 @@ import MealInfo from '../views/MealInfo.vue'
 import Reports from '../views/Reports.vue'
 import Appointments from '../views/Appointments.vue'
 import Call from '../views/Call.vue'
+import Test from '../views/test.vue'
 
 Vue.use(VueRouter);
 

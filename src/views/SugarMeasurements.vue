@@ -95,24 +95,25 @@
                            v-if="!chartOptions.series">
                             There is No Measurements in this Day
                         </p>
-                        <div>
-                            <highcharts :options="chartOptions"></highcharts>
+                        <div v-if="chartOptions.series">
+                            <highcharts class="stock" :constructor-type="'stockChart'"
+                                        :options="chartOptions"></highcharts>
                         </div>
-                        <ul class="flex items-center justify-between bg-white-900 px-16 pb-2"
-                            v-if="chartOptions.series">
-                            <li class="text-xs font-bold text-blue-800">00:00</li>
-                            <li class="text-xs font-bold text-blue-800">2:00</li>
-                            <li class="text-xs font-bold text-blue-800">4:00</li>
-                            <li class="text-xs font-bold text-blue-800">6:00</li>
-                            <li class="text-xs font-bold text-blue-800">8:00</li>
-                            <li class="text-xs font-bold text-blue-800">10:00</li>
-                            <li class="text-xs font-bold text-blue-800">12:00</li>
-                            <li class="text-xs font-bold text-blue-800">14:00</li>
-                            <li class="text-xs font-bold text-blue-800">16:00</li>
-                            <li class="text-xs font-bold text-blue-800">18:00</li>
-                            <li class="text-xs font-bold text-blue-800">20:00</li>
-                            <li class="text-xs font-bold text-blue-800">22:00</li>
-                        </ul>
+                        <!--                        <ul class="flex items-center justify-between bg-white-900 px-16 pb-2"-->
+                        <!--                            v-if="chartOptions.series">-->
+                        <!--                            <li class="text-xs font-bold text-blue-800">00:00</li>-->
+                        <!--                            <li class="text-xs font-bold text-blue-800">2:00</li>-->
+                        <!--                            <li class="text-xs font-bold text-blue-800">4:00</li>-->
+                        <!--                            <li class="text-xs font-bold text-blue-800">6:00</li>-->
+                        <!--                            <li class="text-xs font-bold text-blue-800">8:00</li>-->
+                        <!--                            <li class="text-xs font-bold text-blue-800">10:00</li>-->
+                        <!--                            <li class="text-xs font-bold text-blue-800">12:00</li>-->
+                        <!--                            <li class="text-xs font-bold text-blue-800">14:00</li>-->
+                        <!--                            <li class="text-xs font-bold text-blue-800">16:00</li>-->
+                        <!--                            <li class="text-xs font-bold text-blue-800">18:00</li>-->
+                        <!--                            <li class="text-xs font-bold text-blue-800">20:00</li>-->
+                        <!--                            <li class="text-xs font-bold text-blue-800">22:00</li>-->
+                        <!--                        </ul>-->
 
                         <div class="time-line" v-if="selectedChart ==='today'">
                             <ul>
@@ -137,7 +138,11 @@
     import SendReport from "../components/userDetails/SendReport";
     import callPatient from "../components/userDetails/CallPatient";
     import FoodInfo from "../components/FoodInfo";
+    import {Chart} from 'highcharts-vue';
+    import Highcharts from 'highcharts';
+    import stockInit from 'highcharts/modules/stock';
 
+    stockInit(Highcharts);
     export default {
         data() {
             return {
@@ -266,7 +271,7 @@
                 $form.user_id = this.$route.params.user;
                 $form.date = this.formatDate($form.date);
                 this.axios.post('c_panel/user/public/search', $form).then((res) => {
-                    this.chartOptions.series = res.data.data.chart_diabetes.length ? res.data.data.chart_diabetes[0] : null;
+                    this.chartOptions.series = res.data.data.chart_diabetes.length ? res.data.data.chart_diabetes[0].data : null;
                     this.meals = res.data.data.meals.length ? res.data.data.meals : null;
                     this.medicine = res.data.data.medicine.length ? res.data.data.medicine : null;
                 }).catch((error) => {

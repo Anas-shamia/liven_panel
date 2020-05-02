@@ -48,6 +48,7 @@ Vue.use(VCalendar);
 import 'element-ui/lib/theme-chalk/index.css'
 
 import HighchartsVue from 'highcharts-vue'
+import stockInit from 'highcharts/modules/stock'
 
 Vue.use(HighchartsVue);
 
