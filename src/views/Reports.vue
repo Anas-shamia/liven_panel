@@ -37,20 +37,33 @@
                         </el-button>
                     </template>
                 </el-table-column>
+                <el-table-column label="Delete">
+                    <template slot-scope="scope">
+                        <el-button
+                                type="link"
+                                @click="openDeleteModal(scope.row)">
+                            Delete
+                        </el-button>
+                    </template>
+                </el-table-column>
             </data-tables>
         </div>
         <ViewReport v-if="openReport" @close="openReport = false" :id="myId" :url="'/c_panel/report'"/>
+        <ConfirmDelete v-if="openDelete" @close="openDelete = false" :id="myId" :url="'/c_panel/report'"/>
     </div>
 </template>
 <script>
     import ViewReport from '../components/userDetails/ViewReport';
+    import ConfirmDelete from '../components/ConfirmDelete';
     export default {
         components:{
-            ViewReport
+            ViewReport,
+            ConfirmDelete
         },
         data() {
             return {
                 myId: null,
+                openDelete: false,
                 openReport: false,
                 user_id: this.$route.params.user,
                 filters: [
@@ -86,6 +99,10 @@
             openReportModal(row) {
                 this.myId = row.id;
                 this.openReport = !this.openReport;
+            },
+            openDeleteModal(row) {
+                this.myId = row.id;
+                this.openDelete = !this.openDelete;
             },
         },
         mounted() {

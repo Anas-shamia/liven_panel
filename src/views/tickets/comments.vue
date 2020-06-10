@@ -52,8 +52,13 @@
                                     </ValidationProvider>
                                     <button type="submit"
                                             class="comment-button text-white-900 py-2 px-6 3sm:text-sm 3sm:py-1 bg-blue-900 border border-blue-900 rounded-lg 3sm:rounded 3sm:w-full"
+                                            :class="loading?'btn-loading':''"
                                             :disabled="loading">
-                                        Send
+                                        <span>Send</span>
+                                        <div v-if="loading" class="spinner">
+                                            <div class="double-bounce1"></div>
+                                            <div class="double-bounce2"></div>
+                                        </div>
                                     </button>
                                 </div>
                             </form>
@@ -71,8 +76,8 @@
                         </ValidationObserver>
                     </div>
                 </div>
-                <div class="w-3/5" v-if="OpenCallComponent">
-                    <callPatient/>
+                <div class="w-full" v-if="OpenCallComponent">
+                    <callPatient :channel_id="profile.channel_id"/>
                 </div>
             </div>
         </div>
@@ -90,6 +95,7 @@
                 loading: false,
                 ticketLoading: false,
                 ticketSuccess: false,
+                profile: null,
                 form: {
                     ticket_id: this.$route.params.id,
                     replay_text: null
@@ -154,6 +160,13 @@
                 const $id = this.$route.params.id;
                 this.axios.get(`c_panel/ticket/replays?ticket_id=${$id}`,)
                     .then(response => (this.tickets = response.data.data))
+            },
+            loadUser(){
+                const $id = this.$route.params.user;
+                this.axios.get(`c_panel/user/profile?user_id=${$id}`)
+                    .then(response => {
+                        this.profile = response.data.data[0];
+                    })
             }
         },
         computed: {
@@ -163,6 +176,7 @@
         },
         mounted() {
             this.loadTicket();
+            this.loadUser();
         },
     }
 </script>

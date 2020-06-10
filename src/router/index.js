@@ -50,7 +50,7 @@ routes = [
         component: Comments,
     },
     {
-        path: '/tickets/:user/statistics',
+        path: '/stats/:user/statistics',
         name: 'statistics',
         meta: {layout: 'default'},
         component: Statistics,

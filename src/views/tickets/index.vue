@@ -27,7 +27,7 @@
                                 v-else-if="title.prop === 'user'"
                                 type="link"
                                 @click="user(scope.$index, scope.row)">
-                            {{scope.row.user.name}}
+                            <span v-if="scope.row.user">{{scope.row.user.name}}</span>
                         </el-button>
                         <el-tag v-else-if="title.prop === 'status_text'"
                                 :type="scope.row.status_text === 'Closed' ? 'closed-class' : 'open-class'"

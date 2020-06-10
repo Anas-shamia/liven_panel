@@ -6,32 +6,50 @@
                     Subscription Start:
                 </p>
                 <span class="text-gray-600 font-medium 3sm:font-normal text-xl 4xl:text-lg 3sm:text-base" v-if="!open">{{this.start_date}}</span>
-                <div v-if="open">
+                <div class="flex items-center" v-if="open">
                     <v-date-picker
                             v-model='form.subscription_start_date'
                             :popover="popover"
                             :max-date="maxDate"
                             :input-props='{
                           class: "form-control",
-                          placeholder: "Subscription Start",
+                          placeholder: cStart_date,
                         }'
                     />
+                    <svg @click="clearDate()" aria-hidden="true" focusable="false" data-prefix="fas"
+                         data-icon="trash-alt"
+                         role="img"
+                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                         class="svg-inline--fa fa-trash-alt cursor-pointer w-4">
+                        <path fill="#ff0000"
+                              d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"
+                              class=""></path>
+                    </svg>
                 </div>
             </div>
             <div class="flex items-center mb-4 3sm:mb-2">
                 <p class="text-gray-600 font-medium 3sm:font-normal text-xl 4xl:text-lg 3sm:text-base pr-4">
                     Subscription End:</p>
                 <span class="text-gray-600 font-medium 3sm:font-normal text-xl 4xl:text-lg 3sm:text-base" v-if="!open">{{this.end_date}}</span>
-                <div v-if="open">
+                <div class="flex items-center" v-if="open">
                     <v-date-picker
                             v-model='form.subscription_end_date'
                             :popover="popover"
                             :min-date="minDate"
                             :input-props='{
                           class: "form-control",
-                          placeholder: "Subscription End",
+                          placeholder: cEnd_date,
                         }'
                     />
+                    <svg @click="clearDate()" aria-hidden="true" focusable="false" data-prefix="fas"
+                         data-icon="trash-alt"
+                         role="img"
+                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"
+                         class="svg-inline--fa fa-trash-alt cursor-pointer w-4">
+                        <path fill="#ff0000"
+                              d="M32 464a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128H32zm272-256a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zm-96 0a16 16 0 0 1 32 0v224a16 16 0 0 1-32 0zM432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16z"
+                              class=""></path>
+                    </svg>
                 </div>
             </div>
             <div class="flex items-center 3sm:flex-wrap">
@@ -66,7 +84,7 @@
     import AssignDietician from "../../components/AssignDietician";
 
     export default {
-        props: ['start_date', 'end_date','next_meeting'],
+        props: ['start_date', 'end_date', 'next_meeting'],
         components: {
             AssignDietician
         },
@@ -74,6 +92,8 @@
             return {
                 open: false,
                 openAssign: false,
+                cStart_date: this.start_date,
+                cEnd_date: this.end_date,
                 form: {
                     user_id: this.$route.params.user,
                     subscription_start_date: null,
@@ -99,22 +119,34 @@
         methods: {
             formatDate() {
                 let $date = this.form.subscription_start_date;
-                let dd = String($date.getDate()).padStart(2, '0');
-                let mm = String($date.getMonth() + 1).padStart(2, '0'); //January is 0!
-                let yyyy = $date.getFullYear();
-                $date = mm + '-' + dd + '-' + yyyy;
-                return this.form.subscription_start_date = $date;
+                if ($date) {
+                    let dd = String($date.getDate()).padStart(2, '0');
+                    let mm = String($date.getMonth() + 1).padStart(2, '0'); //January is 0!
+                    let yyyy = $date.getFullYear();
+                    $date = mm + '-' + dd + '-' + yyyy;
+                    return this.form.subscription_start_date = $date;
+                }
+
             },
             formatEndDate() {
                 let $date = this.form.subscription_end_date;
-                let dd = String($date.getDate()).padStart(2, '0');
-                let mm = String($date.getMonth() + 1).padStart(2, '0'); //January is 0!
-                let yyyy = $date.getFullYear();
-                $date = mm + '-' + dd + '-' + yyyy;
-                return this.form.subscription_end_date = $date;
+                if ($date) {
+                    let dd = String($date.getDate()).padStart(2, '0');
+                    let mm = String($date.getMonth() + 1).padStart(2, '0'); //January is 0!
+                    let yyyy = $date.getFullYear();
+                    $date = mm + '-' + dd + '-' + yyyy;
+                    return this.form.subscription_end_date = $date;
+                }
             },
             openEdit() {
                 this.open = !this.open;
+            },
+            clearDate() {
+                this.cStart_date = '';
+                this.cEnd_date = '';
+                this.form.subscription_start_date = null;
+                this.form.subscription_end_date = null;
+
             },
             saveDate() {
                 this.open = false;

@@ -40,8 +40,8 @@
                 </button>
             </div>
             <div class="w-3/4 3sm:w-full px-4 flex flex-wrap">
-                <div class="w-3/5" v-if="OpenCallComponent ">
-                    <callPatient/>
+                <div class="w-full" v-if="OpenCallComponent ">
+                    <callPatient :channel_id="profile.channel_id"/>
                 </div>
                 <div class="w-full" v-if="OpenCallComponent === false">
                     <SubscriptionDuration :start_date="profile.subscription_date"

@@ -33,8 +33,13 @@
                             </ValidationProvider>
                             <button type="submit"
                                     class="w-full rounded bg-primary-900 text-white-900 text-lg 3sm:text-base 3sm:py-2 py-3 block text-center my-3 3sm:mb-0"
+                                    :class="loading?'btn-loading':''"
                                     :disabled="loading">
-                                Upload
+                                <span>Upload</span>
+                                <div v-if="loading" class="spinner">
+                                    <div class="double-bounce1"></div>
+                                    <div class="double-bounce2"></div>
+                                </div>
                             </button>
                             <div class="bg-green-100 mt-4 rounded-10px text-center" v-if="success">
                                 <p class="p-3 text-base text-blue-800 font-medium">Sent Successfully</p>

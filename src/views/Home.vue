@@ -7,7 +7,7 @@
                 <span class="bg-primary-900 text-white-900 rounded-full h-6 w-8 flex items-center justify-center mx-4">{{data.length}}</span>
             </div>
             <div class="w-1/4 3sm:w-full 3sm:mt-4">
-                <el-input placeholder="Search" v-model="filters[0].value"></el-input>
+                <el-input placeholder="Search" v-model="q"></el-input>
             </div>
         </div>
         <div class="py-6 users-table">
@@ -54,7 +54,7 @@
                         </el-button>
                     </template>
                 </el-table-column>
-                <el-table-column label="Delete">
+                <el-table-column label="Delete" v-if="user === 'admin'">
                     <template slot-scope="scope">
                         <el-button
                                 type="link"
@@ -72,6 +72,7 @@
 <script>
     import UploadFile from '../components/UploadFile'
     import ConfirmDelete from '../components/ConfirmDelete';
+
     export default {
         components: {
             UploadFile,
@@ -83,6 +84,11 @@
                 open: false,
                 my_user: null,
                 myId: null,
+                q: '',
+                init: {
+                    page: 1,
+                    pageSize: 5
+                },
                 openDelete: false,
                 filters: [
                     {
@@ -126,6 +132,16 @@
                 total: 0,
             }
         },
+        watch: {
+            q($val) {
+                this.loadData(this.init);
+            }
+        },
+        computed: {
+            user() {
+                return localStorage.getItem('user') ? localStorage.getItem('user') : null;
+            }
+        },
         methods: {
             openDeleteModal(row) {
                 this.myId = row.id;
@@ -146,13 +162,14 @@
                 this.open = !this.open;
             },
             async loadData(q) {
+                console.log(q);
                 const $user = localStorage.getItem('user') ? localStorage.getItem('user') : null;
                 let $url = '/c_panel/users/patient/all';
 
                 if ($user === 'dietitian')
                     $url = '/c_panel/users/patient/of/dietitian/all';
 
-                this.axios.get(`${$url}?per_page=${q.pageSize}&page=${q.page}`)
+                this.axios.get(`${$url}?per_page=${q.pageSize}&page=${q.page}&search=${this.q}`)
                     .then(response => {
                         const $res = response.data.data;
                         this.data = $res.data;

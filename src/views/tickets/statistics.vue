@@ -1,5 +1,14 @@
 <template>
     <div class="container-content pb-24" v-if="profile">
+        <div class="flex items-center mb-8 3sm:mb-4">
+            <img src="@/assets/img/user.svg" alt="icon">
+            <router-link tag="h2" to="/users" class="text-2xl 4xl:text-lg text-blue-900 px-4 cursor-pointer">Users
+            </router-link>
+            <img src="@/assets/img/right-chevron.svg" alt="icon">
+            <router-link tag="p" :to="`/${this.user_id}/details`"
+                         class="text-2xl 4xl:text-lg text-gray-900 pl-6 cursor-pointer">User Details
+            </router-link>
+        </div>
         <div class="flex flex-wrap -mx-4">
             <div class="w-1/4 3sm:w-full px-4 profile-info">
                 <Profile/>
@@ -30,7 +39,7 @@
                     Send Notification
                 </button>
             </div>
-            <div class="w-3/4 3sm:w-full px-4">
+            <div class="w-3/4 3sm:w-full px-4" v-if="OpenCallComponent === false">
                 <h2 class="text-2xl 4xl:text-lg text-blue-900 mb-6">Body Stats</h2>
                 <highcharts :options="chartOptions2"></highcharts>
                 <div>
@@ -174,7 +183,9 @@
                     </table>
                 </div>
             </div>
-
+            <div class="w-3/4 3sm:w-full px-4" v-if="OpenCallComponent">
+                <callPatient :channel_id="profile.channel_id"/>
+            </div>
             <SendNotification v-if="open" @close="open = false"/>
             <SendReport v-if="openReport" @close="openReport = false" :profile_id="profile.id"/>
         </div>
@@ -184,13 +195,14 @@
     import Profile from "../../components/userDetails/Profile";
     import SendNotification from "../../components/userDetails/SendNotification";
     import SendReport from "../../components/userDetails/SendReport";
-
+    import callPatient from "../../components/userDetails/CallPatient";
     export default {
         data() {
             return {
                 open: false,
                 openReport: false,
                 edit: false,
+                user_id: this.$route.params.user,
                 chartOptions2: {
                     chart: {
                         type: 'column'
@@ -235,6 +247,7 @@
             Profile,
             SendNotification,
             SendReport,
+            callPatient
         },
         methods: {
             openNotification() {
@@ -277,7 +290,10 @@
                 if (this.profile.reports.length) {
                     return this.profile.reports = _.orderBy(this.profile.reports, ['id'], ['desc']);
                 }
-            }
+            },
+            OpenCallComponent() {
+                return this.$store.state.openCall;
+            },
         },
         mounted() {
             const $id = this.$route.params.user;

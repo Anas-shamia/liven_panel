@@ -24,11 +24,18 @@
                                        :class="{ 'has-danger': errors.length }" v-model="form.content"/>
                                 <p class="message-danger">{{ errors[0] }}</p>
                             </ValidationProvider>
+                            <p class="message-danger mb-4" v-if="serverErrors">User Notifications Off</p>
                             <button type="submit"
                                     class="w-full rounded bg-primary-900 text-white-900 text-lg 3sm:text-base 3sm:py-2 py-3 block text-center mb-6 3sm:mb-4"
+                                    :class="loading?'btn-loading':''"
                                     :disabled="loading">
-                                Create
+                                <span>Create</span>
+                                <div v-if="loading" class="spinner">
+                                    <div class="double-bounce1"></div>
+                                    <div class="double-bounce2"></div>
+                                </div>
                             </button>
+
                             <div class="bg-green-100 mt-4 rounded-10px text-center" v-if="success">
                                 <p class="p-3 text-base text-blue-800 font-medium">Sent Successfully</p>
                             </div>
@@ -64,7 +71,9 @@
                 openSendLater: false,
                 success: false,
                 loading: false,
+                serverErrors: null,
                 form: {
+                    user_id: this.$route.params.user,
                     title: null,
                     content: null,
                     date: null
@@ -77,16 +86,22 @@
                 let dd = String(today.getDate()).padStart(2, '0');
                 let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
                 let yyyy = today.getFullYear();
-                today = dd + '/' + mm + '/' + yyyy;
+                today = dd + '-' + mm + '-' + yyyy;
                 return this.form.date = today;
             },
+
             handleSubmit() {
                 const $this = this;
                 this.getToday();
                 this.$refs['sendNotification'].validate().then((result) => {
                     if (result) {
                         this.loading = true;
-                        this.axios.post('/c_panel/notification', this.form).then((res) => {
+
+                        let $url = '/c_panel/notification';
+                        if (this.user !== 'admin') {
+                            $url = 'c_panel/notification/by/patient';
+                        }
+                        this.axios.post($url, this.form).then((res) => {
                             this.success = true;
                             this.loading = false;
                             this.form = {
@@ -103,7 +118,7 @@
                             this.loading = false;
                             if (error.response) {
                                 if (error.response.status === 422) {
-                                    this.$refs['sendNotification'].setErrors(error.response.data.errors);
+                                    this.serverErrors = error.response.data.data;
                                 }
                             }
                         });
@@ -113,6 +128,11 @@
             // sendLater() {
             //     this.openSendLater = !this.openSendLater;
             // }
+        },
+        computed: {
+            user() {
+                return localStorage.getItem('user') ? localStorage.getItem('user') : null;
+            },
         },
     }
 </script>

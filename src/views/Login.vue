@@ -47,10 +47,15 @@
                             </div>
                         </ValidationProvider>
 
-
                         <button type="submit"
-                                class="login-btn border border-transparent w-full block text-center bg-primary-900 text-white-900 text-xl 3sm:text-base rounded py-4 3sm:py-2">
-                            Login
+                                class="login-btn border border-transparent w-full block text-center bg-primary-900 text-white-900 text-xl 3sm:text-base rounded py-4 3sm:py-2"
+                                :class="loading?'btn-loading':''"
+                                :disabled="loading">
+                            <span>Login</span>
+                            <div v-if="loading" class="spinner">
+                                <div class="double-bounce1"></div>
+                                <div class="double-bounce2"></div>
+                            </div>
                         </button>
 
                         <!--                        <router-link to="/"-->
@@ -73,8 +78,8 @@
                 errorMsg: null,
                 myErrors: null,
                 form: {
-                    email: 'admin@liven.com',
-                    password: 12345678,
+                    email: null,
+                    password: null,
                 },
                 success: false,
                 show: false,

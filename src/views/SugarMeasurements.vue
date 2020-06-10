@@ -41,8 +41,8 @@
                 </button>
             </div>
             <div class="w-3/4 3sm:w-full px-4 flex flex-wrap">
-                <div class="w-3/5" v-if="OpenCallComponent">
-                    <callPatient/>
+                <div class="w-full" v-if="OpenCallComponent">
+                    <callPatient :channel_id="profile.channel_id"/>
                 </div>
                 <div class="w-full" v-if="OpenCallComponent === false">
                     <div>
@@ -92,28 +92,18 @@
                             </li>
                         </ul>
                         <p class="text-blue-900 font-medium text-2xl 4xl:text-lg mb-6 3sm:mb-4"
-                           v-if="!chartOptions.series[0].data.length">
-                            There is No Measurements in this Day
+                           v-if="!chartOptions.series.length"
+                        >
+                            There is No Measurements To Show
                         </p>
-                        <div v-if="chartOptions.series[0].data.length">
-                            <highcharts class="stock" :constructor-type="'stockChart'"
-                                        :options="chartOptions"></highcharts>
+                        <div class="spinner" v-if="loading">
+                            <div class="double-bounce1"></div>
+                            <div class="double-bounce2"></div>
                         </div>
-                        <!--                        <ul class="flex items-center justify-between bg-white-900 px-16 pb-2"-->
-                        <!--                            v-if="chartOptions.series">-->
-                        <!--                            <li class="text-xs font-bold text-blue-800">00:00</li>-->
-                        <!--                            <li class="text-xs font-bold text-blue-800">2:00</li>-->
-                        <!--                            <li class="text-xs font-bold text-blue-800">4:00</li>-->
-                        <!--                            <li class="text-xs font-bold text-blue-800">6:00</li>-->
-                        <!--                            <li class="text-xs font-bold text-blue-800">8:00</li>-->
-                        <!--                            <li class="text-xs font-bold text-blue-800">10:00</li>-->
-                        <!--                            <li class="text-xs font-bold text-blue-800">12:00</li>-->
-                        <!--                            <li class="text-xs font-bold text-blue-800">14:00</li>-->
-                        <!--                            <li class="text-xs font-bold text-blue-800">16:00</li>-->
-                        <!--                            <li class="text-xs font-bold text-blue-800">18:00</li>-->
-                        <!--                            <li class="text-xs font-bold text-blue-800">20:00</li>-->
-                        <!--                            <li class="text-xs font-bold text-blue-800">22:00</li>-->
-                        <!--                        </ul>-->
+                        <div v-if="chartOptions.series.length && !loading">
+                            <highcharts
+                                    :options="chartOptions"></highcharts>
+                        </div>
 
                         <div class="time-line" v-if="selectedChart ==='today'">
                             <ul>
@@ -143,6 +133,8 @@
     import stockInit from 'highcharts/modules/stock';
 
     stockInit(Highcharts);
+
+
     export default {
         data() {
             return {
@@ -151,6 +143,7 @@
                 openFood: false,
                 openCall: false,
                 profile: null,
+                loading: false,
                 selectedChart: 'today',
                 measurementAllByType: [],
                 meals: [],
@@ -163,65 +156,172 @@
                     user_id: this.$route.params.user,
                     date: new Date(),
                 },
+                // chartOptions: {
+                //     title: {
+                //         text: ''
+                //     },
+                //     credits: {
+                //         enabled: false
+                //     },
+                //     yAxis: {
+                //         title: {
+                //             text: 'CGM'
+                //         },
+                //         plotLines: [{
+                //             value: 70,
+                //             color: 'red',
+                //             dashStyle: 'shortdash',
+                //             width: 3,
+                //             label: {
+                //                 text: '70 mg/dl'
+                //             }
+                //         }, {
+                //             value: 180,
+                //             color: 'red',
+                //             dashStyle: 'shortdash',
+                //             width: 3,
+                //             label: {
+                //                 text: '180 mg/dl'
+                //             }
+                //         }]
+                //     },
+                //     xAxis: {
+                //         title: {
+                //             text: 'Time'
+                //         },
+                //         labels: {
+                //             enabled: false
+                //         }
+                //     },
+                //     plotOptions: {
+                //         series: {
+                //             label: {
+                //                 connectorAllowed: false
+                //             },
+                //         }
+                //     },
+                //     series: [],
+                //
+                //     responsive: {
+                //         rules: [{
+                //             condition: {
+                //                 maxWidth: 576
+                //             },
+                //         }]
+                //     }
+                // }
                 chartOptions: {
+                    connectNulls : false,
+                    chart: {type: 'area'},
                     title: {
                         text: ''
                     },
                     credits: {
                         enabled: false
                     },
-                    yAxis: {
-                        title: {
-                            text: 'CGM'
-                        },
-                        plotLines: [{
-                            value: 70,
-                            color: 'red',
-                            dashStyle: 'shortdash',
-                            width: 3,
-                            label: {
-                                text: '70 mg/dl'
-                            }
-                        }, {
-                            value: 180,
-                            color: 'red',
-                            dashStyle: 'shortdash',
-                            width: 3,
-                            label: {
-                                text: '180 mg/dl'
-                            }
-                        }]
-                    },
-                    xAxis: {
-                        title: {
-                            text: 'Time'
-                        },
-                        labels: {
-                            enabled: false
+                    legend: {enabled: true},
+                    tooltip: {
+                        shared: true,
+                        useHTML: true,
+                        dateTimeLabelFormats: {
+                            hour: "%H:%M:%S"
                         }
                     },
                     plotOptions: {
+                        area: {
+                            lineWidth: 1,
+                            marker: {
+                                enabled: false,
+                                symbol: 'circle',
+                                radius: 4
+                            }
+                        },
+                        arearange: {
+                            lineWidth: 1
+                        },
+                        areaspline: {
+                            lineWidth: 1,
+                            marker: {
+                                enabled: false,
+                                symbol: 'circle',
+                                radius: 4
+                            }
+                        },
+                        areasplinerange: {
+                            lineWidth: 1
+                        },
+                        boxplot: {
+                            groupPadding: 0.05,
+                            pointPadding: 0.05,
+                            fillColor: 'rgba(255,255,255,.75)'
+                        },
+                        bubble: {
+                            minSize: '0.25%',
+                            maxSize: '17%'
+                        },
+                        column: {
+                            //stacking:'normal',
+                            groupPadding: 0.05,
+                            pointPadding: 0.05
+                        },
+                        columnrange: {
+                            groupPadding: 0.05,
+                            pointPadding: 0.05
+                        },
+                        errorbar: {
+                            groupPadding: 0.05,
+                            pointPadding: 0.05,
+                            showInLegend: true
+                        },
+                        line: {
+                            lineWidth: 1,
+                            marker: {
+                                enabled: false,
+                                symbol: 'circle',
+                                radius: 4
+                            }
+                        },
+                        scatter: {
+                            marker: {
+                                symbol: 'circle',
+                                radius: 5
+                            }
+                        },
+                        spline: {
+                            lineWidth: 1,
+                            marker: {
+                                enabled: false,
+                                symbol: 'circle',
+                                radius: 4
+                            }
+                        },
                         series: {
-                            label: {
-                                connectorAllowed: false
-                            },
+                            fillOpacity: 0,
+                            lineWidth: 0.25,
+                            pointStart: 1435723200000,
+                            pointInterval: 3600 * 1000,
+                            shadow: false,
+                            borderWidth: 0,
+                            states: {
+                                hover: {
+                                    lineWidthPlus: 0,
+                                }
+                            }
                         }
                     },
-                    series: [
-                        {
-                            name: 'Value',
-                            data: [],
-                        }
-                    ],
-
-
-                    responsive: {
-                        rules: [{
-                            condition: {
-                                maxWidth: 576
-                            },
-                        }]
-                    }
+                    xAxis: {
+                        type: 'datetime',
+                        showLastLabel: true,
+                        endOnTick: false,
+                        labels: {
+                            formatter: function () {
+                                return Highcharts.dateFormat('%H:%M', this.value);
+                            }
+                        },
+                        title: {text: 'Time'}
+                    },
+                    yAxis: {title: {text: 'Values'}},
+                    series: null
                 }
 
             }
@@ -255,10 +355,23 @@
             changeChart(type) {
                 const $id = this.$route.params.user;
                 this.selectedChart = type;
+                this.loading = true;
                 this.axios.get(`/c_panel/diabetes/user/chart/${this.selectedChart}?user_id=${$id}`)
                     .then(response => {
-                        this.measurementAllByType = response.data.data;
-                        this.chartOptions.series[0].data = this.measurementAllByType;
+                        let myData = response.data.data.map(function (x) {
+                            return {
+                                name: new Date(x.data[0][0]).toISOString().slice(0, 10),
+                                data: x.data.map(function (r) {
+                                    return r[1]
+                                })
+                            }
+                        });
+                        
+                        
+
+                        this.measurementAllByType = myData;
+                        this.chartOptions.series = this.measurementAllByType;
+                        this.loading = false;
                     });
 
             },
@@ -276,7 +389,8 @@
                 $form.user_id = this.$route.params.user;
                 $form.date = this.formatDate($form.date);
                 this.axios.post('c_panel/user/public/search', $form).then((res) => {
-                    this.chartOptions.series[0].data = res.data.data.chart_diabetes.length ? res.data.data.chart_diabetes : [];
+                    console.log(res.data.data.chart_diabetes);
+                    this.chartOptions.series = res.data.data.chart_diabetes.length ? res.data.data.chart_diabetes : [];
                     this.meals = res.data.data.meals.length ? res.data.data.meals : null;
                     this.medicine = res.data.data.medicine.length ? res.data.data.medicine : null;
                 }).catch((error) => {
@@ -289,9 +403,6 @@
             },
         },
         computed: {
-            ShowMealsComponent() {
-                return this.$store.state.showMeal;
-            },
             OpenCallComponent() {
                 return this.$store.state.openCall;
             },
@@ -362,5 +473,14 @@
             transition: all 0.25s ease;
             cursor: pointer;
         }
+    }
+
+    .spinner {
+        width: 68px;
+        height: 68px;
+    }
+
+    .double-bounce1, .double-bounce2 {
+        background-color: #693574 !important;
     }
 </style>

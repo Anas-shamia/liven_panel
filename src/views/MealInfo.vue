@@ -14,8 +14,8 @@
                 <Profile/>
             </div>
             <div class="w-3/4 3sm:w-full px-4 flex flex-wrap">
-                <div class="w-3/5" v-if="OpenCallComponent">
-                    <callPatient/>
+                <div class="w-full" v-if="OpenCallComponent">
+                    <callPatient :channel_id="profile.channel_id"/>
                 </div>
                 <div class="w-full flex flex-wrap -mx-4" v-if="OpenCallComponent === false">
                     <div class="w-full 3sm:w-full 3sm:mb-4 px-4 4xl:px-2" v-if="mealInfo">
@@ -109,7 +109,7 @@
                                 </thead>
                                 <tbody>
                                 <tr v-for="(meal, index) in results" :key="index">
-                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">
+                                    <td class="border-b px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs" v-if="meal.food.label">
                                         {{meal.food.label}}
 
                                     </td>
@@ -193,8 +193,11 @@
                                         type="button" @click="clearProperties">Clear
                                 </button>
                             </div>
-
-                            <table class="table-fixed w-full" v-if="mealInfo.properties">
+                            <div class="spinner" v-if="loading">
+                                <div class="double-bounce1"></div>
+                                <div class="double-bounce2"></div>
+                            </div>
+                            <table class="table-fixed w-full" v-if="mealInfo.properties && mealInfo.properties.length">
                                 <thead>
                                 <tr>
                                     <th class="w-1/3 text-left px-4 py-6 4xl:py-4 3sm:px-2 3sm:text-xs">Food</th>
@@ -256,6 +259,7 @@
                             <p class="text-blue-900 font-medium text-2xl 4xl:text-lg mt-6 3sm:mb-4" v-else>No Meals
                                 History</p>
 
+
                         </div><!--bg white-->
                     </div><!--info-->
                 </div><!--wrap-->
@@ -279,6 +283,7 @@
                 search: null,
                 openReport: false,
                 openCall: false,
+                profile: null,
                 user_id: this.$route.params.user,
                 meal: {
                     quantity: '',
@@ -399,13 +404,15 @@
                 let $carbs = 0;
                 let $sumQty = 0;
                 if (this.mealInfo.hasOwnProperty('properties')) {
-                    this.mealInfo.properties.forEach((x) => {
-                        $calories += x.food.nutrients.ENERC_KCAL;
-                        $fat += x.food.nutrients.FAT;
-                        $protein += x.food.nutrients.PROCNT;
-                        $carbs += x.food.nutrients.CHOCDF;
-                        $sumQty += parseFloat(x.quantity);
-                    });
+                    if (this.mealInfo.properties && this.mealInfo.properties.length) {
+                        this.mealInfo.properties.forEach((x) => {
+                            $calories += x.food.nutrients.ENERC_KCAL;
+                            $fat += x.food.nutrients.FAT;
+                            $protein += x.food.nutrients.PROCNT;
+                            $carbs += x.food.nutrients.CHOCDF;
+                            $sumQty += parseFloat(x.quantity);
+                        });
+                    }
                 }
                 this.sumCaloryHistory = parseFloat($calories).toFixed(2);
                 this.sumFatHistory = parseFloat($fat).toFixed(2);
@@ -425,8 +432,27 @@
                 this.getTotal();
             },
             clearProperties() {
-                this.mealInfo.properties = [];
-                this.saveProperties();
+                let $clear = {
+                    meal_id: this.$route.params.meal,
+                    properties: this.mealInfo.properties = []
+                };
+                this.axios.post('/c_panel/meal/properties', $clear).then((res) => {
+                    this.success = true;
+                    this.loading = false;
+                    this.search = null;
+                    this.results = [];
+                    this.sumQty = 0;
+                    this.sumCalory = 0;
+                    this.sumFat = 0;
+                    this.sumProtein = 0;
+                    this.sumCarbs = 0;
+                    this.loadMealInfo();
+                    setTimeout(function () {
+                        $this.success = false;
+                    }, 2000);
+                }).catch((error) => {
+                    this.loading = false;
+                });
             },
             saveProperties() {
                 let $properties = this.mealInfo.properties;
@@ -477,6 +503,13 @@
                         }
                     });
             },
+            loadUser() {
+                const $id = this.$route.params.user;
+                this.axios.get(`c_panel/user/profile?user_id=${$id}`)
+                    .then(response => {
+                        this.profile = response.data.data[0];
+                    })
+            }
         },
         computed: {
             OpenCallComponent() {
@@ -485,6 +518,7 @@
         },
         mounted() {
             this.loadMealInfo();
+            this.loadUser();
         }
     }
 </script>
@@ -518,5 +552,14 @@
         tr:nth-child(odd) td {
             background-color: #F9FAFC;
         }
+    }
+
+    .spinner {
+        width: 68px;
+        height: 68px;
+    }
+
+    .double-bounce1, .double-bounce2 {
+        background-color: #693574 !important;
     }
 </style>
