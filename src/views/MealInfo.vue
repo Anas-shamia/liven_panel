@@ -432,10 +432,13 @@
                 this.getTotal();
             },
             clearProperties() {
+                this.mealInfo.properties = [];
+                this.selectedResults = [];
                 let $clear = {
                     meal_id: this.$route.params.meal,
-                    properties: this.mealInfo.properties = []
+                    properties: this.mealInfo.properties,
                 };
+                const $this = this;
                 this.axios.post('/c_panel/meal/properties', $clear).then((res) => {
                     this.success = true;
                     this.loading = false;
@@ -446,7 +449,6 @@
                     this.sumFat = 0;
                     this.sumProtein = 0;
                     this.sumCarbs = 0;
-                    this.loadMealInfo();
                     setTimeout(function () {
                         $this.success = false;
                     }, 2000);
@@ -474,6 +476,7 @@
                     this.sumProtein = 0;
                     this.sumCarbs = 0;
                     this.loadMealInfo();
+                    this.selectedResults = [];
                     setTimeout(function () {
                         $this.success = false;
                     }, 2000);
